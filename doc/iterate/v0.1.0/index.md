@@ -28,4 +28,4 @@
 
 - 避免 MCP-Prototype 与输入的原型的CSS/JS/标签等冲突。
 
-- 采用 nodejs + vue3 技术栈
+

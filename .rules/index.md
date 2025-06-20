@@ -6,8 +6,10 @@
 
 - [目录结构规范](file-structure.md)
 - [需求分析与梳理](requirement.md)
+- [代码字典规范](dict.md)
 - [生成总体要求](generate.md)
 - [原型生成要求](prototype.md)
+- [开发计划生成与执行要求](plan.md)
 - [代码生成要求](code.md)
 
 当前任务的参考信息：
