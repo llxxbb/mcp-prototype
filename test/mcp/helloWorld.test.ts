@@ -1,5 +1,5 @@
 import { callTool } from '../../src/mcp/helloWorld';
-import { ToolResponse } from '@modelcontextprotocol/sdk/types';
+import { ToolResponse } from '../../src/mcp/types';
 
 describe('helloWorld', () => {
   describe('callTool', () => {

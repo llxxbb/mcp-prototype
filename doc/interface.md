@@ -1,60 +1,111 @@
 # 工具提供的接口
 
-## 使用说明接口
-
-AI与此 MCP-Prototype 协作流程如下：
-
-- AI 检索 MCP-Prototype 使用规范
-
-- 基于使用规范， AI 生成一组 HTML+CSS+JS 原型文件及原型辅助说明文件。
-
-- AI 生成原型描述配置文件，并调用 MCP-Prototype 工具进行原型展示。
-
-- MCP-Prototype 组件依据原型配置文件进行展示。
-
 ## 规范查询接口
 
-返回下面的内容：
+**工具名**: getSpec
 
-```markdown
-## 原型辅助说明文件（可选）
+**说明**: 检索 MCP-Prototype 使用规范，了解如何在原型里增加**标记**和**页面辅助说明**。
 
-每个原型文件可以对应一个辅助说明文件。文件名与原型文件一致，后缀为".annotation.md"
+**入参**: 无
+
+**出参**：
+
+```json
+[
+    {
+        "specId":"navigateLevel",
+        "content": "导航栏中的层级定义,与原型所在文件系统的目录结构一一对应。"
+    },
+    {
+        "specId":"navigateName",
+        "content": "导航栏中的原型名称定义，来源于原型页面<html>标签的 **data-nav-name**数据属性值"
+    },
+    {
+        "specId":"navigateSeq",
+        "content": "导航栏位置定义，来源于原型页面<html>标签的 **data-nav-seq**数据属性值"
+    },
+    {
+        "specId":"pageNote",
+        "content": "原型页面辅助说明定义，可选。文件名与原型页面文件一致，扩展名为'.annotation.md'"
+    },
+    {
+        "specId":"marker",
+        "content": "UI 元素增加标记定义，可选, 来源于元素标签的**data-marker**数据属性值，MCP-Prototype 将自动为元素绘制标记，鼠标悬浮显示标记内容。"
+    }
+]
 ```
 
-## 提交配置
+## 初始化
 
-如果处于运行状态则重启原型
+**工具名**: init
 
-入参内容如下：
+**说明**: 告诉 MCP-Prototype 原型根路径、是否展示标记等初始化信息，可以多次调用。
+
+**入参**: 字符串类型，值为 MCP-Prototype 配置文件的绝对路径。
 
 ```json
 {
-    "prototypeBasePath": "原型所在的根目录，所有的原型文件相对于此路径进行说明",
-    "nav":[ // 一级导航，可递归树结构
-        {
-            "navTitle":"导航名称",
-            "page": "原型页面的相对路径",
-            "marker": [    // 元素对应的序号标记说明
-                {
-                    "id": "元素ID",
-                    "text": "对该元素进行说明，如值的范围，格式等。"
-                },
-                ...
-            ]
-            "nav":[], // 二级导航, 可选
-        },
-        ...
-    ],
-    "option":{
-        "marker":{
-            "position": 0, // 0缺省，左上；1中上；2右上；3坐下，4中下；5右下。暂不支持
-            "disable": false， // 关闭标签显示，缺省显示。
-        }
-    }
+    "projectPath": "当前项目的路径",
+    "configFile": "原型配置文件名，是 projectPath 的相对路径，缺省值为：prototypemcp.config.json"
 }
 ```
 
-## 启动原型
+**出参**：
 
-## 停止原型
+```json
+// 成功响应：
+{
+    "isOk": true,
+    "message": "",
+}
+// 错误示例
+{
+    "isOk": false,
+    "message": "[projectPath] must be set",
+} 
+```
+
+## 展示原型
+
+**工具名**: start
+
+**说明**: 该工具将启动web服务并展示模型，调用成功后，请在浏览器里输入本地地址和`init`中指定的端口号进行查看。在调用此工具前，下面的事情需要就位，否则此工具可能无法正常工作：
+
+- 遵循 `getSpec` 工具中的指示并进行了原型创造。
+- 已经调用 `init` 进行了初始化。
+
+**入参**: 无
+
+**出参**：
+
+```json
+// 成功响应
+{
+    "isOk": true,
+    "message": "",
+}
+// 错误示例
+{
+    "isOk": false,
+    "message": "[init] must be called ok",
+}
+```
+
+## 停止展示
+
+**工具名**: stop
+
+**入参**: 无
+
+**出参**：
+
+```json
+{
+    "isOk": true,
+    "message": "",
+}
+```
+
+## 参考
+
+[配置文件](config.md)
