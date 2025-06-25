@@ -1,14 +1,8 @@
-interface LogEntry {
-  level: 'debug' | 'info' | 'warn' | 'error';
-  message: string;
-  data?: unknown;
-}
-
 const logLevels = {
   debug: 0,
   info: 1,
   warn: 2,
-  error: 3
+  error: 3,
 };
 
 const currentLogLevel = logLevels.debug; // Default to debug level
@@ -33,5 +27,5 @@ export const logger = {
     if (currentLogLevel <= logLevels.error) {
       console.error(`[ERROR] ${message}`, data);
     }
-  }
+  },
 };

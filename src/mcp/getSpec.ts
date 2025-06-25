@@ -4,25 +4,32 @@ import { logger } from "../utils/logger.js";
 export async function callTool(
   args?: Record<string, any>,
 ): Promise<CallToolResult> {
-  if (!args || !args.name || typeof args.name !== "string") {
-    logger.warn("Invalid arguments for hello_world tool", args);
+  if (!args || typeof args !== "object") {
+    logger.warn("Invalid arguments for getSpec tool", args);
     return {
       content: [
         {
           type: "text",
-          text: "Invalid arguments: name must be a string",
+          text: "Invalid arguments: expected object",
         },
       ],
       isError: true,
     };
   }
 
-  logger.info(`Generating greeting for ${args.name}`);
+  logger.info("Generating specification");
   return {
     content: [
       {
         type: "text",
-        text: `Hello, ${args.name}!`,
+        text: JSON.stringify(
+          {
+            version: "1.0",
+            tools: ["getSpec", "init", "start", "stop"],
+          },
+          null,
+          2,
+        ),
       },
     ],
   };
