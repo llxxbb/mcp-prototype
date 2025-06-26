@@ -2,7 +2,7 @@
 
 ## 基本需求
 
-- 基于 Model-Context Protocol 协议的 stdio 方式实现 [MCP-Prototype 的接口](../../interface.md)
+- 基于 Model-Context Protocol 协议的 stdio 方式实现 [MCP-Prototype 的接口](design/interface.md)
 
 
 - 展示形式，三栏结构：

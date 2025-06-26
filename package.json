@@ -10,27 +10,28 @@
     "format": "prettier --write .",
     "test": "set NODE_OPTIONS=--experimental-vm-modules && jest --config ./jest.config.mjs",
     "lint:check": "eslint \"**/*.{js,ts,tsx}\"",
-    "lint": "eslint src --ext .ts,.tsx --fix --config eslint.config.mjs"
+    "lint": "eslint src --fix --config eslint.config.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.13.1",
+    "neverthrow": "^8.2.0",
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "typescript": "^5.8.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.3",
-    "jest": "^30.0.3",
-    "ts-jest": "^29.1.1",
-    "prettier": "^3.6.1",
-    "eslint": "^9.23.0",
-    "typescript-eslint": "^8.28.0",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
+    "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-prettier": "^5.5.0",
-    "eslint-plugin-promise": "^6.1.1"
+    "eslint-plugin-promise": "^6.1.1",
+    "jest": "^30.0.3",
+    "prettier": "^3.6.1",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.28.0"
   }
 }

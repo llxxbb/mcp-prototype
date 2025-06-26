@@ -1,37 +1,9 @@
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { logger } from "../utils/logger.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-export async function callTool(
-  args?: Record<string, any>,
-): Promise<CallToolResult> {
-  if (!args || typeof args !== "object") {
-    logger.warn("Invalid arguments for stop tool", args);
-    return {
-      content: [
-        {
-          type: "text",
-          text: "Invalid arguments: expected object",
-        },
-      ],
-      isError: true,
-    };
-  }
-
-  const { serviceName } = args;
-  if (!serviceName || typeof serviceName !== "string") {
-    logger.warn("Missing serviceName in stop tool", args);
-    return {
-      content: [
-        {
-          type: "text",
-          text: "Missing required serviceName parameter",
-        },
-      ],
-      isError: true,
-    };
-  }
-
-  logger.info(`Stopping service: ${serviceName}`);
+export async function stopTool(): Promise<CallToolResult> {
+  logger.info("Stopping service");
   // 模拟服务停止过程
   await new Promise((resolve) => setTimeout(resolve, 800));
 
@@ -41,9 +13,8 @@ export async function callTool(
         type: "text",
         text: JSON.stringify(
           {
-            status: "stopped",
-            serviceName,
-            stoppedAt: new Date().toISOString(),
+            isOk: true,
+            message: "",
           },
           null,
           2,
@@ -51,4 +22,21 @@ export async function callTool(
       },
     ],
   };
+}
+
+export function registerStopTool(server: McpServer) {
+  server.registerTool(
+    "stop",
+    {
+      title: "Stop Service",
+      description: "停止展示原型，并关闭web服务器",
+      inputSchema: {},
+    },
+    async () => {
+      const response = await stopTool();
+      return {
+        content: response.content,
+      };
+    },
+  );
 }

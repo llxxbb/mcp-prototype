@@ -11,4 +11,6 @@ export default {
       tsconfig: 'tsconfig.json'
     }],
   },
+  detectOpenHandles: true,
+  forceExit: true
 };

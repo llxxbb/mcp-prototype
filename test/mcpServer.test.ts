@@ -1,14 +1,11 @@
-import { McpServer } from '../src/index';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { EnhancedMcpServer } from '../src/index';
 import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 
 describe('McpServer', () => {
-  let server: McpServer;
-  let transport: StdioServerTransport;
+  let server: EnhancedMcpServer;
 
   beforeAll(async () => {
-    server = new McpServer();
-    transport = new StdioServerTransport();
+    server = new EnhancedMcpServer();
     await server.run();
   });
 

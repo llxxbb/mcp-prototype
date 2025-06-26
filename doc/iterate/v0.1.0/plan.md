@@ -12,23 +12,27 @@
 - 支持展示和关闭
 - 给出具体的入参和出参定义，这些定义需要符合 MCP 协议要求。
 
-1.3 [进行中]实现 MCP 工具接口定义 (1人天)
-- 按[接口定义](../../interface.md)进行接口“空”实现，但接口文档要有完整的职能说明，便于后续任务参考。
+1.3 [完成]实现 MCP 工具接口定义 (1人天)
+- 按[接口定义](design/interface.md)进行接口“空”实现，但接口文档要有完整的职能说明，便于后续任务参考。
 - 与 /src/index.js 中的 mcp 服务进行对接
 - tools 描述和 schema 需要准确。
 
-1.4 实现 getSpec 接口 (0.5人天)
-- 按[接口定义](../../interface.md)进行接口实现
+1.4 [完成]实现 getSpec 接口 (0.5人天)
+- 按[接口定义](design/interface.md)进行接口实现
 
-1.5 实现 init 接口 (1人天)
-- 按[接口定义](../../interface.md)进行接口实现  
+1.5 [进行中]实现 init 接口 (1人天)
+- 按[接口定义](design/interface.md)进行接口实现
+
+1.5 实现日志落盘
+- 订阅配置变更
+- 只有 globalConfig.logDisable 为 false 时进行日志落盘
 
 1.6 实现 start 接口 (1人天)
-- 按[接口定义](../../interface.md)进行接口实现
+- 按[接口定义](design/interface.md)进行接口实现
 - 与 /src/index.js 中的 mcp 服务进行对接
 
 1.7 实现 stop 接口 (0.5人天)
-- 按[接口定义](../../interface.md)进行接口实现
+- 按[接口定义](design/interface.md)进行接口实现
 
 ## 2. 前端开发
 2.1 三栏布局框架 (1人天)

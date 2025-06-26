@@ -1,16 +1,13 @@
-#!/usr/bin/env node
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
-import { GetSpecInputSchema } from "./types/tools.js";
-import { callTool as helloWorld } from "./mcp/helloWorld.js";
-import { callTool as getSpec } from "./mcp/getSpec.js";
-import { callTool as init } from "./mcp/init.js";
-import { callTool as start } from "./mcp/start.js";
-import { callTool as stop } from "./mcp/stop.js";
 import { logger } from "./utils/logger.js";
+import { helloWorldTool, registerHelloWorldTool } from "./mcp/helloWorld.js";
+import { registerGetSpecTool } from "./mcp/getSpec.js";
+import { registerInitTool } from "./mcp/init.js";
+import { registerStartTool } from "./mcp/start.js";
+import { registerStopTool } from "./mcp/stop.js";
 
-class EnhancedMcpServer {
+export class EnhancedMcpServer {
   private server: McpServer;
 
   constructor() {
@@ -19,94 +16,12 @@ class EnhancedMcpServer {
       version: "0.1.0",
     });
 
-    // Register tools
-    this.server.registerTool(
-      "hello_world",
-      {
-        title: "Hello World Tool",
-        description: "Returns a greeting message",
-        inputSchema: {
-          name: z.string().describe("Name to greet"),
-        },
-      },
-      async ({ name }: { name: string }) => {
-        logger.info(`Processing hello_world request for ${name}`);
-        const response = await helloWorld({ name });
-        return {
-          content: response.content,
-        };
-      },
-    );
-
-    this.server.registerTool(
-      "getSpec",
-      {
-        title: "Get Specification",
-        description: "Returns service specification",
-        inputSchema: GetSpecInputSchema,
-      },
-      async () => {
-        logger.info("Processing getSpec request");
-        const response = await getSpec({});
-        return {
-          content: response.content,
-        };
-      },
-    );
-
-    this.server.registerTool(
-      "init",
-      {
-        title: "Initialize Service",
-        description: "Initializes service with configuration",
-        inputSchema: {
-          config: z.record(z.unknown()).describe("Configuration object"),
-        },
-      },
-      async ({ config }: { config: Record<string, unknown> }) => {
-        logger.info("Processing init request");
-        const response = await init({ config });
-        return {
-          content: response.content,
-        };
-      },
-    );
-
-    this.server.registerTool(
-      "start",
-      {
-        title: "Start Service",
-        description: "Starts the specified service",
-        inputSchema: {
-          serviceName: z.string().describe("Name of service to start"),
-        },
-      },
-      async ({ serviceName }: { serviceName: string }) => {
-        logger.info(`Processing start request for ${serviceName}`);
-        const response = await start({ serviceName });
-        return {
-          content: response.content,
-        };
-      },
-    );
-
-    this.server.registerTool(
-      "stop",
-      {
-        title: "Stop Service",
-        description: "Stops the specified service",
-        inputSchema: {
-          serviceName: z.string().describe("Name of service to stop"),
-        },
-      },
-      async ({ serviceName }: { serviceName: string }) => {
-        logger.info(`Processing stop request for ${serviceName}`);
-        const response = await stop({ serviceName });
-        return {
-          content: response.content,
-        };
-      },
-    );
+    // Register tools using the new registration functions
+    registerHelloWorldTool(this.server);
+    registerGetSpecTool(this.server);
+    registerInitTool(this.server);
+    registerStartTool(this.server);
+    registerStopTool(this.server);
 
     // // Register resources
     // this.server.registerResource(
@@ -153,6 +68,8 @@ class EnhancedMcpServer {
   private reconnectAttempts = 0;
   private readonly maxReconnectAttempts = 5;
   private readonly reconnectDelay = 3000; // 3 seconds
+  private heartbeatInterval?: NodeJS.Timeout;
+  private keepAliveInterval?: NodeJS.Timeout;
 
   async run(): Promise<void> {
     try {
@@ -189,7 +106,7 @@ class EnhancedMcpServer {
       logger.info("Server running on stdio");
 
       // Heartbeat check
-      setInterval(() => {
+      this.heartbeatInterval = setInterval(() => {
         if (!this.isConnected) {
           logger.warn("Connection lost, attempting to reconnect...");
           monitorConnection();
@@ -197,9 +114,9 @@ class EnhancedMcpServer {
       }, 5000);
 
       // Keep process alive
-      const keepAliveInterval = setInterval(() => {
+      this.keepAliveInterval = setInterval(() => {
         if (!this.isConnected) {
-          clearInterval(keepAliveInterval);
+          clearInterval(this.keepAliveInterval);
         }
       }, 1000);
     } catch (err) {
@@ -213,7 +130,7 @@ class EnhancedMcpServer {
     args: { name?: string },
   ): Promise<{ content: unknown }> {
     if (name === "hello_world") {
-      const response = await helloWorld(args);
+      const response = await helloWorldTool(args);
       return {
         content: response.content,
       };
@@ -222,6 +139,12 @@ class EnhancedMcpServer {
   }
 
   async close(): Promise<void> {
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+    }
+    if (this.keepAliveInterval) {
+      clearInterval(this.keepAliveInterval);
+    }
     await this.server.close();
     this.isConnected = false;
     logger.info("Server stopped");
@@ -233,5 +156,3 @@ server.run().catch((err) => {
   logger.error("Unhandled server error", err);
   process.exit(1);
 });
-
-export { EnhancedMcpServer as McpServer };

@@ -3,7 +3,7 @@ import eslintPluginPrettier from "eslint-plugin-prettier";
 
 export default tseslint.config({
   // Base ESLint configuration
-  files: ['src/**/*.ts', 'src/**/*.tsx'],
+  files: ['src/**/*.ts'],
   ignores: ['**/*.d.ts'],
   languageOptions: {
     ecmaVersion: "latest",
