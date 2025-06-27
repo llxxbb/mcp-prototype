@@ -17,16 +17,12 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
     return response.error("Invalid arguments: expected object");
   }
 
-  var parsedArgs;
-  try {
-    // Parse and apply defaults from schema
-    parsedArgs = InitArgsSchema.parse(args);
-  } catch (error) {
-    logger.error("Init tool error", error);
-    return response.error(`Initialization failed: ${error}`);
-  }
-  
-  if (globalConfig.projectPath === undefined && parsedArgs.projectPath === "") {
+  var parsedArgs = InitArgsSchema.parse(args);
+
+  if (
+    globalConfig.projectPath === undefined &&
+    (parsedArgs.projectPath === undefined || parsedArgs.projectPath === "")
+  ) {
     logger.warn("Init failed: projectPath is required");
     return response.error("[projectPath] must be set for first time");
   }
