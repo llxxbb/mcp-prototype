@@ -20,19 +20,18 @@
 1.4 [完成]实现 getSpec 接口 (0.5人天)
 - 按[接口定义](design/interface.md)进行接口实现
 
-1.5 [进行中]实现 init 接口 (1人天)
+1.5 [完成]实现 init 接口 (1人天)
+- 按[接口定义](design/interface.md)进行接口实现
+
+1.6 [进行中]实现 start 接口 (1人天)
+- 按[接口定义](design/interface.md)进行接口实现
+
+1.7 实现 stop 接口 (0.5人天)
 - 按[接口定义](design/interface.md)进行接口实现
 
 1.5 实现日志落盘
 - 订阅配置变更
 - 只有 globalConfig.logDisable 为 false 时进行日志落盘
-
-1.6 实现 start 接口 (1人天)
-- 按[接口定义](design/interface.md)进行接口实现
-- 与 /src/index.js 中的 mcp 服务进行对接
-
-1.7 实现 stop 接口 (0.5人天)
-- 按[接口定义](design/interface.md)进行接口实现
 
 ## 2. 前端开发
 2.1 三栏布局框架 (1人天)

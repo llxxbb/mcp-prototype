@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
-import { globalConfig } from "../../src/mcp/init.js";
+import { globalConfig, initialized } from "../../src/mcp/init.js";
 
 describe("initTool", () => {
   let initTool;
@@ -29,12 +29,14 @@ describe("initTool", () => {
   });
 
   it("projectPath ok", async () => {
+    expect(initialized).toBe(false);
     var path = process.cwd();
     const result = await initTool({
       projectPath: path,
     });
     expect(result.content[0].text).toContain(`\"Initialization succeeded\"`);
     expect(globalConfig.projectPath).toBe(path);
+    expect(initialized).toBe(true);
   });
 
   it("old should be retain", async () => {

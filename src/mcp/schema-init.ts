@@ -2,9 +2,9 @@ import { z } from "zod";
 
 export const InitArgsSchema = z.object({
   projectPath: z
-  .string()
-  .optional()
-  .describe("当前项目的路径, 第一次调用时必须指定"),
+    .string()
+    .optional()
+    .describe("当前项目的路径, 第一次调用时必须指定"),
   prototypeRoot: z
     .string()
     .optional()

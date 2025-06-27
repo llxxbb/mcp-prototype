@@ -8,6 +8,7 @@ import { checkDirectory } from "../utils/directory.js";
 
 // Global configuration object
 export let globalConfig: Partial<InitArgs> = {};
+export let initialized = false;
 
 type InitArgs = z.infer<typeof InitArgsSchema>;
 
@@ -17,11 +18,11 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
     return response.error("Invalid arguments: expected object");
   }
 
-  var parsedArgs = InitArgsSchema.parse(args);
+  const parsedArgs = InitArgsSchema.parse(args);
 
   if (
     globalConfig.projectPath === undefined &&
-    (parsedArgs.projectPath === undefined || parsedArgs.projectPath === "")
+    (parsedArgs?.projectPath === undefined || parsedArgs?.projectPath === "")
   ) {
     logger.warn("Init failed: projectPath is required");
     return response.error("[projectPath] must be set for first time");
@@ -34,6 +35,7 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
       logger.warn(`Invalid project path: ${parsedArgs.projectPath}`);
       return response.error(`Invalid project path: ${parsedArgs.projectPath}`);
     }
+    initialized = true;
   }
 
   // Update globalConfig with parsed args (partial update)
@@ -55,6 +57,6 @@ export function registerInitTool(server: McpServer) {
       return {
         content: rep.content,
       };
-    }
+    },
   );
 }

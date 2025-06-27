@@ -23,11 +23,18 @@ export const response = {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   success: (data: any): CallToolResult => {
+    // 如果 data 是字符串，那么就直接返回，否则就将其转换为字符串
+    let content: string;
+    if (typeof data === "string") {
+      content = data;
+    } else {
+      content = JSON.stringify(data, null, 2);
+    }
     return {
       content: [
         {
           type: "text",
-          text: JSON.stringify(data, null, 2),
+          text: content,
         },
       ],
       isError: false,

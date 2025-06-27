@@ -4,8 +4,7 @@ import { logger } from "./utils/logger.js";
 import { helloWorldTool, registerHelloWorldTool } from "./mcp/helloWorld.js";
 import { registerGetSpecTool } from "./mcp/getSpec.js";
 import { registerInitTool } from "./mcp/init.js";
-import { registerStartTool } from "./mcp/start.js";
-import { registerStopTool } from "./mcp/stop.js";
+import { registerWebTools } from "./mcp/web.js";
 
 export class EnhancedMcpServer {
   private server: McpServer;
@@ -20,8 +19,7 @@ export class EnhancedMcpServer {
     registerHelloWorldTool(this.server);
     registerGetSpecTool(this.server);
     registerInitTool(this.server);
-    registerStartTool(this.server);
-    registerStopTool(this.server);
+    registerWebTools(this.server);
 
     // // Register resources
     // this.server.registerResource(
