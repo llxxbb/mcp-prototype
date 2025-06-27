@@ -17,36 +17,32 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
     return response.error("Invalid arguments: expected object");
   }
 
+  var parsedArgs;
   try {
     // Parse and apply defaults from schema
-    const parsedArgs = InitArgsSchema.parse(args);
-
-    if (
-      globalConfig.projectPath === undefined &&
-      parsedArgs.projectPath === ""
-    ) {
-      logger.warn("Init failed: projectPath is required");
-      return response.error("[projectPath] must be set for first time");
-    }
-
-    // Verify projectPath exists and is a directory
-    if (parsedArgs.projectPath) {
-      const dirResult = await checkDirectory(parsedArgs.projectPath);
-      if (dirResult.isErr()) {
-        logger.warn(`Invalid project path: ${parsedArgs.projectPath}`);
-        return response.error(
-          `Invalid project path: ${parsedArgs.projectPath}`,
-        );
-      }
-    }
-
-    // Update globalConfig with parsed args (partial update)
-    globalConfig = { ...globalConfig, ...parsedArgs };
-    return response.success("Initialization succeeded");
+    parsedArgs = InitArgsSchema.parse(args);
   } catch (error) {
     logger.error("Init tool error", error);
     return response.error(`Initialization failed: ${error}`);
   }
+  
+  if (globalConfig.projectPath === undefined && parsedArgs.projectPath === "") {
+    logger.warn("Init failed: projectPath is required");
+    return response.error("[projectPath] must be set for first time");
+  }
+
+  // Verify projectPath exists and is a directory
+  if (parsedArgs.projectPath) {
+    const dirResult = await checkDirectory(parsedArgs.projectPath);
+    if (dirResult.isErr()) {
+      logger.warn(`Invalid project path: ${parsedArgs.projectPath}`);
+      return response.error(`Invalid project path: ${parsedArgs.projectPath}`);
+    }
+  }
+
+  // Update globalConfig with parsed args (partial update)
+  globalConfig = { ...globalConfig, ...parsedArgs };
+  return response.success("Initialization succeeded");
 }
 
 export function registerInitTool(server: McpServer) {
@@ -63,6 +59,6 @@ export function registerInitTool(server: McpServer) {
       return {
         content: rep.content,
       };
-    },
+    }
   );
 }

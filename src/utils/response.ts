@@ -21,6 +21,7 @@ export const response = {
    * 生成成功响应
    * @param data 响应数据
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   success: (data: any): CallToolResult => {
     return {
       content: [

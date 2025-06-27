@@ -1,16 +1,11 @@
 export default {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  extensionsToTreatAsEsm: ['.ts'],
+  preset: "ts-jest",
+  testEnvironment: "node",
+  extensionsToTreatAsEsm: [".ts"],
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
+    "^(\\.{1,2}/.*)\\.js$": "$1",
   },
-  transform: {
-    '^.+\\.ts$': ['ts-jest', {
-      useESM: true,
-      tsconfig: 'tsconfig.json'
-    }],
-  },
+  roots: ["src", "test"],
   detectOpenHandles: true,
-  forceExit: true
+  forceExit: true,
 };
