@@ -2,6 +2,7 @@ import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { logger } from "../utils/logger.js";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import fastify, { FastifyInstance } from "fastify";
+import fastifyStatic from "@fastify/static";
 import { globalConfig, initialized } from "./init.js";
 import { response } from "../utils/response.js";
 
@@ -19,8 +20,15 @@ export async function startTool(): Promise<CallToolResult> {
     logger: false, // 使用自定义logger
   });
 
+  // 检查prototypeRoot是否定义
+  if (!globalConfig.prototypeRoot) {
+    return response.error(
+      "prototypeRoot未配置，请先调用init工具设置原型根目录",
+    );
+  }
+
   // 注册静态文件服务
-  serverInstance.register(require("@fastify/static"), {
+  serverInstance.register(fastifyStatic, {
     root: globalConfig.prototypeRoot,
     prefix: "/",
   });

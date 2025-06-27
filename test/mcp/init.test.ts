@@ -34,7 +34,7 @@ describe("initTool", () => {
     const result = await initTool({
       projectPath: path,
     });
-    expect(result.content[0].text).toContain(`\"Initialization succeeded\"`);
+    expect(result.content[0].text).toContain(`Initialization succeeded`);
     expect(globalConfig.projectPath).toBe(path);
     expect(initialized).toBe(true);
   });
