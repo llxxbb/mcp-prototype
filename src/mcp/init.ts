@@ -67,7 +67,7 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
         );
       }
 
-      // Check or create directory
+      // Check or create prototypeRoot directory
       const dirResult = await checkDirectory(parsedArgs.prototypeRoot);
       if (dirResult.isErr()) {
         logger.info(
