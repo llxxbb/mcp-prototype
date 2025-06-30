@@ -5,6 +5,9 @@ import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { InitArgsSchema } from "./schema-init.js";
 import { checkDirectory } from "../utils/directory.js";
+import path from "path";
+import * as fs from "fs/promises";
+import { assert } from "console";
 
 // Global configuration object
 export let globalConfig: Partial<InitArgs> = {};
@@ -38,6 +41,12 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
     initialized = true;
   }
 
+  let projectPath = globalConfig.projectPath
+    ? globalConfig.projectPath
+    : parsedArgs.projectPath;
+  assert(projectPath);
+  projectPath = projectPath!;
+
   // prototypeRoot is required
   if (
     globalConfig.prototypeRoot === undefined &&
@@ -53,8 +62,8 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
       // Handle relative path
       if (!path.isAbsolute(parsedArgs.prototypeRoot)) {
         parsedArgs.prototypeRoot = path.join(
-          parsedArgs.projectPath,
-          parsedArgs.prototypeRoot
+          projectPath,
+          parsedArgs.prototypeRoot,
         );
       }
 
@@ -62,14 +71,14 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
       const dirResult = await checkDirectory(parsedArgs.prototypeRoot);
       if (dirResult.isErr()) {
         logger.info(
-          `Creating prototype root directory: ${parsedArgs.prototypeRoot}`
+          `Creating prototype root directory: ${parsedArgs.prototypeRoot}`,
         );
-        await fs.promises.mkdir(parsedArgs.prototypeRoot, { recursive: true });
+        await fs.mkdir(parsedArgs.prototypeRoot, { recursive: true });
       }
     } catch (error) {
       logger.error(`Failed to process prototypeRoot: ${error}`);
       return response.error(
-        `Failed to process prototypeRoot: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to process prototypeRoot: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   }
@@ -93,7 +102,7 @@ export function registerInitTool(server: McpServer) {
       return {
         content: rep.content,
       };
-    }
+    },
   );
 }
 
