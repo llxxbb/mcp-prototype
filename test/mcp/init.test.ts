@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
-import { globalConfig, initialized } from "../../src/mcp/init.js";
+import { globalConfig, initialized, resetConfig } from "../../src/mcp/init.js";
 
 describe("initTool", () => {
   let initTool;
@@ -9,7 +9,7 @@ describe("initTool", () => {
     const initModule = await import("../../src/mcp/init.js");
     initTool = initModule.initTool;
     // Reset globalConfig before each test
-    Object.keys(globalConfig).forEach((key) => delete globalConfig[key]);
+    resetConfig()
   });
 
   it("should require projectPath", async () => {

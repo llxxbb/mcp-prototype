@@ -38,6 +38,42 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
     initialized = true;
   }
 
+  // prototypeRoot is required
+  if (
+    globalConfig.prototypeRoot === undefined &&
+    (parsedArgs?.prototypeRoot === undefined ||
+      parsedArgs?.prototypeRoot === "")
+  ) {
+    logger.warn("Init failed: prototypeRoot is required");
+    return response.error("[prototypeRoot] must be set for first time");
+  }
+  // Verify prototypeRoot exists and is a directory
+  if (parsedArgs.prototypeRoot) {
+    try {
+      // Handle relative path
+      if (!path.isAbsolute(parsedArgs.prototypeRoot)) {
+        parsedArgs.prototypeRoot = path.join(
+          parsedArgs.projectPath,
+          parsedArgs.prototypeRoot
+        );
+      }
+
+      // Check or create directory
+      const dirResult = await checkDirectory(parsedArgs.prototypeRoot);
+      if (dirResult.isErr()) {
+        logger.info(
+          `Creating prototype root directory: ${parsedArgs.prototypeRoot}`
+        );
+        await fs.promises.mkdir(parsedArgs.prototypeRoot, { recursive: true });
+      }
+    } catch (error) {
+      logger.error(`Failed to process prototypeRoot: ${error}`);
+      return response.error(
+        `Failed to process prototypeRoot: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  }
+
   // Update globalConfig with parsed args (partial update)
   globalConfig = { ...globalConfig, ...parsedArgs };
   return response.success("Initialization succeeded");
@@ -57,6 +93,11 @@ export function registerInitTool(server: McpServer) {
       return {
         content: rep.content,
       };
-    },
+    }
   );
+}
+
+export function resetConfig() {
+  globalConfig = {};
+  initialized = false;
 }

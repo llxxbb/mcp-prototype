@@ -6,7 +6,7 @@ import fastifyStatic from "@fastify/static";
 import { globalConfig, initialized } from "./init.js";
 import { response } from "../utils/response.js";
 
-let serverInstance: FastifyInstance | null = null;
+export let serverInstance: FastifyInstance | null = null;
 
 export async function startTool(): Promise<CallToolResult> {
   // 检查是否已初始化

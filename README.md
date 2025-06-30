@@ -27,6 +27,11 @@
     }
 ```
 
+## 技术栈
+
+- nodejs, Svelte, Fastify，ts
+- 基于最新 ES 规范开发，禁止引入 commonJS。
+
 ## 其他文档
 
 v0.1.0
