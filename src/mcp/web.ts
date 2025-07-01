@@ -5,8 +5,11 @@ import fastify, { FastifyInstance } from "fastify";
 import fastifyStatic from "@fastify/static";
 import { globalConfig, initialized } from "./init.js";
 import { response } from "../utils/response.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 export let serverInstance: FastifyInstance | null = null;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export async function startTool(): Promise<CallToolResult> {
   // 检查是否已初始化
@@ -29,8 +32,13 @@ export async function startTool(): Promise<CallToolResult> {
 
   // 注册静态文件服务
   serverInstance.register(fastifyStatic, {
-    root: globalConfig.prototypeRoot,
+    root: path.join(__dirname, "../dist"),
     prefix: "/",
+  });
+
+  // 添加根路由处理
+  serverInstance.get("/", async (request, reply) => {
+    return reply.sendFile("index.html");
   });
 
   try {
