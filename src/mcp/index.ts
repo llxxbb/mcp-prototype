@@ -1,10 +1,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { logger } from "./utils/logger.js";
-import { helloWorldTool, registerHelloWorldTool } from "./mcp/helloWorld.js";
-import { registerGetSpecTool } from "./mcp/getSpec.js";
-import { registerInitTool } from "./mcp/init.js";
-import { registerWebTools } from "./mcp/web.js";
+import { helloWorldTool, registerHelloWorldTool } from "./tool/helloWorld.js";
+import { registerGetSpecTool } from "./tool/getSpec.js";
+import { registerInitTool } from "./tool/init.js";
+import { registerWebTools } from "./tool/web.js";
 
 export class EnhancedMcpServer {
   private server: McpServer;

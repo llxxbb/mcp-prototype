@@ -1,5 +1,5 @@
-import { startTool, stopTool } from "../../src/mcp/web.js";
-import { initTool } from "../../src/mcp/init.js";
+import { startTool, stopTool } from "./web.js";
+import { initTool } from "./init.js";
 import { join, dirname } from "path";
 import { mkdirSync, writeFileSync, rmSync } from "fs";
 import { fileURLToPath } from "url";

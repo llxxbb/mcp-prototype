@@ -29,7 +29,7 @@
 
 ## 技术栈
 
-- nodejs, Svelte, Fastify，ts
+- nodejs, SvelteKit, Vite，ts 
 - 基于最新 ES 规范开发，禁止引入 commonJS。
 
 ## 其他文档
@@ -37,5 +37,3 @@
 v0.1.0
 
 [需求](doc/iterate/v0.1.0/index.md)
-
-接口

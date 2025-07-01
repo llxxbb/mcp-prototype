@@ -1,4 +1,4 @@
-import { helloWorldTool } from '../../src/mcp/helloWorld';
+import { helloWorldTool } from '../../src/mcp/tool/helloWorld';
 
 describe('helloWorld', () => {
   describe('callTool', () => {
