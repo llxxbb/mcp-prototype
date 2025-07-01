@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && rollup -c",
     "start": "node ./dist/index.js",
     "format": "prettier --write .",
     "test": "set NODE_OPTIONS=--experimental-vm-modules && jest --config ./jest.config.mjs",

@@ -1,7 +1,7 @@
-import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { logger } from "../utils/logger.js";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import fastify, { FastifyInstance } from "fastify";
+import fastify, { type FastifyInstance } from "fastify";
 import fastifyStatic from "@fastify/static";
 import { globalConfig, initialized } from "./init.js";
 import { response } from "../utils/response.js";

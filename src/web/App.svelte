@@ -1,8 +1,10 @@
-<script>
-  export let name;
+<script lang="ts">
+  let props = $props();
+  let name = props?.name || 'World';
+  console.log('Received props:', props);
   
-  let leftSidebarVisible = true;
-  let rightSidebarVisible = true;
+  let leftSidebarVisible = $state(true);
+  let rightSidebarVisible = $state(true);
   
   function toggleLeftSidebar() {
     leftSidebarVisible = !leftSidebarVisible;
@@ -15,7 +17,7 @@
 
 <main class="app-container">
   <aside class="sidebar left" class:collapsed={!leftSidebarVisible}>
-    <button on:click={toggleLeftSidebar} class="toggle-btn">
+    <button onclick={toggleLeftSidebar} class="toggle-btn">
       {leftSidebarVisible ? '◀' : '▶'}
     </button>
     <div class="nav-content">
@@ -30,7 +32,7 @@
   </section>
   
   <aside class="sidebar right" class:collapsed={!rightSidebarVisible}>
-    <button on:click={toggleRightSidebar} class="toggle-btn">
+    <button onclick={toggleRightSidebar} class="toggle-btn">
       {rightSidebarVisible ? '◀' : '▶'}
     </button>
     <div class="helper-content">
