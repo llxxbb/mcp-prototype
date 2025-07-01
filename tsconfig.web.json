@@ -7,11 +7,11 @@
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
-    "rootDir": "./src/web",
-    "sourceMap": true,
+		"rootDir": "./src",
+		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler"
 	},
-  "include": ["src/web/**/*"],
-  "exclude": ["src/web/**/*.test.ts"]
+	"include": ["src/**/*"],
+	"exclude": ["src/mcp/**/*", "src/**/*.test.ts"]
 }
