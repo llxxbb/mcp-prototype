@@ -36,7 +36,14 @@ describe('web.ts', () => {
 		it('should start server successfully', async () => {
 			const result = await startTool();
 			expect(result.isError).toBe(false);
-			expect(result.content[0].text).toContain('http://localhost:3001');
+			const url = 'http://localhost:3001';
+			expect(result.content[0].text).toContain(url);
+
+			// 实际访问URL验证内容
+			const fetch = (await import('node-fetch')).default;
+			const response = await fetch(url);
+			const html = await response.text();
+			expect(html).toContain('Hello World!');
 		});
 	});
 });
