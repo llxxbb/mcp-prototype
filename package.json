@@ -5,10 +5,10 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"start:mcp": "node dist/mcp/index.cjs",
+		"build:mcp": "tsc -p ./tsconfig.mcp.json",
+		"start:mcp": "node dist/mcp/index.js",
 		"start:web": "node ./dist/mcp/web.js",
 		"build:web": "set TSCONFIG_PATH=tsconfig.web.json && vite build -c ./vite.config.web.ts",
-		"build:mcp": "set TSCONFIG_PATH=tsconfig.mcp.json && vite build -c ./vite.config.mcp.ts",
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",

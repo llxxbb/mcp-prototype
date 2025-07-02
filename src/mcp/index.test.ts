@@ -1,5 +1,5 @@
-import { EnhancedMcpServer } from '../src/index';
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { EnhancedMcpServer } from './index';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 describe('McpServer', () => {
   let server: EnhancedMcpServer;
