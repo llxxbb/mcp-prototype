@@ -22,7 +22,7 @@
       "args": [
         "--prefix",
         "path/to/mcp-prototype",
-        "start"
+        "start:mcp"
       ]
     }
 ```

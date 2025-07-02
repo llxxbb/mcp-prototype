@@ -5,8 +5,8 @@ import fastify, { type FastifyInstance } from "fastify";
 import fastifyStatic from "@fastify/static";
 import { globalConfig, initialized } from "./init.js";
 import { response } from "../utils/response.js";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export let serverInstance: FastifyInstance | null = null;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

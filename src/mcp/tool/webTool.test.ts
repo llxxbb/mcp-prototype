@@ -1,4 +1,4 @@
-import { startTool, stopTool } from "./web.js";
+import { startTool, stopTool } from "./webTool.js";
 import { initTool } from "./init.js";
 import { join, dirname } from "path";
 import { mkdirSync, writeFileSync, rmSync } from "fs";

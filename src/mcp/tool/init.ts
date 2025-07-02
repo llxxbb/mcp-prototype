@@ -5,9 +5,9 @@ import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { InitArgsSchema } from "./schema-init.js";
 import { checkDirectory } from "../utils/directory.js";
-import path from "path";
-import * as fs from "fs/promises";
-import { assert } from "console";
+import path from "node:path";
+import * as fs from "node:fs/promises";
+import { assert } from "node:console";
 
 // Global configuration object
 export let globalConfig: Partial<InitArgs> = {};

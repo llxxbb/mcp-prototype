@@ -4,7 +4,7 @@ import { logger } from "./utils/logger.js";
 import { helloWorldTool, registerHelloWorldTool } from "./tool/helloWorld.js";
 import { registerGetSpecTool } from "./tool/getSpec.js";
 import { registerInitTool } from "./tool/init.js";
-import { registerWebTools } from "./tool/web.js";
+import { registerWebTools } from "./tool/webTool.js";
 
 export class EnhancedMcpServer {
   private server: McpServer;
