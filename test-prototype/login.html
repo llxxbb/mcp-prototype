@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" data-nav-level="1" data-nav-name="用户登录" data-nav-seq="1">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +11,14 @@
         <h1>Login</h1>
         <form id="loginForm" action="/login" method="POST">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+                <label for="username" data-marker="用户名标签">Username</label>
+                <input type="text" id="username" name="username" required data-marker="用户名输入框">
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <label for="password" data-marker="密码标签">Password</label>
+                <input type="password" id="password" name="password" required data-marker="密码输入框">
             </div>
-            <button type="submit">Login</button>
+                            <button type="submit" data-marker="登录按钮">Login</button>
         </form>
     </div>
     <script src="js/login.js"></script>
