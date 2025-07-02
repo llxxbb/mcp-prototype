@@ -7,17 +7,16 @@
 	"scripts": {
 		"build:mcp": "tsc -p ./tsconfig.mcp.json",
 		"start:mcp": "node dist/mcp/index.js",
-		"start:web": "node ./dist/mcp/web.js",
+		"start:mcpW": "node ./dist/mcp/web.js",
 		"build:web": "set TSCONFIG_PATH=tsconfig.web.json && vite build -c ./vite.config.web.ts",
+		"web": "vite dev -c ./vite.config.web.ts",
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
-		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run"
+		"test": "vitest",
+		"test:debug": "vitest --inspect-brk"
 	},
 	"dependencies": {
-		"@fastify/static": "^8.2.0",
 		"@modelcontextprotocol/sdk": "^1.13.1",
-		"fastify": "^5.4.0",
 		"neverthrow": "^8.2.0",
 		"zod": "^3.25.67"
 	},

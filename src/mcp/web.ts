@@ -1,16 +1,12 @@
 import { createServer } from 'vite'
-import path from 'path'
-import { fileURLToPath } from 'url'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const start = async () => {
   try {
     const server = await createServer({
-      root: path.join(__dirname, '../.svelte-kit'),
+      configFile: "vite.config.web.ts",
       server: {
         port: 3000,
-        open: false
+        open: true
       }
     })
     
