@@ -43,7 +43,7 @@ describe('web.ts', () => {
 			const fetch = (await import('node-fetch')).default;
 			const response = await fetch(url);
 			const html = await response.text();
-			expect(html).toContain('Hello World!');
+			expect(html).toContain('mcp-prototype');
 		});
 	});
 });
