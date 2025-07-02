@@ -1,5 +1,35 @@
 import { defineConfig } from 'vite';
+
+// 所有 Node.js 内置模块列表
+const NODE_BUILTINS = [
+  'node:fs',
+  'node:path', 
+  'node:console',
+  'node:fs/promises',
+  'node:process',
+  'node:url',
+  'node:assert',
+  'node:events',
+  'node:stream',
+  'node:util',
+  'node:http',
+  'node:https',
+  'node:http2',
+  'node:dns',
+  'node:os',
+  'node:async_hooks',
+  'node:crypto',
+  'node:string_decoder',
+  'node:diagnostics_channel'
+];
+
 export default defineConfig({
+  resolve: {
+    alias: {
+      path: 'path-browserify'
+    }
+  },
+  plugins: [],
 	build: {
 		target: 'node16',
 		lib: {
@@ -7,30 +37,12 @@ export default defineConfig({
 				index: 'src/mcp/index.ts',
 				web: 'src/mcp/web.ts'
 			},
-			formats: ['cjs'],
+			formats: ['es'],
 			fileName: '[name]'
 		},
 		rollupOptions: {
 			external: [
-				'node:fs',
-				'node:path',
-				'node:console',
-				'node:fs/promises',
-				'node:process',
-				'node:url',
-				'node:assert',
-				'node:events',
-				'node:stream',
-				'node:util',
-				'node:http',
-				'node:https',
-				'node:http2',
-				'node:dns',
-				'node:os',
-				'node:async_hooks',
-				'node:crypto',
-				'node:string_decoder',
-				'node:diagnostics_channel',
+				...NODE_BUILTINS,
 				/@modelcontextprotocol\/sdk/,
 				/^avvio/,
 				/^fastify/,
@@ -41,12 +53,12 @@ export default defineConfig({
 				/^minipass/,
 				/^glob/,
 				/^path-scurry/,
-				/^safe-buffer/
+				/^safe-buffer/,
+				/^fsevents$/
 			],
 			output: {
-				format: 'cjs',
-				interop: 'auto',
-				exports: 'named'
+				format: 'es',
+				interop: 'auto'
 			}
 		},
 		outDir: 'dist/mcp',
@@ -54,25 +66,7 @@ export default defineConfig({
 	},
 	optimizeDeps: {
 		exclude: [
-			'node:fs',
-			'node:path',
-			'node:console',
-			'node:fs/promises',
-			'node:process',
-			'node:url',
-			'node:assert',
-			'node:events',
-			'node:stream',
-			'node:util',
-			'node:http',
-			'node:https',
-			'node:http2',
-			'node:dns',
-			'node:os',
-			'node:async_hooks',
-			'node:crypto',
-			'node:string_decoder',
-			'node:diagnostics_channel',
+			...NODE_BUILTINS,
 			/@modelcontextprotocol\/sdk/,
 			/^avvio/,
 			/^fastify/,
