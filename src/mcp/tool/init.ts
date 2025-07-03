@@ -13,7 +13,7 @@ import { assert } from 'node:console';
 export let globalConfig: Partial<InitArgs> = {};
 export let initialized = false;
 
-type InitArgs = z.infer<typeof InitArgsSchema>;
+export type InitArgs = z.infer<typeof InitArgsSchema>;
 
 export async function initTool(args?: InitArgs): Promise<CallToolResult> {
 	if (!args || typeof args !== 'object') {

@@ -1,5 +1,5 @@
 import { startTool, stopTool } from './webTool.js';
-import { initTool } from './init.js';
+import { initTool, InitArgs } from './init.js';
 import { join } from 'path';
 import { writeFileSync, rmSync } from 'fs';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
@@ -16,7 +16,7 @@ describe('web.ts', () => {
 			projectPath: projectPath,
 			prototypeRoot,
 			port: testPort
-		});
+		} as InitArgs);
 
 		// 创建测试静态文件目录
 		writeFileSync(join(testRoot, 'index.html'), '<h1>Test</h1>');

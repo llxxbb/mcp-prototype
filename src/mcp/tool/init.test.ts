@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { globalConfig, initialized, resetConfig } from './init.js';
+import { globalConfig, initialized, resetConfig, initTool, InitArgs } from './init.js';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
@@ -11,29 +11,25 @@ describe('initTool', () => {
 		// Clean up temp directory
 		await fs.rm(tempDir, { recursive: true, force: true });
 	});
-	let initTool;
 	beforeEach(async () => {
-		// Dynamically import the module after mocks are set up
-		const initModule = await import('./init.js');
-		initTool = initModule.initTool;
 		// Reset globalConfig before each test
 		resetConfig();
 	});
 	it('should require projectPath', async () => {
-		const result = await initTool({});
+		const result = await initTool({} as InitArgs);
 		expect(result.content[0].text).toContain(`[projectPath] must be set for first time`);
 	});
 	it('projectPath path invalid', async () => {
 		const result = await initTool({
 			projectPath: '/test/path'
-		});
+		} as InitArgs);
 		expect(result.content[0].text).toContain(`Invalid project path: /test/path`);
 	});
 	it('should require prototypeRoot', async () => {
 		expect(initialized).toBe(false);
 		const result = await initTool({
 			projectPath: currentPath
-		});
+		} as InitArgs);
 		expect(result.content[0].text).toContain('[prototypeRoot] must be set for first time');
 	});
 
@@ -42,7 +38,7 @@ describe('initTool', () => {
 		const result = await initTool({
 			projectPath: currentPath,
 			prototypeRoot: htmlPath
-		});
+		} as InitArgs);
 		expect(result.content[0].text).toContain('Initialization succeeded');
 		expect(globalConfig.prototypeRoot).toBe(tempDir);
 	});
@@ -52,7 +48,7 @@ describe('initTool', () => {
 		const result = await initTool({
 			projectPath: currentPath,
 			prototypeRoot: htmlPath
-		});
+		} as InitArgs);
 		expect(result.content[0].text).toContain('Initialization succeeded');
 		expect(globalConfig.prototypeRoot).toBe(tempDir);
 	});
@@ -61,7 +57,7 @@ describe('initTool', () => {
 		const result = await initTool({
 			projectPath: currentPath,
 			prototypeRoot: prototypeRoot
-		});
+		} as InitArgs);
 		expect(result.content[0].text).toContain('Invalid prototypeRoot: end dir must be "html');
 	});
 
@@ -70,7 +66,7 @@ describe('initTool', () => {
 		await initTool({
 			projectPath: currentPath,
 			prototypeRoot: htmlPath
-		});
+		} as InitArgs);
 		await initTool();
 		expect(globalConfig.projectPath).toBe(currentPath);
 		expect(globalConfig.prototypeRoot).toBe(tempDir);

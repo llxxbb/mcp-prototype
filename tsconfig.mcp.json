@@ -12,9 +12,6 @@
     "sourceMap": true,
     "declaration": true,
     "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "paths": {
-      "@/*": ["./src/mcp/*"]
-    }
-  }
+  },
+  "include": ["src/mcp/**/*.ts", "src/mcp/**/*.js"],
 }
