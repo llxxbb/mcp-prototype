@@ -33,6 +33,18 @@
   overflow: auto;
 }
 
+.content-viewer {
+  width: 100%;
+  height: 100%;
+}
+
+.content-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+}
+
 .nav-content, .helper-content {
   padding: 20px;
   width: 250px;

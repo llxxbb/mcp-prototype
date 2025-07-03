@@ -36,16 +36,21 @@
     </div>
   </aside>
   
-  <section class="content">
-    {#if currentContent}
-      <div class="content-viewer">
-        <pre>{currentContent}</pre>
-      </div>
-    {:else}
-      <h1>mcp-prototype</h1>
-      <p>Please select a prototype file from the left sidebar</p>
-    {/if}
-  </section>
+      <section class="content">
+        {#if currentContent}
+          <div class="content-viewer">
+            <iframe 
+              title="prototype page"
+              srcdoc={currentContent}
+              frameborder="0"
+              class="content-frame"
+            ></iframe>
+          </div>
+        {:else}
+          <h1>mcp-prototype</h1>
+          <p>Please select a prototype file from the left sidebar</p>
+        {/if}
+      </section>
   
   <aside class="sidebar right" class:collapsed={!rightSidebarVisible}>
     <button onclick={toggleRightSidebar} class="toggle-btn">
