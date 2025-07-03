@@ -9,7 +9,7 @@ export const InitArgsSchema = z.object({
     .string()
     .optional()
     .default("")
-    .describe("原型所在的路径（可选），是 projectPath 的相对路径"),
+    .describe("原型所在的路径（可选），是 projectPath 的相对路径, 注意末端目录必须是‘html’"),
   logDisable: z
     .boolean()
     .optional()

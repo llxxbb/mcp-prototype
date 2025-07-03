@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach } from "@jest/globals";
-import { globalConfig, initialized, resetConfig } from "../../src/mcp/init.js";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { globalConfig, initialized, resetConfig } from "./init.js";
 import * as fs from "fs/promises";
 import * as path from "path";
-import os, { tmpdir } from "os";
+
 describe("initTool", () => {
     var currentPath = process.cwd();
     var prototypeRoot = "tmp/prototype";
@@ -14,7 +14,7 @@ describe("initTool", () => {
     let initTool;
     beforeEach(async () => {
         // Dynamically import the module after mocks are set up
-        const initModule = await import("../../src/mcp/init.js");
+        const initModule = await import("./init.js");
         initTool = initModule.initTool;
         // Reset globalConfig before each test
         resetConfig();
@@ -36,39 +36,46 @@ describe("initTool", () => {
         });
         expect(result.content[0].text).toContain("[prototypeRoot] must be set for first time");
     });
-    it("prototypeRoot is absolute path", async () => {
-        expect(initialized).toBe(false);
-        let absolutePath = "/tmp/test-mcp-prototypes";
+
+    it("should adjust prototypeRoot when ends with html (absolute path)", async () => {
+        const htmlPath = path.join(tempDir, "html");
         const result = await initTool({
             projectPath: currentPath,
-            prototypeRoot: absolutePath,
+            prototypeRoot: htmlPath,
         });
-        await fs.rm(absolutePath, { recursive: true, force: true });
-        expect(result.content[0].text).toContain(`Initialization succeeded`);
-        expect(globalConfig.projectPath).toBe(currentPath);
-        expect(globalConfig.prototypeRoot).toBe(absolutePath);
-        expect(initialized).toBe(true);
-    });
-    it("prototypeRoot is relative path", async () => {
-        expect(initialized).toBe(false);
-        const result = await initTool({
-            projectPath: currentPath,
-            prototypeRoot: prototypeRoot,
-        });
-        expect(result.content[0].text).toContain(`Initialization succeeded`);
-        expect(globalConfig.projectPath).toBe(currentPath);
+        expect(result.content[0].text).toContain("Initialization succeeded");
         expect(globalConfig.prototypeRoot).toBe(tempDir);
-        expect(initialized).toBe(true);
     });
-    it("old should be retain", async () => {
+
+    it("should adjust prototypeRoot when ends with html (relative path)", async () => {
+        const htmlPath = path.join(prototypeRoot, "html");
+        const result = await initTool({
+            projectPath: currentPath,
+            prototypeRoot: htmlPath,
+        });
+        expect(result.content[0].text).toContain("Initialization succeeded");
+        expect(globalConfig.prototypeRoot).toBe(tempDir);
+    });
+
+    it("should return error when prototypeRoot doesn't end with html", async () => {
         const result = await initTool({
             projectPath: currentPath,
             prototypeRoot: prototypeRoot,
+        });
+        expect(result.content[0].text).toContain('Invalid prototypeRoot: end dir must be "html');
+    });
+
+    it("old should be retain", async () => {
+        const htmlPath = path.join(prototypeRoot, "html");
+        await initTool({
+            projectPath: currentPath,
+            prototypeRoot: htmlPath,
         });
         await initTool();
         expect(globalConfig.projectPath).toBe(currentPath);
         expect(globalConfig.prototypeRoot).toBe(tempDir);
         expect(initialized).toBe(true);
     });
+
 });
 //# sourceMappingURL=init.test.js.map

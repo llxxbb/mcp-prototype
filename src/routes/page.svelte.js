@@ -2,8 +2,7 @@ export let leftSidebarVisible = true;
 export let rightSidebarVisible = true;
 export let currentContent = '';
 export const contentCache = {};
-export const prototypeRoot = "prototype";
-console.log('Prototype root:', prototypeRoot);
+export const prototypeRoot = "html";
 
 export let prototypeItems = [];
 

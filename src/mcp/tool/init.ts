@@ -75,6 +75,17 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
         );
         await fs.mkdir(parsedArgs.prototypeRoot, { recursive: true });
       }
+
+      // Special handling when last path segment is "html"
+      const pathSegments = parsedArgs.prototypeRoot.split(path.sep);
+      if (pathSegments[pathSegments.length - 1].toLowerCase() === "html") {
+        parsedArgs.prototypeRoot = path.dirname(parsedArgs.prototypeRoot);
+        logger.info(
+          `Adjusted prototypeRoot to parent directory: ${parsedArgs.prototypeRoot}`,
+        );
+      } else {
+        return response.error(`Invalid prototypeRoot: end dir must be "html`)
+      }
     } catch (error) {
       logger.error(`Failed to process prototypeRoot: ${error}`);
       return response.error(
