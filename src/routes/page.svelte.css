@@ -1,0 +1,39 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 250px;
+  background: #f5f5f5;
+  transition: width 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 40px;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 10;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  overflow: auto;
+}
+
+.nav-content, .helper-content {
+  padding: 20px;
+  width: 250px;
+}
