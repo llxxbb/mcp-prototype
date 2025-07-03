@@ -14,12 +14,7 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/mcp/*"]
     }
-  },
-  "include": ["src/mcp/**/*.ts", "src/mcp/**/*.js", "src/mcp/**/*.test.ts"],
-  "exclude": ["node_modules", "dist"],
-  "references": [
-    { "path": "./tsconfig.json" }
-  ]
+  }
 }
