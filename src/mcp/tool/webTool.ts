@@ -27,6 +27,9 @@ export async function startTool(): Promise<CallToolResult> {
 			server: {
 				port: globalConfig.port,
 				open: true
+			},
+			define: {
+				'import.meta.env.MCP_PROTOTYPE_ROOT': JSON.stringify(globalConfig.prototypeRoot),
 			}
 		});
 

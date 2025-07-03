@@ -1,3 +1,4 @@
+import path from 'path'
 import { createServer } from 'vite'
 
 const start = async () => {
@@ -7,6 +8,9 @@ const start = async () => {
       server: {
         port: 3000,
         open: true
+      },
+      define: {
+        'import.meta.env.MCP_PROTOTYPE_ROOT': JSON.stringify(path.join(process.cwd(), 'prototype'))
       }
     })
     

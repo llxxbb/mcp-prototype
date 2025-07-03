@@ -1,6 +1,16 @@
 <script lang="ts">
   let leftSidebarVisible = $state(true);
   let rightSidebarVisible = $state(true);
+  let currentContent = $state('');
+  const contentCache = $state<Record<string, string>>({});
+  const prototypeRoot = import.meta.env.MCP_PROTOTYPE_ROOT;
+  console.log('Prototype root:', prototypeRoot);
+  
+  const prototypeItems = [
+    { id: 'index', name: 'Main Prototype', path: `${prototypeRoot}/index.html` },
+    { id: 'style', name: 'CSS Style', path: `${prototypeRoot}/css/style.css` },
+    { id: 'app', name: 'JavaScript', path: `${prototypeRoot}/js/app.js` }
+  ];
   
   function toggleLeftSidebar() {
     leftSidebarVisible = !leftSidebarVisible;
@@ -8,6 +18,23 @@
   
   function toggleRightSidebar() {
     rightSidebarVisible = !rightSidebarVisible;
+  }
+  
+  async function loadContent(path: string) {
+    if (contentCache[path]) {
+      currentContent = contentCache[path];
+      return;
+    }
+    
+    try {
+      const response = await fetch(path);
+      const content = await response.text();
+      contentCache[path] = content;
+      currentContent = content;
+    } catch (error) {
+      console.error('Failed to load content:', error);
+      currentContent = `Error loading content from ${path}`;
+    }
   }
 </script>
 
@@ -17,14 +44,28 @@
       {leftSidebarVisible ? '◀' : '▶'}
     </button>
     <div class="nav-content">
-      <h2>Navigation</h2>
-      <!-- Navigation items will go here -->
+      <h2>Prototype Files</h2>
+      <ul>
+        {#each prototypeItems as item}
+          <li>
+            <button onclick={() => loadContent(item.path)}>
+              {item.name}
+            </button>
+          </li>
+        {/each}
+      </ul>
     </div>
   </aside>
   
   <section class="content">
-    <h1>mcp-prototype</h1>
-    <p>Prototype content will be loaded here</p>
+    {#if currentContent}
+      <div class="content-viewer">
+        <pre>{currentContent}</pre>
+      </div>
+    {:else}
+      <h1>mcp-prototype</h1>
+      <p>Please select a prototype file from the left sidebar</p>
+    {/if}
   </section>
   
   <aside class="sidebar right" class:collapsed={!rightSidebarVisible}>
