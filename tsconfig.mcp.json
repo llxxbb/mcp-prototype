@@ -15,5 +15,5 @@
     "verbatimModuleSyntax": true,
   },
   "include": ["src/mcp/**/*"],
-  "exclude": ["src/mcp/**/*.test.ts"]
+  "include": ["src/mcp/**/*.ts", "src/mcp/**/*.js"]
 }

@@ -28,7 +28,8 @@ export default ts.config(
 			parserOptions: {
 				project: './tsconfig.mcp.json',
 				projectService: true,
-				parser: ts.parser
+				parser: ts.parser,
+				allowDefaultProject: true
 			}
 		},
 		rules: {
