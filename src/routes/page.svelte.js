@@ -2,7 +2,7 @@ export let leftSidebarVisible = true;
 export let rightSidebarVisible = true;
 export let currentContent = '';
 export const contentCache = {};
-export const prototypeRoot = import.meta.env.MCP_PROTOTYPE_ROOT;
+export const prototypeRoot = "prototype";
 console.log('Prototype root:', prototypeRoot);
 
 export let prototypeItems = [];

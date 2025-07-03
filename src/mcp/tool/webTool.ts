@@ -28,9 +28,7 @@ export async function startTool(): Promise<CallToolResult> {
 				port: globalConfig.port,
 				open: true
 			},
-			define: {
-				'import.meta.env.MCP_PROTOTYPE_ROOT': JSON.stringify(globalConfig.prototypeRoot),
-			}
+			publicDir: globalConfig.prototypeRoot,
 		});
 
 		const viteServer = await serverInstance;
