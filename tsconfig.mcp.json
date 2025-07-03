@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext", 
+    "module": "NodeNext",
     "moduleResolution": "nodenext",
     "strict": true,
     "esModuleInterop": true,
@@ -13,7 +13,13 @@
     "declaration": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src/mcp/**/*"],
-  "include": ["src/mcp/**/*.ts", "src/mcp/**/*.js"]
+  "include": ["src/mcp/**/*.ts", "src/mcp/**/*.js", "src/mcp/**/*.test.ts"],
+  "exclude": ["node_modules", "dist"],
+  "references": [
+    { "path": "./tsconfig.json" }
+  ]
 }

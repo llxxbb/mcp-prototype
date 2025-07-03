@@ -1,6 +1,7 @@
 # Package Managers
 package-lock.json
-eslint.config.js
+eslint.config.web.js
+eslint.config.mcp.js
 package.json
 README.md
 svelte.config.js

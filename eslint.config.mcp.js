@@ -26,10 +26,9 @@ export default ts.config(
 		files: ['src/mcp/**/*.ts', 'src/mcp/**/*.js'],
 		languageOptions: {
 			parserOptions: {
-				project: './tsconfig.mcp.json',
-				projectService: true,
+				project: fileURLToPath(new URL('./tsconfig.mcp.json', import.meta.url)),
 				parser: ts.parser,
-				allowDefaultProject: true
+				createDefaultProgram: true
 			}
 		},
 		rules: {

@@ -4,9 +4,9 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 describe('initTool', () => {
-	var currentPath = process.cwd();
-	var prototypeRoot = 'tmp/prototype';
-	var tempDir = path.join(currentPath, prototypeRoot);
+	const currentPath = process.cwd();
+	const prototypeRoot = 'tmp/prototype';
+	const tempDir = path.join(currentPath, prototypeRoot);
 	afterEach(async () => {
 		// Clean up temp directory
 		await fs.rm(tempDir, { recursive: true, force: true });
