@@ -21,7 +21,7 @@
 		<div class="nav-content">
 			<h2>Prototype Files</h2>
 			<ul>
-				{#each prototypeItems as item}
+				{#each prototypeItems as item (item.path)}
 					<li>
 						<button onclick={() => loadContent(item.path)}>
 							{item.name}

@@ -28,17 +28,16 @@ export default ts.config(
 	},
 	{
 		files: ['src/**/*.svelte', 'src/**/*.ts', 'src/**/*.js'],
+		ignores: ['src/mcp/**/*'],
 		languageOptions: {
 			parserOptions: {
 				project: './tsconfig.web.json',
-				projectService: true,
 				extraFileExtensions: ['.svelte'],
 				parser: ts.parser,
 				svelteConfig
 			}
 		},
 		rules: {
-			'no-console': 'warn',
 			'prefer-const': 'error',
 			'max-lines': ['warn', 200],
 			'max-depth': ['warn', 4]
