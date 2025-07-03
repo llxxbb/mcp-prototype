@@ -11,7 +11,8 @@
 		"build:web": "set TSCONFIG_PATH=tsconfig.web.json && vite build -c ./vite.config.web.ts",
 		"web": "vite dev -c ./vite.config.web.ts",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint .",
+		"lint:mcp": "prettier --check . && eslint --fix -c ./eslint.config.mcp.js ./src/mcp/",
+		"lint:web": "prettier --check . && eslint --fix  -c ./eslint.config.web.js ./src/",
 		"test": "vitest",
 		"test:debug": "vitest --inspect-brk"
 	},

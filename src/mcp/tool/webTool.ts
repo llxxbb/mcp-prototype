@@ -28,7 +28,7 @@ export async function startTool(): Promise<CallToolResult> {
 				port: globalConfig.port,
 				open: true
 			},
-			publicDir: globalConfig.prototypeRoot,
+			publicDir: globalConfig.prototypeRoot
 		});
 
 		const viteServer = await serverInstance;

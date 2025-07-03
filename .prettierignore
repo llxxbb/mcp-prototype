@@ -1,5 +1,18 @@
 # Package Managers
 package-lock.json
+eslint.config.js
+package.json
+README.md
+svelte.config.js
+tsconfig.mcp.json
+tsconfig.web.json
+vite.config.web.ts
+vitest.config.ts
 
 # Miscellaneous
-static/
+.rules/
+doc/
+test-prototype/
+.vscode/
+
+
