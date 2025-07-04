@@ -9,6 +9,11 @@ interface HtmlFileInfo {
 	navSeq: number;
 }
 
+export async function filterToEnv(rootDir: string){
+    let rtn = await filter(rootDir);
+    process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
+}
+
 /**
  * 递归查找HTML文件并过滤符合条件的文件
  * @param rootDir 根目录路径
@@ -46,7 +51,7 @@ export async function filter(rootDir: string, baseDir: string = rootDir): Promis
 				const navSeq = parseInt(htmlElement.attr('data-nav-seq') || '0', 10);
 
 				if (navName) {
-					const relativePath = path.relative(baseDir, fullPath);
+					const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
 					results.push({
 						filePath: fullPath,
 						relativePath,

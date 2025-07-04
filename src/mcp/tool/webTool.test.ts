@@ -7,8 +7,7 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 describe('web.ts', () => {
 	const testPort = 3001;
 	const projectPath = process.cwd();
-	const prototypeRoot = './test-prototype';
-	const testRoot = join(projectPath, prototypeRoot);
+	const prototypeRoot = './test-prototype/html';
 
 	beforeAll(async () => {
 		// 初始化配置
@@ -18,19 +17,8 @@ describe('web.ts', () => {
 			port: testPort
 		} as InitArgs);
 
-		// 创建测试静态文件目录
-		writeFileSync(join(testRoot, 'index.html'), '<h1>Test</h1>');
 	});
 
-	afterAll(async () => {
-		// 清理测试目录
-		try {
-			await stopTool();
-			rmSync(testRoot, { recursive: true, force: true });
-		} catch (e) {
-			console.error('Cleanup error:', e);
-		}
-	});
 
 	describe('web can start', () => {
 		it('should start server successfully', async () => {

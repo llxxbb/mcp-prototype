@@ -60,6 +60,9 @@ describe('html filter function', () => {
 			results.forEach((file) => {
 				expect(file.navName).toBeDefined();
 				expect(file.navSeq).toBeDefined();
+				// 验证路径分隔符已替换为URL格式
+				expect(file.relativePath).not.toContain('\\');
+				expect(file.relativePath).toContain('/');
 			});
 		} finally {
 			// 清理测试目录
