@@ -10,7 +10,10 @@ interface HtmlFileInfo {
 }
 
 export async function filterToEnv(rootDir: string){
-    let rtn = await filter(rootDir);
+    console.log('set env.MCP_PROTOTYPE_HTML_PATH', rootDir);
+	process.env.MCP_PROTOTYPE_HTML_PATH = rootDir;
+    let dir = path.join(rootDir, 'html');
+    let rtn = await filter(dir);
     process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
 }
 

@@ -5,6 +5,7 @@ import { globalConfig, initialized } from './init.js';
 import { response } from '../utils/response.js';
 import { createServer, type ViteDevServer } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { filterToEnv } from '../main/html.js';
 
 export let serverInstance: Promise<ViteDevServer> | null = null;
 
@@ -21,8 +22,7 @@ export async function startTool(): Promise<CallToolResult> {
 		return response.error('prototypeRoot未配置，请先调用init工具设置原型根目录');
 	}
 
-	console.log('web starter: env.MCP_PROTOTYPE_HTML_PATH', globalConfig.prototypeRoot);
-	process.env.MCP_PROTOTYPE_HTML_PATH = globalConfig.prototypeRoot;
+	filterToEnv(globalConfig.prototypeRoot);
 
 	try {
 		// 创建Vite服务器
