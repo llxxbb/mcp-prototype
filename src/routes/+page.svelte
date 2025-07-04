@@ -6,11 +6,7 @@
 		toggleRightSidebar,
 		loadContent
 	} from './page.svelte.js';
-	import {
-		leftSidebarVisible,
-		rightSidebarVisible,
-		currentContent
-	} from './stores';
+	import { leftSidebarVisible, rightSidebarVisible, currentContent } from './stores';
 
 	loadPrototypeItems();
 </script>
@@ -37,7 +33,11 @@
 	<section class="content">
 		{#if $currentContent}
 			<div class="content-viewer">
-				<iframe title="prototype page" srcdoc={$currentContent} frameborder="0" class="content-frame"
+				<iframe
+					title="prototype page"
+					srcdoc={$currentContent}
+					frameborder="0"
+					class="content-frame"
 				></iframe>
 			</div>
 		{:else}

@@ -31,16 +31,16 @@ export function loadPrototypeItems() {
 }
 
 export function toggleLeftSidebar() {
-	leftSidebarVisible.update(v => !v);
+	leftSidebarVisible.update((v) => !v);
 }
 
 export function toggleRightSidebar() {
-	rightSidebarVisible.update(v => !v);
+	rightSidebarVisible.update((v) => !v);
 }
 
 export async function loadContent(path) {
 	if (contentCache[path]) {
-		      currentContent.set(contentCache[path]);
+		currentContent.set(contentCache[path]);
 		return;
 	}
 
