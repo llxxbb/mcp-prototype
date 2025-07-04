@@ -2,7 +2,7 @@ export let leftSidebarVisible = true;
 export let rightSidebarVisible = true;
 export let currentContent = '';
 export const contentCache = {};
-export const prototypeRoot = 'html';
+export const prototypeRoot = '/html';
 
 export let prototypeItems = [];
 
@@ -12,19 +12,18 @@ export function loadPrototypeItems() {
 	onMount(async () => {
 		try {
 			console.log('Loading prototype items from:', prototypeRoot);
-			const response = await fetch(`${prototypeRoot}/?list=html`);
-			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-			const files = await response.json();
+			const modules = import.meta.glob('/html/*.html', { eager: true });
+			const files = Object.keys(modules);
 			console.log('Found prototype files:', files);
 
-			prototypeItems = files
-				.filter((file) => file.endsWith('.html'))
-				.map((file) => ({
+			prototypeItems = files.map((filePath) => {
+				const file = filePath.split('/').pop();
+				return {
 					id: file.replace('.html', ''),
 					name: file,
-					path: `${prototypeRoot}/${file}`
-				}));
+					path: filePath
+				};
+			});
 		} catch (error) {
 			console.error('Failed to load prototype items:', error);
 			// Fallback to default items if dynamic loading fails
