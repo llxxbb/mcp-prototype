@@ -1,22 +1,24 @@
 <script lang="ts">
 	import {
-		leftSidebarVisible,
-		rightSidebarVisible,
-		currentContent,
 		prototypeItems,
 		loadPrototypeItems,
 		toggleLeftSidebar,
 		toggleRightSidebar,
 		loadContent
 	} from './page.svelte.js';
+	import {
+		leftSidebarVisible,
+		rightSidebarVisible,
+		currentContent
+	} from './stores';
 
 	loadPrototypeItems();
 </script>
 
 <main class="app-container">
-	<aside class="sidebar left" class:collapsed={!leftSidebarVisible}>
+	<aside class="sidebar left" class:collapsed={!$leftSidebarVisible}>
 		<button onclick={toggleLeftSidebar} class="toggle-btn">
-			{leftSidebarVisible ? '◀' : '▶'}
+			{$leftSidebarVisible ? '◀' : '▶'}
 		</button>
 		<div class="nav-content">
 			<h2>Prototype Files</h2>
@@ -33,9 +35,9 @@
 	</aside>
 
 	<section class="content">
-		{#if currentContent}
+		{#if $currentContent}
 			<div class="content-viewer">
-				<iframe title="prototype page" srcdoc={currentContent} frameborder="0" class="content-frame"
+				<iframe title="prototype page" srcdoc={$currentContent} frameborder="0" class="content-frame"
 				></iframe>
 			</div>
 		{:else}
@@ -44,9 +46,9 @@
 		{/if}
 	</section>
 
-	<aside class="sidebar right" class:collapsed={!rightSidebarVisible}>
+	<aside class="sidebar right" class:collapsed={!$rightSidebarVisible}>
 		<button onclick={toggleRightSidebar} class="toggle-btn">
-			{rightSidebarVisible ? '◀' : '▶'}
+			{$rightSidebarVisible ? '◀' : '▶'}
 		</button>
 		<div class="helper-content">
 			<h2>Helper</h2>

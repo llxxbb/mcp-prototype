@@ -1,6 +1,4 @@
-export let leftSidebarVisible = true;
-export let rightSidebarVisible = true;
-export let currentContent = '';
+import { leftSidebarVisible, rightSidebarVisible, currentContent } from './stores';
 export const contentCache = {};
 export const prototypeRoot = '/html';
 
@@ -33,16 +31,16 @@ export function loadPrototypeItems() {
 }
 
 export function toggleLeftSidebar() {
-	leftSidebarVisible = !leftSidebarVisible;
+	leftSidebarVisible.update(v => !v);
 }
 
 export function toggleRightSidebar() {
-	rightSidebarVisible = !rightSidebarVisible;
+	rightSidebarVisible.update(v => !v);
 }
 
 export async function loadContent(path) {
 	if (contentCache[path]) {
-		currentContent = contentCache[path];
+		      currentContent.set(contentCache[path]);
 		return;
 	}
 
@@ -50,9 +48,9 @@ export async function loadContent(path) {
 		const response = await fetch(path);
 		const content = await response.text();
 		contentCache[path] = content;
-		currentContent = content;
+		currentContent.set(content);
 	} catch (error) {
 		console.error('Failed to load content:', error);
-		currentContent = `Error loading content from ${path}`;
+		currentContent.set(`Error loading content from ${path}`);
 	}
 }
