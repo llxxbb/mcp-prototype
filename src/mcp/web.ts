@@ -1,15 +1,19 @@
 import path from 'path';
 import { createServer } from 'vite';
+import { sveltekit } from '@sveltejs/kit/vite';
 
 const start = async () => {
+	const htmlPath = path.join(process.cwd(), 'test-prototype');
+	console.log('web starter: env.MCP_PROTOTYPE_HTML_PATH', htmlPath);
+	process.env.MCP_PROTOTYPE_HTML_PATH = htmlPath;
+
 	try {
 		const server = await createServer({
-			configFile: 'vite.config.web.ts',
+			plugins: [sveltekit()],
 			server: {
 				port: 3000,
 				open: true
-			},
-			publicDir: path.join(process.cwd(), 'test-prototype')
+			}
 		});
 
 		await server.listen();
