@@ -1,14 +1,11 @@
 <script lang="ts">
 	import {
 		prototypeItems,
-		loadPrototypeItems,
 		toggleLeftSidebar,
 		toggleRightSidebar,
 		loadContent
 	} from './page.svelte.js';
 	import { leftSidebarVisible, rightSidebarVisible, currentContent } from './stores';
-
-	loadPrototypeItems();
 </script>
 
 <main class="app-container">

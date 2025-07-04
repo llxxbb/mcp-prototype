@@ -3,7 +3,6 @@ import path from 'path';
 import * as cheerio from 'cheerio';
 
 interface HtmlFileInfo {
-	filePath: string;
 	relativePath: string;
 	navName: string;
 	navSeq: number;
@@ -56,7 +55,6 @@ export async function filter(rootDir: string, baseDir: string = rootDir): Promis
 				if (navName) {
 					const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
 					results.push({
-						filePath: fullPath,
 						relativePath,
 						navName,
 						navSeq

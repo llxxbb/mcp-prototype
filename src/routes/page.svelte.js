@@ -4,31 +4,17 @@ export const prototypeRoot = '/html';
 
 export let prototypeItems = [];
 
-import { onMount } from 'svelte';
-
-export function loadPrototypeItems() {
-	onMount(async () => {
-		try {
-			console.log('Loading prototype items from:', prototypeRoot);
-			const modules = import.meta.glob('/html/*.html', { eager: true });
-			const files = Object.keys(modules);
-			console.log('Found prototype files:', files);
-
-			prototypeItems = files.map((filePath) => {
-				const file = filePath.split('/').pop();
-				return {
-					id: file.replace('.html', ''),
-					name: file,
-					path: filePath
-				};
-			});
-		} catch (error) {
-			console.error('Failed to load prototype items:', error);
-			// Fallback to default items if dynamic loading fails
-			prototypeItems = [{ id: 'index', name: 'index.html', path: `${prototypeRoot}/index.html` }];
-		}
-	});
+// Initialize from environment variable if available
+if (typeof process !== 'undefined' && process.env.MCP_PROTOTYPE_FILES) {
+    try {
+        prototypeItems = JSON.parse(process.env.MCP_PROTOTYPE_FILES);
+        console.log('Html files:', prototypeItems);
+    } catch (error) {
+        console.error('Failed to parse MCP_PROTOTYPE_FILES:', error);
+    }
 }
+
+
 
 export function toggleLeftSidebar() {
 	leftSidebarVisible.update((v) => !v);
