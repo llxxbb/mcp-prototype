@@ -23,6 +23,11 @@ export async function getSpecTool(): Promise<CallToolResult> {
 							content: '导航栏位置定义，来源于原型页面<html>标签的 data-nav-seq 数据属性值'
 						},
 						{
+							specId: 'basePath',
+							content:
+								'每个原型页面需要设置 <base href="/html/">，否则无法正确解析相对路径'
+						},
+						{
 							specId: 'pageNote',
 							content:
 								"原型页面辅助说明定义，可选。文件名与原型页面文件一致，扩展名为'.annotation.md'"

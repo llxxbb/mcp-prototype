@@ -8,13 +8,13 @@ interface HtmlFileInfo {
 	navSeq: number;
 }
 
-export async function filterToEnv(rootDir: string){
-    console.log('set env.MCP_PROTOTYPE_HTML_PATH', rootDir);
+export async function filterToEnv(rootDir: string) {
+	console.log('set env.MCP_PROTOTYPE_HTML_PATH', rootDir);
 	process.env.MCP_PROTOTYPE_HTML_PATH = rootDir;
-    let dir = path.join(rootDir, 'html');
-    let rtn = await filter(dir);
-    process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
-    console.log('set env.MCP_PROTOTYPE_FILES', rtn);
+	let dir = path.join(rootDir, 'html');
+	let rtn = await filter(dir);
+	process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
+	console.log('set env.MCP_PROTOTYPE_FILES', rtn);
 }
 
 /**
@@ -56,7 +56,7 @@ export async function filter(rootDir: string, baseDir: string = rootDir): Promis
 				if (navName) {
 					const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
 					results.push({
-						relativePath,
+						relativePath: 'html/' + relativePath,
 						navName,
 						navSeq
 					});
