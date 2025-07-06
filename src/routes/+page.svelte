@@ -7,7 +7,7 @@
 	import { leftSidebarVisible, rightSidebarVisible, currentContent } from './stores';
 
 	export let data;
-	$: prototypeItems = data?.prototypeItems || [];
+	let prototypeItems = data?.prototypeItems || [];
 </script>
 
 <main class="app-container">
@@ -18,10 +18,10 @@
 		<div class="nav-content">
 			<h2>Prototype Files: {prototypeItems.length}</h2>
 			<ul>
-				{#each prototypeItems as item (item.path)}
+				{#each prototypeItems as item (item.relativePath)}
 					<li>
-						<button onclick={() => loadContent(item.path)}>
-							{item.name}
+						<button onclick={() => loadContent(item.relativePath)}>
+							{item.navName}
 						</button>
 					</li>
 				{/each}
