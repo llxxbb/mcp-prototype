@@ -2,19 +2,23 @@ import { leftSidebarVisible, rightSidebarVisible, currentContent } from './store
 export const contentCache = {};
 export const prototypeRoot = '/html';
 
-export let prototypeItems = [];
-
 // Initialize from environment variable if available
-if (typeof process !== 'undefined' && process.env.MCP_PROTOTYPE_FILES) {
-    try {
-        prototypeItems = JSON.parse(process.env.MCP_PROTOTYPE_FILES);
-        console.log('Html files:', prototypeItems);
-    } catch (error) {
-        console.error('Failed to parse MCP_PROTOTYPE_FILES:', error);
-    }
+export function initFiles() {
+	if (typeof process !== 'undefined' && process.env.MCP_PROTOTYPE_FILES) {
+		try {
+			let files = JSON.parse(process.env.MCP_PROTOTYPE_FILES);
+			console.log('Html files:', files);
+			return files;
+		} catch (error) {
+			console.error('Failed to parse MCP_PROTOTYPE_FILES:', error);
+		}
+		return [];
+	}
+	else {
+		console.log('MCP_PROTOTYPE_FILES not set, using default');
+		return [];
+	}
 }
-
-
 
 export function toggleLeftSidebar() {
 	leftSidebarVisible.update((v) => !v);

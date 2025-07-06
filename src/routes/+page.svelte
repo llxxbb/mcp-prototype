@@ -1,11 +1,12 @@
 <script lang="ts">
 	import {
-		prototypeItems,
 		toggleLeftSidebar,
 		toggleRightSidebar,
 		loadContent
 	} from './page.svelte.js';
 	import { leftSidebarVisible, rightSidebarVisible, currentContent } from './stores';
+
+	export let prototypeItems = [];
 </script>
 
 <main class="app-container">
@@ -14,7 +15,7 @@
 			{$leftSidebarVisible ? '◀' : '▶'}
 		</button>
 		<div class="nav-content">
-			<h2>Prototype Files</h2>
+			<h2>Prototype Files: {prototypeItems.length}</h2>
 			<ul>
 				{#each prototypeItems as item (item.path)}
 					<li>
