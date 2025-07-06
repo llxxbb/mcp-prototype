@@ -6,7 +6,8 @@
 	} from './page.svelte.js';
 	import { leftSidebarVisible, rightSidebarVisible, currentContent } from './stores';
 
-	export let prototypeItems = [];
+	export let data;
+	$: prototypeItems = data?.prototypeItems || [];
 </script>
 
 <main class="app-container">
