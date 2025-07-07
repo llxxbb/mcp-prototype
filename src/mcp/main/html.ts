@@ -34,7 +34,7 @@ export async function copyFile(from: string, to: string) {
 	try {
 		// 检查源文件是否存在
 		try {
-			await fs.access(from);
+			await fs.access(from, fs.constants.R_OK);
 		} catch (err) {
 			throw new Error(`源文件 ${from} 不存在或不可访问`);
 		}
