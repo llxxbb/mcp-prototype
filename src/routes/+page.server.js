@@ -1,7 +1,7 @@
 import { initFiles } from './page.svelte.js';
 
 export function load() {
-    return {
-        prototypeItems: initFiles()
-    };
+	return {
+		prototypeItems: initFiles()
+	};
 }

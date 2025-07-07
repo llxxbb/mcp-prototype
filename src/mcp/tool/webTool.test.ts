@@ -1,8 +1,6 @@
-import { startTool, stopTool } from './webTool.js';
+import { startTool } from './webTool.js';
 import { initTool, InitArgs } from './init.js';
-import { join } from 'path';
-import { writeFileSync, rmSync } from 'fs';
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 
 describe('web.ts', () => {
 	const testPort = 3001;
@@ -16,9 +14,7 @@ describe('web.ts', () => {
 			prototypeRoot,
 			port: testPort
 		} as InitArgs);
-
 	});
-
 
 	describe('web can start', () => {
 		it('should start server successfully', async () => {

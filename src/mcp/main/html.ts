@@ -11,9 +11,9 @@ interface HtmlFileInfo {
 export async function initHtmlFiles(rootDir: string) {
 	console.log('set env.MCP_PROTOTYPE_HTML_PATH', rootDir);
 	process.env.MCP_PROTOTYPE_HTML_PATH = rootDir;
-	let prefix = 'html'
-	let dir = path.join(rootDir, prefix);
-	let rtn = await filter(dir, prefix);
+	const prefix = 'html';
+	const dir = path.join(rootDir, prefix);
+	const rtn = await filter(dir, prefix);
 	await injectJs(rtn, '$lib/mcp-prototype-inject.js');
 	process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
 	console.log('set env.MCP_PROTOTYPE_FILES', rtn);
@@ -26,7 +26,11 @@ export async function initHtmlFiles(rootDir: string) {
  * @param prefix 相对路径前缀(可选)
  * @returns 符合条件的HTML文件列表，按data-nav-seq 进行同级目录排序
  */
-export async function filter(rootDir: string, prefix: string = '', baseDir: string = rootDir): Promise<HtmlFileInfo[]> {
+export async function filter(
+	rootDir: string,
+	prefix: string = '',
+	baseDir: string = rootDir
+): Promise<HtmlFileInfo[]> {
 	const results: HtmlFileInfo[] = [];
 	const sortedResults: HtmlFileInfo[] = [];
 
@@ -98,54 +102,57 @@ export async function filter(rootDir: string, prefix: string = '', baseDir: stri
 
 /**
  * 注入 JS 文件
- * 
+ *
  * 具体方法为：
  * - 如没有 header 则创建 header 并插入对入 JS 文件的引用
  * - 如有 header 则检测是否已经引用了 js 文件，如没有则插入对入 JS 文件的引用
- *  
+ *
  * @param files HTML文件信息数组
  * @param jsPath 要注入的JS文件路径
  */
 export async function injectJs(files: HtmlFileInfo[], jsPath: string) {
-    try {
-        console.log(`开始注入JS文件: ${jsPath}`);
-        
-        for (const file of files) {
-            try {
-                const fullPath = path.join(process.env.MCP_PROTOTYPE_HTML_PATH || '', file.relativePath.replace('html/', ''));
-                const content = await fs.readFile(fullPath, 'utf-8');
-                const $ = cheerio.load(content);
-                
-                // 检查是否已经引用了该JS文件
-                const existingScript = $(`script[src="${jsPath}"]`);
-                if (existingScript.length > 0) {
-                    console.log(`文件 ${file.relativePath} 已包含JS引用: ${jsPath}`);
-                    continue;
-                }
-                
-                // 检查是否有head元素
-                if ($('head').length === 0) {
-                    $('html').prepend('<head></head>');
-                    console.log(`文件 ${file.relativePath} 创建了head元素`);
-                }
-                
-                // 添加JS引用
-                $('head').append(`<script src="${jsPath}"></script>`);
-                console.log(`文件 ${file.relativePath} 添加了JS引用: ${jsPath}`);
-                
-                // 写入修改后的内容
-                await fs.writeFile(fullPath, $.html());
-            } catch (error) {
-                const errMsg = `处理文件 ${file.relativePath} 时出错: ${error instanceof Error ? error.message : String(error)}`;
-                console.error(errMsg);
-                throw new Error(errMsg);
-            }
-        }
-        
-        console.log('JS文件注入完成');
-    } catch (error) {
-        const errMsg = `注入JS文件时发生错误: ${error instanceof Error ? error.message : String(error)}`;
-        console.error(errMsg);
-        throw new Error(errMsg);
-    }
+	try {
+		console.log(`开始注入JS文件: ${jsPath}`);
+
+		for (const file of files) {
+			try {
+				const fullPath = path.join(
+					process.env.MCP_PROTOTYPE_HTML_PATH || '',
+					file.relativePath.replace('html/', '')
+				);
+				const content = await fs.readFile(fullPath, 'utf-8');
+				const $ = cheerio.load(content);
+
+				// 检查是否已经引用了该JS文件
+				const existingScript = $(`script[src="${jsPath}"]`);
+				if (existingScript.length > 0) {
+					console.log(`文件 ${file.relativePath} 已包含JS引用: ${jsPath}`);
+					continue;
+				}
+
+				// 检查是否有head元素
+				if ($('head').length === 0) {
+					$('html').prepend('<head></head>');
+					console.log(`文件 ${file.relativePath} 创建了head元素`);
+				}
+
+				// 添加JS引用
+				$('head').append(`<script src="${jsPath}"></script>`);
+				console.log(`文件 ${file.relativePath} 添加了JS引用: ${jsPath}`);
+
+				// 写入修改后的内容
+				await fs.writeFile(fullPath, $.html());
+			} catch (error) {
+				const errMsg = `处理文件 ${file.relativePath} 时出错: ${error instanceof Error ? error.message : String(error)}`;
+				console.error(errMsg);
+				throw new Error(errMsg);
+			}
+		}
+
+		console.log('JS文件注入完成');
+	} catch (error) {
+		const errMsg = `注入JS文件时发生错误: ${error instanceof Error ? error.message : String(error)}`;
+		console.error(errMsg);
+		throw new Error(errMsg);
+	}
 }

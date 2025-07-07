@@ -122,7 +122,9 @@ describe('injectJs function', () => {
 
 			// 验证日志调用顺序
 			expect(consoleSpy.mock.calls[0][0]).toBe('开始注入JS文件: /path/to/script.js');
-			expect(consoleSpy.mock.calls[1][0]).toBe('文件 no-head.html 添加了JS引用: /path/to/script.js');
+			expect(consoleSpy.mock.calls[1][0]).toBe(
+				'文件 no-head.html 添加了JS引用: /path/to/script.js'
+			);
 			expect(consoleSpy.mock.calls[2][0]).toBe('JS文件注入完成');
 
 			// 验证文件内容
@@ -141,8 +143,10 @@ describe('injectJs function', () => {
 
 		// 创建一个已包含JS引用的HTML文件
 		const existingFile = path.join(testDir, 'existing.html');
-		await fs.writeFile(existingFile, 
-			'<html><head><script src="/path/to/script.js"></script></head></html>');
+		await fs.writeFile(
+			existingFile,
+			'<html><head><script src="/path/to/script.js"></script></head></html>'
+		);
 
 		try {
 			const files = [{ relativePath: 'existing.html', navName: 'Existing', navSeq: 1 }];
@@ -152,7 +156,8 @@ describe('injectJs function', () => {
 
 			// 验证跳过了已存在的引用
 			expect(consoleSpy).toHaveBeenCalledWith(
-				'文件 existing.html 已包含JS引用: /path/to/script.js');
+				'文件 existing.html 已包含JS引用: /path/to/script.js'
+			);
 
 			// 验证文件内容没有重复注入
 			const content = await fs.readFile(existingFile, 'utf-8');

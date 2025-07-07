@@ -24,18 +24,15 @@ export async function getSpecTool(): Promise<CallToolResult> {
 						},
 						{
 							specId: 'basePath',
-							content:
-								'每个原型页面需要设置 <base href="/html/">，否则无法正确解析相对路径'
+							content: '每个原型页面需要设置 <base href="/html/">，否则无法正确解析相对路径'
 						},
 						{
 							specId: 'basePath',
-							content:
-								'每个原型页面需要设置 <base href="/html/">，否则无法正确解析相对路径'
+							content: '每个原型页面需要设置 <base href="/html/">，否则无法正确解析相对路径'
 						},
 						{
 							specId: 'fileEncoding',
-							content:
-								"原型文件使用 utf-8 编码格式存储"
+							content: '原型文件使用 utf-8 编码格式存储'
 						},
 						{
 							specId: 'marker',

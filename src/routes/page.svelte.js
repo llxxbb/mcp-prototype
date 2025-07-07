@@ -13,8 +13,7 @@ export function initFiles() {
 			console.error('Failed to parse MCP_PROTOTYPE_FILES:', error);
 		}
 		return [];
-	}
-	else {
+	} else {
 		console.log('MCP_PROTOTYPE_FILES not set, using default');
 		return [];
 	}

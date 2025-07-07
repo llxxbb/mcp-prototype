@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		toggleLeftSidebar,
-		toggleRightSidebar,
-		loadContent
-	} from './page.svelte.js';
+	import { toggleLeftSidebar, toggleRightSidebar, loadContent } from './page.svelte.js';
 	import { leftSidebarVisible, rightSidebarVisible, currentContent } from './stores';
 
 	export let data;
