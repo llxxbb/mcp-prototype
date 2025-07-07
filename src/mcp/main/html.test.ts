@@ -88,7 +88,7 @@ describe('injectJs function', () => {
 			const files = await filter(testDir);
 			const consoleSpy = vi.spyOn(console, 'log');
 
-			await injectHeader(files, jsPath, "test");
+			await injectHeader(files, jsPath, 'test');
 
 			// 验证日志输出
 			expect(consoleSpy).toHaveBeenCalledWith(`开始注入Header: ${jsPath}`);
@@ -118,7 +118,7 @@ describe('injectJs function', () => {
 			const files = [{ relativePath: 'no-head.html', navName: 'NoHead', navSeq: 1 }];
 			const consoleSpy = vi.spyOn(console, 'log');
 
-			await injectHeader(files, jsPath, "test");
+			await injectHeader(files, jsPath, 'test');
 
 			// 验证日志调用顺序
 			expect(consoleSpy.mock.calls[0][0]).toBe('开始注入Header: /path/to/script.js');
@@ -153,7 +153,7 @@ describe('injectJs function', () => {
 			const files = [{ relativePath: 'existing.html', navName: 'Existing', navSeq: 1 }];
 			const consoleSpy = vi.spyOn(console, 'log');
 
-			await injectHeader(files, jsPath, "test");
+			await injectHeader(files, jsPath, 'test');
 
 			// 验证跳过了已存在的引用
 			expect(consoleSpy).toHaveBeenCalledWith('文件 existing.html 已处理过');
@@ -177,7 +177,7 @@ describe('injectJs function', () => {
 			const files = [{ relativePath: invalidFile, navName: 'Invalid', navSeq: 1 }];
 			const consoleSpy = vi.spyOn(console, 'error');
 
-			await expect(injectHeader(files, jsPath, "test")).rejects.toThrow();
+			await expect(injectHeader(files, jsPath, 'test')).rejects.toThrow();
 			expect(consoleSpy).toHaveBeenCalled();
 		} finally {
 			await fs.rm(testDir, { recursive: true, force: true });
