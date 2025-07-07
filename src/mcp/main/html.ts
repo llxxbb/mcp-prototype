@@ -116,10 +116,7 @@ export async function injectJs(files: HtmlFileInfo[], jsPath: string) {
 
 		for (const file of files) {
 			try {
-				const fullPath = path.join(
-					process.env.MCP_PROTOTYPE_HTML_PATH || '',
-					file.relativePath.replace('html/', '')
-				);
+				const fullPath = path.join(process.env.MCP_PROTOTYPE_HTML_PATH || '', file.relativePath);
 				const content = await fs.readFile(fullPath, 'utf-8');
 				const $ = cheerio.load(content);
 
