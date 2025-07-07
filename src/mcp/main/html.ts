@@ -40,23 +40,22 @@ export async function copyFile(from: string, to: string) {
 		}
 
 		// 创建目标目录（如不存在）
-		const toDir = path.dirname(to);
 		try {
-			await fs.mkdir(toDir, { recursive: true });
-			console.log(`目标目录已创建: ${toDir}`);
+			await fs.mkdir(to, { recursive: true });
+			console.log(`目标目录已创建: ${to}`);
 		} catch (err) {
-			throw new Error(`无法创建目标目录 ${toDir}: ${err instanceof Error ? err.message : String(err)}`);
+			throw new Error(`无法创建目标目录 ${to}: ${err instanceof Error ? err.message : String(err)}`);
 		}
 
 		// 检查目标目录写入权限
 		try {
-			await fs.access(toDir, fs.constants.W_OK);
+			await fs.access(to, fs.constants.W_OK);
 		} catch (err) {
-			throw new Error(`目标目录 ${toDir} 无写入权限`);
+			throw new Error(`目标目录 ${to} 无写入权限`);
 		}
 		
 		// 复制文件（覆盖已存在的文件）
-		await fs.copyFile(from, toDir);
+		await fs.copyFile(from, to);
 		console.log(`文件复制成功: ${from} -> ${to}`);
 	} catch (error) {
 		const errMsg = `复制文件 ${from} 到 ${to} 失败: ${error instanceof Error ? error.message : String(error)}`;

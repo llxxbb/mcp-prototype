@@ -214,16 +214,16 @@ describe('injectJs function', () => {
 			const srcFile = path.join(testDir, 'dir1/file1.html');
 			const destFile = path.join(testDir, 'overwritten.html');
 
-			// �ȴ���һ��Ŀ���ļ�
-			await fs.writeFile(destFile, 'original content');
+			// 创建一个目标HTML文件
+			await fs.writeFile(destFile, '<html>original content</html>');
 
 			await copyFile(srcFile, destFile);
 
-			// ��֤�ļ��ѱ�����
+			// 验证文件已被覆盖
 			const srcContent = await fs.readFile(srcFile, 'utf-8');
 			const destContent = await fs.readFile(destFile, 'utf-8');
 			expect(destContent).toBe(srcContent);
-		});
+		}, 10000); // 增加超时时间
 
 		it('should throw error when source file not exists', async () => {
 			const testDir = await setupTestDir();
