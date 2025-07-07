@@ -1,11 +1,11 @@
 import path from 'path';
 import { createServer } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { filterToEnv } from './main/html.js';
+import { initHtmlFiles } from './main/html.js';
 
 const start = async () => {
 	const htmlPath = path.join(process.cwd(), 'test-prototype');
-	filterToEnv(htmlPath);
+	initHtmlFiles(htmlPath);
 
 	try {
 		const server = await createServer({

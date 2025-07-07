@@ -8,11 +8,13 @@ interface HtmlFileInfo {
 	navSeq: number;
 }
 
-export async function filterToEnv(rootDir: string) {
+export async function initHtmlFiles(rootDir: string) {
 	console.log('set env.MCP_PROTOTYPE_HTML_PATH', rootDir);
 	process.env.MCP_PROTOTYPE_HTML_PATH = rootDir;
-	let dir = path.join(rootDir, 'html');
-	let rtn = await filter(dir);
+	let prefix = 'html'
+	let dir = path.join(rootDir, prefix);
+	let rtn = await filter(dir, prefix);
+	await injectJs(rtn, '$lib/mcp-prototype-inject.js');
 	process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
 	console.log('set env.MCP_PROTOTYPE_FILES', rtn);
 }
@@ -21,9 +23,10 @@ export async function filterToEnv(rootDir: string) {
  * 递归查找HTML文件并过滤符合条件的文件
  * @param rootDir 根目录路径
  * @param baseDir 相对路径基准目录(可选)
+ * @param prefix 相对路径前缀(可选)
  * @returns 符合条件的HTML文件列表，按data-nav-seq 进行同级目录排序
  */
-export async function filter(rootDir: string, baseDir: string = rootDir): Promise<HtmlFileInfo[]> {
+export async function filter(rootDir: string, prefix: string = '', baseDir: string = rootDir): Promise<HtmlFileInfo[]> {
 	const results: HtmlFileInfo[] = [];
 	const sortedResults: HtmlFileInfo[] = [];
 
@@ -56,7 +59,7 @@ export async function filter(rootDir: string, baseDir: string = rootDir): Promis
 				if (navName) {
 					const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
 					results.push({
-						relativePath: 'html/' + relativePath,
+						relativePath: prefix + "/" + relativePath,
 						navName,
 						navSeq
 					});
@@ -132,14 +135,16 @@ export async function injectJs(files: HtmlFileInfo[], jsPath: string) {
                 // 写入修改后的内容
                 await fs.writeFile(fullPath, $.html());
             } catch (error) {
-                console.error(`处理文件 ${file.relativePath} 时出错:`, error);
-                throw error;
+                const errMsg = `处理文件 ${file.relativePath} 时出错: ${error instanceof Error ? error.message : String(error)}`;
+                console.error(errMsg);
+                throw new Error(errMsg);
             }
         }
         
         console.log('JS文件注入完成');
     } catch (error) {
-        console.error('注入JS文件时发生错误:', error);
-        throw error;
+        const errMsg = `注入JS文件时发生错误: ${error instanceof Error ? error.message : String(error)}`;
+        console.error(errMsg);
+        throw new Error(errMsg);
     }
 }
