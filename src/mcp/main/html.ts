@@ -14,9 +14,11 @@ export async function initHtmlFiles(rootDir: string) {
 	const prefix = 'html';
 	const dir = path.join(rootDir, prefix);
 	const rtn = await filter(dir, prefix);
-	await injectJs(rtn, '$lib/mcp-prototype-inject.js');
+	await injectHeader(rtn, 'mcp-prototype-inject.js', prefix);
 	process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
 	console.log('set env.MCP_PROTOTYPE_FILES', rtn);
+	// 复制 mcp-prototype-inject.js 到 dir 目录下
+
 }
 
 /**
@@ -101,18 +103,18 @@ export async function filter(
 }
 
 /**
- * 注入 JS 文件
+ * 注入 Header
  *
  * 具体方法为：
- * - 如没有 header 则创建 header 并插入对入 JS 文件的引用
- * - 如有 header 则检测是否已经引用了 js 文件，如没有则插入对入 JS 文件的引用
+ * - 如没有 header 则创建 header 并插入对入 JS 文件的引用 和 <base href="/html/">
+ * - 如有 header 则检测是否已经引用了 js 文件，如没有则插入对入 JS 文件的引用和 <base href="/html/">
  *
  * @param files HTML文件信息数组
  * @param jsPath 要注入的JS文件路径
  */
-export async function injectJs(files: HtmlFileInfo[], jsPath: string) {
+export async function injectHeader(files: HtmlFileInfo[], jsPath: string, baseDir: string) {
 	try {
-		console.log(`开始注入JS文件: ${jsPath}`);
+		console.log(`开始注入Header: ${jsPath}`);
 
 		for (const file of files) {
 			try {
@@ -123,7 +125,7 @@ export async function injectJs(files: HtmlFileInfo[], jsPath: string) {
 				// 检查是否已经引用了该JS文件
 				const existingScript = $(`script[src="${jsPath}"]`);
 				if (existingScript.length > 0) {
-					console.log(`文件 ${file.relativePath} 已包含JS引用: ${jsPath}`);
+					console.log(`文件 ${file.relativePath} 已处理过`);
 					continue;
 				}
 
@@ -133,8 +135,11 @@ export async function injectJs(files: HtmlFileInfo[], jsPath: string) {
 					console.log(`文件 ${file.relativePath} 创建了head元素`);
 				}
 
+				// 添加base标签
+				$('head').append(`<base href==/"${baseDir}"/>`);
+				console.log(`文件 ${file.relativePath} 添加了JS引用: ${jsPath}`);
 				// 添加JS引用
-				$('head').append(`<script src="${jsPath}"></script>`);
+				$('head').append(`<script src="${jsPath}" defer></script>`);
 				console.log(`文件 ${file.relativePath} 添加了JS引用: ${jsPath}`);
 
 				// 写入修改后的内容
@@ -146,9 +151,9 @@ export async function injectJs(files: HtmlFileInfo[], jsPath: string) {
 			}
 		}
 
-		console.log('JS文件注入完成');
+		console.log('Header注入完成');
 	} catch (error) {
-		const errMsg = `注入JS文件时发生错误: ${error instanceof Error ? error.message : String(error)}`;
+		const errMsg = `注入Header时发生错误: ${error instanceof Error ? error.message : String(error)}`;
 		console.error(errMsg);
 		throw new Error(errMsg);
 	}
