@@ -40,7 +40,7 @@ export async function filter(rootDir: string, prefix: string = '', baseDir: stri
 
 			if (stat.isDirectory()) {
 				// 递归处理子目录
-				const subResults = await filter(fullPath, baseDir);
+				const subResults = await filter(fullPath, prefix, baseDir);
 				results.push(...subResults);
 				continue;
 			}
@@ -58,12 +58,13 @@ export async function filter(rootDir: string, prefix: string = '', baseDir: stri
 
 				if (navName) {
 					const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
+					const finalPath = prefix ? `${prefix}/${relativePath}` : relativePath;
 					results.push({
-						relativePath: prefix + "/" + relativePath,
+						relativePath: finalPath,
 						navName,
 						navSeq
 					});
-					console.log(`找到符合条件的HTML文件: ${relativePath}`);
+					console.log(`找到符合条件的HTML文件: ${finalPath}`);
 				}
 			} catch (error) {
 				console.error(`处理文件 ${fullPath} 时出错:`, error);
