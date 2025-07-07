@@ -28,9 +28,14 @@ export async function getSpecTool(): Promise<CallToolResult> {
 								'每个原型页面需要设置 <base href="/html/">，否则无法正确解析相对路径'
 						},
 						{
-							specId: 'pageNote',
+							specId: 'basePath',
 							content:
-								"原型页面辅助说明定义，可选。文件名与原型页面文件一致，扩展名为'.annotation.md'"
+								'每个原型页面需要设置 <base href="/html/">，否则无法正确解析相对路径'
+						},
+						{
+							specId: 'fileEncoding',
+							content:
+								"原型文件使用 utf-8 编码格式存储"
 						},
 						{
 							specId: 'marker',
