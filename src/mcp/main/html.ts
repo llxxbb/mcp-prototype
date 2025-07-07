@@ -18,7 +18,6 @@ export async function initHtmlFiles(rootDir: string) {
 	process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
 	console.log('set env.MCP_PROTOTYPE_FILES', rtn);
 	// 复制 mcp-prototype-inject.js 到 dir 目录下
-
 }
 
 /**
@@ -136,7 +135,7 @@ export async function injectHeader(files: HtmlFileInfo[], jsPath: string, baseDi
 				}
 
 				// 添加base标签
-				$('head').append(`<base href==/"${baseDir}"/>`);
+				$('head').append(`<base href="/${baseDir}/">`);
 				console.log(`文件 ${file.relativePath} 添加了JS引用: ${jsPath}`);
 				// 添加JS引用
 				$('head').append(`<script src="${jsPath}" defer></script>`);
