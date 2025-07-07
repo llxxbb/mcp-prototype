@@ -14,10 +14,37 @@ export async function initHtmlFiles(rootDir: string) {
 	const prefix = 'html';
 	const dir = path.join(rootDir, prefix);
 	const rtn = await filter(dir, prefix);
-	await injectHeader(rtn, 'mcp-prototype-inject.js', prefix);
+	const jsFile = 'mcp-prototype-inject.js';
+	let jsTo = `js/${jsFile}`
+	await injectHeader(rtn, jsTo, prefix);
 	process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
 	console.log('set env.MCP_PROTOTYPE_FILES', rtn);
 	// 复制 mcp-prototype-inject.js 到 dir 目录下
+	copyFile(path.join(process.cwd(), 'lib', jsTo), dir);
+}
+
+/**
+ * 复制文件
+ * 要求：
+ * - 目标目标如不存在则创建。
+ * - 目标文件如果已经存在则覆盖。
+ * @param from 源文件路径
+ * @param to 目标文件路径
+ */
+export async function copyFile(from: string, to: string) {
+	try {
+		// 创建目标目录（如不存在）
+		const toDir = path.dirname(to);
+		await fs.mkdir(toDir, { recursive: true });
+		
+		// 复制文件（覆盖已存在的文件）
+		await fs.copyFile(from, to);
+		console.log(`文件复制成功: ${from} -> ${to}`);
+	} catch (error) {
+		const errMsg = `复制文件 ${from} 到 ${to} 失败: ${error instanceof Error ? error.message : String(error)}`;
+		console.error(errMsg);
+		throw new Error(errMsg);
+	}
 }
 
 /**

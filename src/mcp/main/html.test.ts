@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { filter, injectHeader } from './html.js';
+import { filter, injectHeader, copyFile } from './html.js';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -182,5 +182,55 @@ describe('injectJs function', () => {
 		} finally {
 			await fs.rm(testDir, { recursive: true, force: true });
 		}
+	});
+
+	describe('copyFile function', () => {
+		it('should copy file successfully', async () => {
+			const testDir = await setupTestDir();
+			const srcFile = path.join(testDir, 'dir1/file1.html');
+			const destFile = path.join(testDir, 'copied/file1.html');
+
+			await copyFile(srcFile, destFile);
+
+			// ��֤�ļ��Ѹ���
+			const srcContent = await fs.readFile(srcFile, 'utf-8');
+			const destContent = await fs.readFile(destFile, 'utf-8');
+			expect(destContent).toBe(srcContent);
+		});
+
+		it('should create destination directory if not exists', async () => {
+			const testDir = await setupTestDir();
+			const srcFile = path.join(testDir, 'dir1/file1.html');
+			const destFile = path.join(testDir, 'newdir/copied/file1.html');
+
+			await copyFile(srcFile, destFile);
+
+			// ��֤Ŀ¼�Ѵ���
+			await expect(fs.stat(path.dirname(destFile))).resolves.toBeDefined();
+		});
+
+		it('should overwrite existing file', async () => {
+			const testDir = await setupTestDir();
+			const srcFile = path.join(testDir, 'dir1/file1.html');
+			const destFile = path.join(testDir, 'overwritten.html');
+
+			// �ȴ���һ��Ŀ���ļ�
+			await fs.writeFile(destFile, 'original content');
+
+			await copyFile(srcFile, destFile);
+
+			// ��֤�ļ��ѱ�����
+			const srcContent = await fs.readFile(srcFile, 'utf-8');
+			const destContent = await fs.readFile(destFile, 'utf-8');
+			expect(destContent).toBe(srcContent);
+		});
+
+		it('should throw error when source file not exists', async () => {
+			const testDir = await setupTestDir();
+			const srcFile = path.join(testDir, 'nonexistent.html');
+			const destFile = path.join(testDir, 'should-not-exist.html');
+
+			await expect(copyFile(srcFile, destFile)).rejects.toThrow();
+		});
 	});
 });
