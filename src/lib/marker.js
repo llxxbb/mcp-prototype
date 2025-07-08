@@ -2,25 +2,69 @@ export class Marker {
     constructor(container) {
         this.container = container;
         this.markers = [];
+        
+        // 动态添加标记样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .mcp-marker {
+                position: absolute;
+                width: 15px;
+                height: 15px;
+                background-color: rgba(255, 0, 0, 0.7);
+                border-radius: 50%;
+                border: 1px solid white;
+                box-shadow: 0 0 3px rgba(0,0,0,0.3);
+                transform: none;
+                transition: transform 0.2s ease-out;
+                cursor: pointer;
+                z-index: 2147483647;
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10px;
+                pointer-events: auto;
+                outline: 1px solid rgba(255,255,255,0.5);
+            }
+            .mcp-marker:hover {
+                transform: scale(1.5);
+            }
+            [data-marker] {
+                position: relative;
+                overflow: visible !important;
+            }
+        `;
+        document.head.appendChild(style);
+        console.log('Marker css appended');
     }
 
     // 为指定元素添加标记
     addMarker(element) {
-        if (!element.dataset.marker) return;
+        if (!element.dataset.marker) {
+            console.warn('Element has no data-marker attribute:', element);
+            return;
+        }
 
         const marker = document.createElement('div');
         marker.className = 'mcp-marker';
         
-        // 计算相对于容器元素的位置
-        const rect = element.getBoundingClientRect();
-        const containerRect = this.container.getBoundingClientRect();
-        
-        marker.style.left = `${rect.left - containerRect.left - 5}px`;
-        marker.style.top = `${rect.top - containerRect.top - 5}px`;
+        // 设置标记样式为相对定位
+        marker.style.position = 'absolute';
+        marker.style.left = '-5px';
+        marker.style.top = '-5px';
         
         // 设置标记内容和ID
         marker.dataset.markerId = element.dataset.marker;
         marker.textContent = element.dataset.marker;
+        
+        // 确保目标元素有相对定位
+        if (getComputedStyle(element).position === 'static') {
+            element.style.position = 'relative';
+        }
+        
+        element.appendChild(marker);
+        console.log('Added marker to element:', element, 'at position:', 
+                   element.getBoundingClientRect());
         
         // 添加交互效果
         marker.addEventListener('mouseenter', () => {
@@ -31,17 +75,7 @@ export class Marker {
             marker.style.transform = 'scale(1)';
         });
         
-        marker.addEventListener('click', () => {
-            const relatedEl = this.container.querySelector(
-                `[data-marker="${marker.dataset.markerId}"]`
-            );
-            if (relatedEl) {
-                relatedEl.classList.add('mcp-highlight');
-                setTimeout(() => relatedEl.classList.remove('mcp-highlight'), 2000);
-            }
-        });
 
-        this.container.appendChild(marker);
         this.markers.push(marker);
         return marker;
     }

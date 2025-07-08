@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	import('/marker.js')
 		.then(module => {
 			// 创建 Marker 对象
-			const marker = new module.Marker();
+			const marker = new module.Marker(document.body);
 			// 显示 Marker
-			marker.showMarker();
+			marker.addAllMarkers();
 		})
 		.catch(err => {
 			console.error('Failed to load marker module:', err);
