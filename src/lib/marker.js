@@ -48,10 +48,16 @@ export class Marker {
         const marker = document.createElement('div');
         marker.className = 'mcp-marker';
         
-        // 设置标记样式为相对定位
-        marker.style.position = 'absolute';
-        marker.style.left = '-5px';
-        marker.style.top = '-5px';
+        // 确保标记可见的计算逻辑
+        const rect = element.getBoundingClientRect();
+        const offsetX = -15; // 向左偏移15px
+        const offsetY = -15; // 向上偏移15px
+        
+        marker.style.position = 'fixed';
+        marker.style.left = `${rect.left + offsetX}px`;
+        marker.style.top = `${rect.top + offsetY}px`;
+        marker.style.zIndex = '2147483647'; // 最大z-index值
+        marker.style.pointerEvents = 'none'; // 防止标记阻挡交互
         
         // 设置标记内容和ID
         marker.dataset.markerId = element.dataset.marker;
