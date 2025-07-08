@@ -3,3 +3,4 @@ node_modules/
 .idea/
 .svelte-kit/
 tmp/
+test-prototype/html/js/mcp-prototype-inject.js

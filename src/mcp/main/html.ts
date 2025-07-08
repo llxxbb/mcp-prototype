@@ -19,7 +19,7 @@ export async function initHtmlFiles(rootDir: string) {
 	process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
 	console.log('set env.MCP_PROTOTYPE_FILES', rtn);
 	// 复制 mcp-prototype-inject.js 到 dir 目录下
-	await copyFile(path.join(process.cwd(), 'src', 'lib', jsFile), path.join(dir, 'js', jsFile), 5);
+	await copyFile(path.join(process.cwd(), 'src', 'lib', jsFile), path.join(dir, 'js', jsFile));
 }
 
 /**
@@ -30,58 +30,29 @@ export async function initHtmlFiles(rootDir: string) {
  * @param from 源文件路径
  * @param to 目标文件路径
  */
-export async function copyFile(from: string, to: string, retries = 3) {
-	const retryDelay = 100; // 毫秒
+export async function copyFile(from: string, to: string) {
 	let lastError: Error | null = null;
-	
-	for (let attempt = 1; attempt <= retries; attempt++) {
-		try {
-			// 检查源文件是否存在
-			await fs.access(from, fs.constants.R_OK);
 
-			// 创建目标目录（如不存在）
-			await fs.mkdir(path.dirname(to), { recursive: true });
-			
-			// 检查目标目录写入权限
-			await fs.access(path.dirname(to), fs.constants.W_OK);
-			
-			// 复制文件（覆盖已存在的文件）
-			await fs.copyFile(from, to);
-			
-			// 确保目标文件有正确权限
-			try {
-				await fs.chmod(to, 0o666); // Windows需要显式设置权限
-			} catch (chmodError) {
-				console.warn(`无法设置文件权限 ${to}: ${chmodError instanceof Error ? chmodError.message : String(chmodError)}`);
-			}
-			
-			console.log(`文件复制成功: ${from} -> ${to}`);
-			return; // 成功则退出函数
-			
-		} catch (error) {
-			lastError = error as Error;
-			console.warn(`复制尝试 ${attempt}/${retries} 失败: ${error instanceof Error ? error.message : String(error)}`);
-			
-			if (attempt < retries) {
-				await new Promise(resolve => setTimeout(resolve, retryDelay));
-			}
-		}
-	}
-	
-	// 所有重试都失败
-	const errMsg = `复制文件 ${from} 到 ${to} 失败: ${lastError?.message || '未知错误'}`;
-	console.error(errMsg);
-	console.error(`源文件: ${from}`);
-	console.error(`目标路径: ${to}`);
-	
 	try {
-		const stat = await fs.stat(path.dirname(to));
-		console.error(`目标目录权限: ${stat.mode.toString(8)}`);
-	} catch (statError) {
-		console.error(`无法获取目标目录状态: ${statError instanceof Error ? statError.message : String(statError)}`);
+		// 检查源文件是否存在
+		await fs.access(from, fs.constants.R_OK);
+
+		// 创建目标目录（如不存在）
+		await fs.mkdir(path.dirname(to), { recursive: true });
+
+		// 检查目标目录写入权限
+		await fs.access(path.dirname(to), fs.constants.W_OK);
+
+		// 复制文件（覆盖已存在的文件）
+		await fs.copyFile(from, to);
+
+		console.log(`文件复制成功: ${from} -> ${to}`);
+	} catch (error) {
+		lastError = error as Error;
+		console.warn(
+			`复制尝试失败: ${error instanceof Error ? error.message : String(error)}`
+		);
 	}
-	
-	throw new Error(errMsg);
 }
 
 /**
