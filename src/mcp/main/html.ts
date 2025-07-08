@@ -31,28 +31,12 @@ export async function initHtmlFiles(rootDir: string) {
  * @param to 目标文件路径
  */
 export async function copyFile(from: string, to: string) {
-	let lastError: Error | null = null;
+	// 创建目标目录（如不存在）
+	await fs.mkdir(path.dirname(to), { recursive: true });
 
-	try {
-		// 检查源文件是否存在
-		await fs.access(from, fs.constants.R_OK);
-
-		// 创建目标目录（如不存在）
-		await fs.mkdir(path.dirname(to), { recursive: true });
-
-		// 检查目标目录写入权限
-		await fs.access(path.dirname(to), fs.constants.W_OK);
-
-		// 复制文件（覆盖已存在的文件）
-		await fs.copyFile(from, to);
-
-		console.log(`文件复制成功: ${from} -> ${to}`);
-	} catch (error) {
-		lastError = error as Error;
-		console.warn(
-			`复制尝试失败: ${error instanceof Error ? error.message : String(error)}`
-		);
-	}
+	// 复制文件（覆盖已存在的文件）
+	await fs.copyFile(from, to);
+	console.log(`文件复制成功: ${from} -> ${to}`);
 }
 
 /**
