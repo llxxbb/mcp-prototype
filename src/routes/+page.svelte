@@ -13,7 +13,7 @@
 </script>
 
 <main class="app-container">
-	<aside class="sidebar left" class:collapsed={!$leftSidebarVisible}>
+	<aside class="sidebar" class:collapsed={!$leftSidebarVisible}>
 		<button onclick={toggleLeftSidebar} class="toggle-btn">
 			{$leftSidebarVisible ? '◀' : '▶'}
 		</button>
