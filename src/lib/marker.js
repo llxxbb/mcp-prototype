@@ -11,7 +11,6 @@ const markerCss = `
                 transform: none;
                 transition: transform 0.2s ease-out;
                 cursor: pointer;
-                z-index: 2147483647;
                 color: white;
                 display: flex;
                 align-items: center;
@@ -28,20 +27,20 @@ const markerCss = `
                 overflow: visible !important;
             }
             
-            /* shadcn tooltip styles */
-            .mcp-tooltip {
+            .mcp-marker .mcp-tooltip {
                 position: fixed;
                 padding: 4px 8px;
                 background-color: #333;
                 color: #fff;
                 border-radius: 4px;
-                font-size: 12px;
+                font-size: 10px;
                 white-space: nowrap;
                 opacity: 0;
                 visibility: hidden;
                 transition: opacity 0.2s, visibility 0.2s;
-                z-index: 2147483647;
+                z-index: 10000;
                 pointer-events: none;
+                will-change: transform, opacity, visibility;
             }
             .mcp-marker:hover > .mcp-tooltip {
                 opacity: 1;
