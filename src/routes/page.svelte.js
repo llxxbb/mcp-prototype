@@ -1,6 +1,7 @@
-import { leftSidebarVisible, rightSidebarVisible, currentContent } from './stores';
-export const contentCache = {};
+import { leftSidebarVisible, rightSidebarVisible } from './stores';
 export const prototypeRoot = '/html';
+export let currentContentUrl = $state('');
+export let currentContentHelp = $state('');
 
 // Initialize from environment variable if available
 export function initFiles() {
@@ -28,18 +29,15 @@ export function toggleRightSidebar() {
 }
 
 export async function loadContent(path) {
-	if (contentCache[path]) {
-		currentContent.set(contentCache[path]);
-		return;
-	}
-
+	console.log('Loading content:', path);
+	currentContentUrl.update(path); 
+	// Load corresponding markdown help content
+	const helpPath = path.replace(/\.html$/, '.annotation.md');
 	try {
-		const response = await fetch(path);
-		const content = await response.text();
-		contentCache[path] = content;
-		currentContent.set(content);
+		const helpResponse = await fetch(helpPath);
+		currentContentHelp.update(await helpResponse.text());
 	} catch (error) {
-		console.error('Failed to load content:', error);
-		currentContent.set(`Error loading content from ${path}`);
+		currentContentHelp.update('');
+		console.log(`No help markdown found for ${currentContentHelp}`);
 	}
 }

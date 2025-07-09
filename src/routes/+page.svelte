@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { toggleLeftSidebar, toggleRightSidebar, loadContent } from './page.svelte.js';
-	import { leftSidebarVisible, rightSidebarVisible, currentContent } from './stores';
+	import { toggleLeftSidebar, toggleRightSidebar, loadContent, currentContentUrl, currentContentHelp } from './page.svelte.js';
+	import { leftSidebarVisible, rightSidebarVisible } from './stores';
+	import { marked } from 'marked';
 
 	export let data;
 	let prototypeItems = data?.prototypeItems || [];
@@ -26,11 +27,11 @@
 	</aside>
 
 	<section class="content">
-		{#if $currentContent}
+		{#if $currentContentUrl !== ''}
 			<div class="content-viewer">
 				<iframe
 					title="prototype page"
-					srcdoc={$currentContent}
+					src={$currentContentUrl}
 					frameborder="0"
 					class="content-frame"
 				></iframe>
@@ -47,7 +48,13 @@
 		</button>
 		<div class="helper-content">
 			<h2>Helper</h2>
-			<!-- Helper content will go here -->
+			<div class="markdown-content">
+				{#if $currentContentHelp}
+					{@html marked($currentContentHelp)}
+				{:else}
+					<p>No help available</p>
+				{/if}
+			</div>
 		</div>
 	</aside>
 </main>
