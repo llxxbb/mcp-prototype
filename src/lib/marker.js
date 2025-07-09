@@ -33,6 +33,9 @@ export class Marker {
 		this.container = container;
 		this.markers = new Set(); // 存储所有创建的标记
 
+		// 添加页面卸载时的自动清理
+		window.addEventListener('beforeunload', () => this.cleanup());
+
 		// 动态添加标记样式
 		const style = document.createElement('style');
 		style.textContent = markerCss;
@@ -47,17 +50,23 @@ export class Marker {
 
 		// 保存目标元素引用
 		marker._targetElement = element;
-		
+
 		// 初始位置计算
 		this.updateMarkerPosition(marker);
 
 		// 添加到容器
 		this.container.appendChild(marker);
 
-		// 添加滚动事件监听并存储引用
-		const scrollHandler = () => this.updateMarkerPosition(marker);
-		window.addEventListener('scroll', scrollHandler, { passive: true });
-		marker._scrollHandler = scrollHandler;
+		// 存储marker引用
+		this.markers.add(marker);
+
+		// 如果这是第一个marker，添加统一的滚动事件监听
+		if (this.markers.size === 1) {
+			this._scrollHandler = () => {
+				this.markers.forEach(m => this.updateMarkerPosition(m));
+			};
+			window.addEventListener('scroll', this._scrollHandler, { passive: true });
+		}
 	}
 
 	updateMarkerPosition(marker) {
@@ -70,6 +79,44 @@ export class Marker {
 	addAllMarkers() {
 		const elements = this.container.querySelectorAll('[data-marker]');
 		elements.forEach((el) => this.addMarker(el));
+
+		// 添加窗口resize事件监听
+		if (!this._resizeHandler) {
+			this._resizeHandler = () => {
+				this.markers.forEach(marker => this.updateMarkerPosition(marker));
+			};
+			window.addEventListener('resize', this._resizeHandler, { passive: true });
+		}
 	}
 
+	// 移除单个标记
+	removeMarker(marker) {
+		if (marker._resizeObserver) {
+			marker._resizeObserver.disconnect();
+		}
+		if (marker.parentNode) {
+			marker.parentNode.removeChild(marker);
+		}
+		this.markers.delete(marker);
+	}
+
+	/**
+	 * 清理所有资源，需要手动调用
+	 * 建议在组件卸载或不再需要标记时调用
+	 * 注意：这不是浏览器自动调用的方法
+	 */
+	cleanup() {
+		this.markers.forEach(marker => this.removeMarker(marker));
+		this.markers.clear();
+		
+		// 移除窗口resize和scroll事件监听
+		if (this._resizeHandler) {
+			window.removeEventListener('resize', this._resizeHandler);
+			this._resizeHandler = null;
+		}
+		if (this._scrollHandler) {
+			window.removeEventListener('scroll', this._scrollHandler);
+			this._scrollHandler = null;
+		}
+	}
 }
