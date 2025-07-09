@@ -5,12 +5,12 @@ import path from 'path';
 
 // 确保测试目录不存在
 beforeAll(async () => {
-  const testDir = path.join(__dirname, 'tmp-test-dir');
-  try {
-    await fs.rm(testDir, { recursive: true, force: true });
-  } catch (error) {
-    // 忽略错误
-  }
+	const testDir = path.join(__dirname, 'tmp-test-dir');
+	try {
+		await fs.rm(testDir, { recursive: true, force: true });
+	} catch {
+		// 忽略错误
+	}
 });
 
 // 创建临时测试目录结构
@@ -240,7 +240,7 @@ describe('injectJs function', () => {
 			const srcFile = path.join(testDir, 'nonexistent.html');
 			const destFile = path.join(testDir, 'should-not-exist.html');
 
-			    await expect(copyFile(srcFile, destFile)).rejects.toThrow('ENOENT');
+			await expect(copyFile(srcFile, destFile)).rejects.toThrow('ENOENT');
 		});
 
 		it('should throw error when destination directory cannot be created', async () => {
@@ -250,8 +250,8 @@ describe('injectJs function', () => {
 
 			// 模拟 mkdir 失败
 			vi.spyOn(fs, 'mkdir').mockRejectedValueOnce(new Error('权限不足'));
-			
-			    await expect(copyFile(srcFile, destFile)).rejects.toThrow('权限不足');
+
+			await expect(copyFile(srcFile, destFile)).rejects.toThrow('权限不足');
 		});
 
 		it('should throw error when no write permission on destination', async () => {
@@ -261,17 +261,17 @@ describe('injectJs function', () => {
 
 			// 模拟目标目录无写入权限
 			vi.spyOn(fs, 'copyFile').mockRejectedValueOnce(new Error('EPERM: operation not permitted'));
-			
+
 			await expect(copyFile(srcFile, destFile)).rejects.toThrow('operation not permitted');
 		});
 	});
 });
 
 afterAll(async () => {
-  const testDir = path.join(__dirname, 'tmp-test-dir');
-  try {
-    await fs.rm(testDir, { recursive: true, force: true });
-  } catch (error) {
-    // 忽略错误
-  }
+	const testDir = path.join(__dirname, 'tmp-test-dir');
+	try {
+		await fs.rm(testDir, { recursive: true, force: true });
+	} catch {
+		// 忽略错误
+	}
 });

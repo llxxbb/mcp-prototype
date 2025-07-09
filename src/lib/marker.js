@@ -63,25 +63,24 @@ export class Marker {
 	}
 
 	// 为指定元素添加标记
-			addMarker(element) {
-			const marker = document.createElement('div');
-			marker.className = 'mcp-marker';
-			marker._targetElement = element;
-			marker.style.zIndex = this.zIndexCounter--; // 设置z-index并递减
+	addMarker(element) {
+		const marker = document.createElement('div');
+		marker.className = 'mcp-marker';
+		marker._targetElement = element;
+		marker.style.zIndex = this.zIndexCounter--; // 设置z-index并递减
 
-			// 添加tooltip作为marker的子元素
-			const tooltip = document.createElement('div');
-			tooltip.className = 'mcp-tooltip';
-			tooltip.textContent = element.getAttribute('data-marker') || '';
-			marker.appendChild(tooltip);
-		
+		// 添加tooltip作为marker的子元素
+		const tooltip = document.createElement('div');
+		tooltip.className = 'mcp-tooltip';
+		tooltip.textContent = element.getAttribute('data-marker') || '';
+		marker.appendChild(tooltip);
+
 		this.container.appendChild(marker);
-
 
 		// 关联tooltip和marker
 		marker._tooltip = tooltip;
 
-        		// 初始位置计算
+		// 初始位置计算
 		this.updateMarkerPosition(marker);
 		// 存储marker引用
 		this.markers.add(marker);
@@ -89,7 +88,7 @@ export class Marker {
 		// 如果这是第一个marker，添加统一的滚动事件监听
 		if (this.markers.size === 1) {
 			this._scrollHandler = () => {
-				this.markers.forEach(m => this.updateMarkerPosition(m));
+				this.markers.forEach((m) => this.updateMarkerPosition(m));
 			};
 			window.addEventListener('scroll', this._scrollHandler, { passive: true });
 		}
@@ -99,10 +98,10 @@ export class Marker {
 		const rect = marker._targetElement.getBoundingClientRect();
 		const left = rect.left - 5;
 		const top = rect.top - 5;
-		
+
 		marker.style.left = `${left}px`;
 		marker.style.top = `${top}px`;
-		
+
 		if (marker._tooltip) {
 			marker._tooltip.style.left = `15px`;
 			marker._tooltip.style.top = `-5px`;
@@ -117,7 +116,7 @@ export class Marker {
 		// 添加窗口resize事件监听
 		if (!this._resizeHandler) {
 			this._resizeHandler = () => {
-				this.markers.forEach(marker => this.updateMarkerPosition(marker));
+				this.markers.forEach((marker) => this.updateMarkerPosition(marker));
 			};
 			window.addEventListener('resize', this._resizeHandler, { passive: true });
 		}
@@ -140,9 +139,9 @@ export class Marker {
 	 * 注意：这不是浏览器自动调用的方法
 	 */
 	cleanup() {
-		this.markers.forEach(marker => this.removeMarker(marker));
+		this.markers.forEach((marker) => this.removeMarker(marker));
 		this.markers.clear();
-		
+
 		// 移除窗口resize和scroll事件监听
 		if (this._resizeHandler) {
 			window.removeEventListener('resize', this._resizeHandler);
