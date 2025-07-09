@@ -1,7 +1,6 @@
 const markerCss = `
             .mcp-marker {
                 position: fixed;
-                z-index: 9999;
                 width: 10px;
                 height: 10px;
                 background-color: rgba(255, 0, 0, 0.3);
@@ -51,6 +50,7 @@ export class Marker {
 	constructor(container) {
 		this.container = container;
 		this.markers = new Set(); // 存储所有创建的标记
+		this.zIndexCounter = 9999; // z-index计数器，从9999开始
 
 		// 添加页面卸载时的自动清理
 		window.addEventListener('beforeunload', () => this.cleanup());
@@ -63,17 +63,17 @@ export class Marker {
 	}
 
 	// 为指定元素添加标记
-	addMarker(element) {
-		const marker = document.createElement('div');
-		marker.className = 'mcp-marker';
-		marker._targetElement = element;
+			addMarker(element) {
+			const marker = document.createElement('div');
+			marker.className = 'mcp-marker';
+			marker._targetElement = element;
+			marker.style.zIndex = this.zIndexCounter--; // 设置z-index并递减
 
-
-		// 添加tooltip作为marker的子元素
-		const tooltip = document.createElement('div');
-		tooltip.className = 'mcp-tooltip';
-		tooltip.textContent = element.getAttribute('data-marker') || '';
-		marker.appendChild(tooltip);
+			// 添加tooltip作为marker的子元素
+			const tooltip = document.createElement('div');
+			tooltip.className = 'mcp-tooltip';
+			tooltip.textContent = element.getAttribute('data-marker') || '';
+			marker.appendChild(tooltip);
 		
 		this.container.appendChild(marker);
 
