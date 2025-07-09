@@ -27,6 +27,26 @@ const markerCss = `
                 position: relative;
                 overflow: visible !important;
             }
+            
+            /* shadcn tooltip styles */
+            .mcp-tooltip {
+                position: fixed;
+                padding: 4px 8px;
+                background-color: #333;
+                color: #fff;
+                border-radius: 4px;
+                font-size: 12px;
+                white-space: nowrap;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.2s, visibility 0.2s;
+                z-index: 2147483647;
+                pointer-events: none;
+            }
+            .mcp-marker:hover > .mcp-tooltip {
+                opacity: 1;
+                visibility: visible;
+            }
         `;
 export class Marker {
 	constructor(container) {
@@ -47,16 +67,23 @@ export class Marker {
 	addMarker(element) {
 		const marker = document.createElement('div');
 		marker.className = 'mcp-marker';
-
-		// 保存目标元素引用
 		marker._targetElement = element;
 
-		// 初始位置计算
-		this.updateMarkerPosition(marker);
 
-		// 添加到容器
+		// 添加tooltip作为marker的子元素
+		const tooltip = document.createElement('div');
+		tooltip.className = 'mcp-tooltip';
+		tooltip.textContent = element.getAttribute('data-marker') || '';
+		marker.appendChild(tooltip);
+		
 		this.container.appendChild(marker);
 
+
+		// 关联tooltip和marker
+		marker._tooltip = tooltip;
+
+        		// 初始位置计算
+		this.updateMarkerPosition(marker);
 		// 存储marker引用
 		this.markers.add(marker);
 
@@ -71,8 +98,16 @@ export class Marker {
 
 	updateMarkerPosition(marker) {
 		const rect = marker._targetElement.getBoundingClientRect();
-		marker.style.left = `${rect.left - 5}px`;
-		marker.style.top = `${rect.top - 5}px`;
+		const left = rect.left - 5;
+		const top = rect.top - 5;
+		
+		marker.style.left = `${left}px`;
+		marker.style.top = `${top}px`;
+		
+		if (marker._tooltip) {
+			marker._tooltip.style.left = `15px`;
+			marker._tooltip.style.top = `-5px`;
+		}
 	}
 
 	// 为容器内所有带data-marker属性的元素添加标记
