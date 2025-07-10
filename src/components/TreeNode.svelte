@@ -1,9 +1,9 @@
 <script lang="ts">
   import TreeNode from './TreeNode.svelte';
+  import { expandedNodes } from './treeStore';
   export let node;
   export let onItemClick: (path: string) => void;
   export let toggleExpand: (path: string) => void;
-  export let isExpanded: (path: string) => boolean;
 </script>
 
 <style>
@@ -32,6 +32,12 @@
   
   .folder {
     font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+  }
+  .folder:focus {
+    text-decoration: underline;
   }
   
   .doc-icon {
@@ -58,13 +64,15 @@
       <button
         class="toggle"
         on:click={() => toggleExpand(node.path)}
-        aria-expanded={isExpanded(node.path)}
+        aria-expanded={$expandedNodes.get(node.path)}
       >
-        {isExpanded(node.path) ? '📂' : '📁'}
+        {$expandedNodes.get(node.path) ? '📂' : '📁'}
       </button>
-      <span class="folder">{node.name}</span>
+      <span class="folder" on:click={() => toggleExpand(node.path)} tabindex="0" role="button">
+        {node.name}
+      </span>
     </div>
-    {#if isExpanded(node.path)}
+    {#if $expandedNodes.get(node.path)}
       <div class="tree-children">
         <ul class="tree">
           {#each node.children as child}
@@ -72,7 +80,6 @@
               node={child}
               {onItemClick}
               {toggleExpand}
-              {isExpanded}
             />
           {/each}
         </ul>

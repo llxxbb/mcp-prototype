@@ -1,10 +1,10 @@
 <script lang="ts">
   import TreeNode from './TreeNode.svelte';
+  import { expandedNodes } from './treeStore';
   export let items: {relativePath: string; navName: string}[];
   export let onItemClick: (path: string) => void;
   
-  let expandedNodes = new Map<string, boolean>();
-  $: console.log('Expanded nodes:', Array.from(expandedNodes.entries()));
+  // expandedNodes 已在 store 文件中定义
 
   function buildTree(items?: {relativePath: string; navName: string}[]) {
     const root = [];
@@ -39,9 +39,16 @@
     return root;
   }
 
-  $: nodes = buildTree(items);
-  $: {
-    // Debug only the first level to avoid recursion
+  function getDisplayNodes() {
+    const treeNodes = buildTree(items);
+    if (treeNodes.length === 1 && treeNodes[0].children && treeNodes[0].children.length > 0) {
+      return treeNodes[0].children;
+    }
+    return treeNodes;
+  }
+
+  function debugRootNode() {
+    const nodes = getDisplayNodes();
     if (nodes.length > 0) {
       const debugNode = {
         path: nodes[0].path,
@@ -52,27 +59,34 @@
     }
   }
 
-  function toggleExpand(node: string) {
-    const currentState = expandedNodes.get(node) || false;
-    expandedNodes = new Map(expandedNodes);
-    expandedNodes.set(node, !currentState);
-    console.log('Toggled node:', node, 'New state:', !currentState);
-    nodes = [...nodes]; // Force reactivity update
+  function debugExpandedNodes() {
+    expandedNodes.subscribe(val => {
+      console.log('Expanded nodes:', Array.from(val.entries()));
+    })();
   }
 
-  function isExpanded(node: string): boolean {
-    return expandedNodes.get(node) || false;
+  debugExpandedNodes();
+  debugRootNode();
+
+  function toggleExpand(node: string) {
+    expandedNodes.update(map => {
+      const newMap = new Map(map);
+      const currentState = newMap.get(node) || false;
+      newMap.set(node, !currentState);
+      return newMap;
+    });
+    debugExpandedNodes();
+    debugRootNode();
   }
 </script>
 
 <!-- 引入递归组件 -->
 <ul class="tree">
-  {#each nodes as node}
+  {#each getDisplayNodes() as node}
     <TreeNode
       node={node}
       {onItemClick}
       {toggleExpand}
-      {isExpanded}
     />
   {/each}
 </ul>
