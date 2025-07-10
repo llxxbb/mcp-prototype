@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Tree from '../components/Tree.svelte';
 	import { toggleLeftSidebar, toggleRightSidebar, loadContent } from './page.svelte.js';
 	import {
 		leftSidebarVisible,
@@ -19,15 +20,10 @@
 		</button>
 		<div class="nav-content">
 			<h2>Prototype Files: {prototypeItems.length}</h2>
-			<ul>
-				{#each prototypeItems as item (item.relativePath)}
-					<li>
-						<button onclick={() => loadContent(item.relativePath)}>
-							{item.navName}
-						</button>
-					</li>
-				{/each}
-			</ul>
+			<Tree 
+				items={prototypeItems} 
+				onItemClick={loadContent} 
+			/>
 		</div>
 	</aside>
 
