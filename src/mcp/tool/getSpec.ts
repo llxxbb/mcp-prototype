@@ -23,8 +23,12 @@ export async function getSpecTool(): Promise<CallToolResult> {
 							content: '导航栏位置定义，来源于原型页面<html>标签的 data-nav-seq 数据属性值'
 						},
 						{
-							specId: 'basePath',
-							content: '每个原型页面需要设置 <base href="/html/">，否则无法正确解析相对路径'
+							specId: 'baseInject',
+							content: '系统会为每个 HTML 页面注入 <base href="/html/"> 标签，注意"引用"路径的正确性。'
+						},
+						{
+							specId: 'jsInject',
+							content: '系统会为每个 HTML 页面注入 mcp-prototype-inject.js 文件，用于展示标记。'
 						},
 						{
 							specId: 'fileEncoding',
