@@ -38,9 +38,13 @@ export async function loadContent(path) {
 	const helpPath = path.replace(/\.html$/, '.annotation.md');
 	try {
 		const helpResponse = await fetch(helpPath);
+		if (!helpResponse.ok) {
+			currentContentHelp.set('');
+			return;
+		}
 		currentContentHelp.set(await helpResponse.text());
 	} catch (error) {
 		currentContentHelp.set('');
-		console.log(`No help markdown found for ${helpPath}`);
+		console.log(`load  help markdown error for ${helpPath}: ${error.message}`);
 	}
 }
