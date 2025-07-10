@@ -6,7 +6,7 @@ export const InitArgsSchema = z.object({
 		.string()
 		.optional()
 		.default('')
-		.describe('原型所在的路径（可选），是 projectPath 的相对路径, 注意末端目录必须是‘html’'),
+		.describe('原型所在的路径（默认与 projectPath 相同），可以指定 projectPath 的相对路径。 为了与 mcp-prototype 自身的服务路径进行区别，只对其下的 html 子目录提供服务。'),
 	logDisable: z.boolean().optional().default(false).describe('是否禁用日志输出'),
 	logFile: z
 		.string()
