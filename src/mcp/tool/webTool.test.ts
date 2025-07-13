@@ -1,16 +1,15 @@
 import { startTool } from './webTool.js';
 import { initTool, InitArgs } from './init.js';
 import { describe, it, expect, beforeAll } from 'vitest';
+import path from 'path';
 
 describe('web.ts', () => {
 	const testPort = 3001;
-	const projectPath = process.cwd();
-	const prototypeRoot = './test-prototype/html';
+	const prototypeRoot = path.join(process.cwd(), 'test-prototype/html');
 
 	beforeAll(async () => {
 		// 初始化配置
 		await initTool({
-			projectPath: projectPath,
 			prototypeRoot,
 			port: testPort
 		} as InitArgs);

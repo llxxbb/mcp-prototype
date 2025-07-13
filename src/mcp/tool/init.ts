@@ -7,7 +7,6 @@ import { InitArgsSchema } from './schema-init.js';
 import { checkDirectory } from '../utils/directory.js';
 import path from 'node:path';
 import * as fs from 'node:fs/promises';
-import { assert } from 'node:console';
 
 // Global configuration object
 export let globalConfig: Partial<InitArgs> = {};
@@ -23,42 +22,23 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
 
 	const parsedArgs = InitArgsSchema.parse(args);
 
-	if (
-		globalConfig.projectPath === undefined &&
-		(parsedArgs?.projectPath === undefined || parsedArgs?.projectPath === '')
-	) {
-		logger.warn('Init failed: projectPath is required');
-		return response.error('[projectPath] must be set for first time');
-	}
-
-	// Verify projectPath exists and is a directory
-	if (parsedArgs.projectPath) {
-		const dirResult = await checkDirectory(parsedArgs.projectPath);
-		if (dirResult.isErr()) {
-			logger.warn(`Invalid project path: ${parsedArgs.projectPath}`);
-			return response.error(`Invalid project path: ${parsedArgs.projectPath}`);
-		}
-		initialized = true;
-	}
-
-	let projectPath = globalConfig.projectPath ? globalConfig.projectPath : parsedArgs.projectPath;
-	assert(projectPath);
-	projectPath = projectPath!;
-
 	// prototypeRoot is required
 	if (
 		globalConfig.prototypeRoot === undefined &&
 		(parsedArgs?.prototypeRoot === undefined || parsedArgs?.prototypeRoot === '')
 	) {
-		logger.warn('Init failed: prototypeRoot is required');
-		return response.error('[prototypeRoot] must be set for first time');
+		let msg = 'Init failed: [prototypeRoot] must be set for first time';
+		logger.warn(msg);
+		return response.error(msg);
 	}
 	// Verify prototypeRoot exists and is a directory
 	if (parsedArgs.prototypeRoot) {
 		try {
 			// Handle relative path
 			if (!path.isAbsolute(parsedArgs.prototypeRoot)) {
-				parsedArgs.prototypeRoot = path.join(projectPath, parsedArgs.prototypeRoot);
+				let msg = 'Init failed: [prototypeRoot] must be an absolute path';
+				logger.warn(msg);
+				return response.error(msg);
 			}
 
 			// Check or create prototypeRoot directory
