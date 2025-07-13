@@ -1,100 +1,96 @@
 <script lang="ts">
-  import TreeNode from './TreeNode.svelte';
-  import { expandedNodes } from './treeStore';
-  export let items: {relativePath: string; navName: string}[];
-  export let onItemClick: (path: string) => void;
-  
-  // expandedNodes 已在 store 文件中定义
+	import TreeNode from './TreeNode.svelte';
+	import { expandedNodes } from './treeStore';
+	export let items: { relativePath: string; navName: string }[];
+	export let onItemClick: (path: string) => void;
 
-  function buildTree(items?: {relativePath: string; navName: string}[]) {
-    const root = [];
-    const pathMap = new Map();
+	// expandedNodes 已在 store 文件中定义
 
-    if (!items || !Array.isArray(items)) return root;
+	function buildTree(items?: { relativePath: string; navName: string }[]) {
+		const root = [];
+		const pathMap = new Map();
 
-    items.forEach(item => {
-      const parts = item.relativePath.split('/');
-      let currentLevel = root;
-      let currentPath = '';
+		if (!items || !Array.isArray(items)) return root;
 
-      parts.forEach((part, index) => {
-        currentPath = currentPath ? currentPath + '/' + part : part;
-        let node = pathMap.get(currentPath);
+		items.forEach((item) => {
+			const parts = item.relativePath.split('/');
+			let currentLevel = root;
+			let currentPath = '';
 
-        if (!node) {
-          node = {
-            path: currentPath,
-            name: part,
-            children: [],
-            isLeaf: index === parts.length - 1,
-            navName: index === parts.length - 1 ? item.navName : undefined
-          };
-          pathMap.set(currentPath, node);
-          currentLevel.push(node);
-        }
-        currentLevel = node.children;
-      });
-    });
+			parts.forEach((part, index) => {
+				currentPath = currentPath ? currentPath + '/' + part : part;
+				let node = pathMap.get(currentPath);
 
-    return root;
-  }
+				if (!node) {
+					node = {
+						path: currentPath,
+						name: part,
+						children: [],
+						isLeaf: index === parts.length - 1,
+						navName: index === parts.length - 1 ? item.navName : undefined
+					};
+					pathMap.set(currentPath, node);
+					currentLevel.push(node);
+				}
+				currentLevel = node.children;
+			});
+		});
 
-  function getDisplayNodes() {
-    const treeNodes = buildTree(items);
-    if (treeNodes.length === 1 && treeNodes[0].children && treeNodes[0].children.length > 0) {
-      return treeNodes[0].children;
-    }
-    return treeNodes;
-  }
+		return root;
+	}
 
-  function debugRootNode() {
-    const nodes = getDisplayNodes();
-    if (nodes.length > 0) {
-      const debugNode = {
-        path: nodes[0].path,
-        name: nodes[0].name,
-        children: nodes[0].children?.length || 0
-      };
-      console.log('Root node:', debugNode);
-    }
-  }
+	function getDisplayNodes() {
+		const treeNodes = buildTree(items);
+		if (treeNodes.length === 1 && treeNodes[0].children && treeNodes[0].children.length > 0) {
+			return treeNodes[0].children;
+		}
+		return treeNodes;
+	}
 
-  function debugExpandedNodes() {
-    expandedNodes.subscribe(val => {
-      console.log('Expanded nodes:', Array.from(val.entries()));
-    })();
-  }
+	function debugRootNode() {
+		const nodes = getDisplayNodes();
+		if (nodes.length > 0) {
+			const debugNode = {
+				path: nodes[0].path,
+				name: nodes[0].name,
+				children: nodes[0].children?.length || 0
+			};
+			console.log('Root node:', debugNode);
+		}
+	}
 
-  debugExpandedNodes();
-  debugRootNode();
+	function debugExpandedNodes() {
+		expandedNodes.subscribe((val) => {
+			console.log('Expanded nodes:', Array.from(val.entries()));
+		})();
+	}
 
-  function toggleExpand(node: string) {
-    expandedNodes.update(map => {
-      const newMap = new Map(map);
-      const currentState = newMap.get(node) || false;
-      newMap.set(node, !currentState);
-      return newMap;
-    });
-    debugExpandedNodes();
-    debugRootNode();
-  }
+	debugExpandedNodes();
+	debugRootNode();
+
+	function toggleExpand(node: string) {
+		expandedNodes.update((map) => {
+			const newMap = new Map(map);
+			const currentState = newMap.get(node) || false;
+			newMap.set(node, !currentState);
+			return newMap;
+		});
+		debugExpandedNodes();
+		debugRootNode();
+	}
 </script>
 
 <!-- 引入递归组件 -->
 <ul class="tree">
-  {#each getDisplayNodes() as node}
-    <TreeNode
-      node={node}
-      {onItemClick}
-      {toggleExpand}
-    />
-  {/each}
+	{#each getDisplayNodes() as node}
+		<TreeNode {node} {onItemClick} {toggleExpand} />
+	{/each}
 </ul>
 
 <style>
-  .tree {
-    list-style: none;
-    padding-left: 1rem;
-    margin: 0;
-  }
+	.tree {
+		list-style: none;
+		padding-left: 1rem;
+		margin: 0;
+	}
 </style>

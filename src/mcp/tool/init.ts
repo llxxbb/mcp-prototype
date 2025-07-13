@@ -27,7 +27,7 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
 		globalConfig.prototypeRoot === undefined &&
 		(parsedArgs?.prototypeRoot === undefined || parsedArgs?.prototypeRoot === '')
 	) {
-		let msg = 'Init failed: [prototypeRoot] must be set for first time';
+		const msg = 'Init failed: [prototypeRoot] must be set for first time';
 		logger.warn(msg);
 		return response.error(msg);
 	}
@@ -36,7 +36,7 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
 		try {
 			// Handle relative path
 			if (!path.isAbsolute(parsedArgs.prototypeRoot)) {
-				let msg = 'Init failed: [prototypeRoot] must be an absolute path';
+				const msg = 'Init failed: [prototypeRoot] must be an absolute path';
 				logger.warn(msg);
 				return response.error(msg);
 			}
@@ -51,7 +51,7 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
 			// Special handling when last path segment is "html"
 			const pathSegments = parsedArgs.prototypeRoot.split(path.sep);
 			if (pathSegments[pathSegments.length - 1].toLowerCase() === 'html') {
-				 parsedArgs.prototypeRoot = path.dirname(parsedArgs.prototypeRoot);
+				parsedArgs.prototypeRoot = path.dirname(parsedArgs.prototypeRoot);
 				logger.info(`Adjusted prototypeRoot to parent directory: ${parsedArgs.prototypeRoot}`);
 			} else {
 				return response.error(`Invalid prototypeRoot: end dir must be "html"`);

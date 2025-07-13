@@ -24,7 +24,8 @@ export async function getSpecTool(): Promise<CallToolResult> {
 						},
 						{
 							specId: 'baseInject',
-							content: '系统会为每个 HTML 页面注入 <base href="/html/"> 标签，注意"引用"路径的正确性。'
+							content:
+								'系统会为每个 HTML 页面注入 <base href="/html/"> 标签，注意"引用"路径的正确性。'
 						},
 						{
 							specId: 'jsInject',

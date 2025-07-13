@@ -19,7 +19,7 @@ describe('initTool', () => {
 		expect(result.content[0].text).toContain('[prototypeRoot] must be set for first time');
 	});
 	it('should require absolute prototypeRoot', async () => {
-		const result = await initTool({ prototypeRoot: './relative/path/html' } as InitArgs);
+		const result = await initTool({ prototypeRoot: 'relative/path/html' } as InitArgs);
 		expect(result.content[0].text).toContain('[prototypeRoot] must be an absolute path');
 	});
 	it('should adjust prototypeRoot when ends with html (absolute path)', async () => {

@@ -20,10 +20,7 @@
 		</button>
 		<div class="nav-content">
 			<h2>Prototype Files: {prototypeItems.length}</h2>
-			<Tree 
-				items={prototypeItems} 
-				onItemClick={loadContent} 
-			/>
+			<Tree items={prototypeItems} onItemClick={loadContent} />
 		</div>
 	</aside>
 
