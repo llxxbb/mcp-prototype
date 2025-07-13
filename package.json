@@ -14,7 +14,8 @@
 		"lint:mcp": "prettier --check . && eslint --fix -c ./eslint.config.mcp.js ./src/mcp/",
 		"lint:web": "prettier --check . && eslint --fix  -c ./eslint.config.web.js ./src/",
 		"test": "vitest",
-		"test:debug": "vitest --inspect-brk"
+	    "test:ui": "vitest --ui",
+	    "test:debug": "vitest --inspect-brk"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.13.1",

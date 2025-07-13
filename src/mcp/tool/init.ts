@@ -51,11 +51,12 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
 			// Special handling when last path segment is "html"
 			const pathSegments = parsedArgs.prototypeRoot.split(path.sep);
 			if (pathSegments[pathSegments.length - 1].toLowerCase() === 'html') {
-				parsedArgs.prototypeRoot = path.dirname(parsedArgs.prototypeRoot);
+				 parsedArgs.prototypeRoot = path.dirname(parsedArgs.prototypeRoot);
 				logger.info(`Adjusted prototypeRoot to parent directory: ${parsedArgs.prototypeRoot}`);
 			} else {
-				return response.error(`Invalid prototypeRoot: end dir must be "html`);
+				return response.error(`Invalid prototypeRoot: end dir must be "html"`);
 			}
+			initialized = true;
 		} catch (error) {
 			logger.error(`Failed to process prototypeRoot: ${error}`);
 			return response.error(

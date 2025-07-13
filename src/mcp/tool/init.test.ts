@@ -38,4 +38,3 @@ describe('initTool', () => {
 		expect(initialized).toBe(true);
 	});
 });
-//# sourceMappingURL=init.test.js.map

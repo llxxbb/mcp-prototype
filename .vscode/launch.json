@@ -8,17 +8,14 @@
       "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
       "args": [
         "--run",
+        "--no-file-parallelism",
+        "--inspect-brk",
         "${file}"
       ],
       "autoAttachChildProcesses": true,
       "smartStep": true,
       "console": "integratedTerminal",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "env": {
-        "NODE_ENV": "test"
-      }
+      "internalConsoleOptions": "neverOpen"
     },
     {
       "name": "Debug All Vitest Tests",
