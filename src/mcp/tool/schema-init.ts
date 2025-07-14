@@ -5,7 +5,7 @@ export const InitArgsSchema = z.object({
 		.string()
 		.optional()
 		.describe(
-			'mcp-prototype 工具用于展示的原型文件路径，为了与 mcp-prototype 自身的服务路径进行区别，只对其下的 html 子目录提供服务。'
+			'原型文件所在目录，要求最后一节目录必须是“html”，html 将作为 mcp-prototype web 服务的资源前缀。'
 		),
 	port: z
 		.number()
