@@ -77,19 +77,21 @@ export async function filter(
 				const content = await fs.readFile(fullPath, 'utf-8');
 				const $ = cheerio.load(content);
 				const htmlElement = $('html');
-				const navName = htmlElement.attr('data-nav-name');
+				let navName = htmlElement.attr('data-nav-name');
+				if (!navName) {
+					const filename = path.basename(fullPath, path.extname(fullPath));
+					navName = filename;
+				}
 				const navSeq = parseInt(htmlElement.attr('data-nav-seq') || '0', 10);
 
-				if (navName) {
-					const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
-					const finalPath = prefix ? `${prefix}/${relativePath}` : relativePath;
-					results.push({
-						relativePath: finalPath,
-						navName,
-						navSeq
-					});
-					console.log(`找到符合条件的HTML文件: ${finalPath}`);
-				}
+				const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
+				const finalPath = prefix ? `${prefix}/${relativePath}` : relativePath;
+				results.push({
+					relativePath: finalPath,
+					navName,
+					navSeq
+				});
+				console.log(`找到符合条件的HTML文件: ${finalPath}`);
 			} catch (error) {
 				console.error(`处理文件 ${fullPath} 时出错:`, error);
 			}
