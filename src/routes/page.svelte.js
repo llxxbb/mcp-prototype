@@ -4,6 +4,11 @@ import {
 	currentContentUrl,
 	currentContentHelp
 } from './stores';
+
+let currentContentUrlValue;
+currentContentUrl.subscribe(value => {
+	currentContentUrlValue = value;
+});
 export const prototypeRoot = '/html';
 
 // Initialize from environment variable if available
@@ -24,11 +29,14 @@ export function initFiles() {
 }
 
 export function toggleLeftSidebar() {
-	leftSidebarVisible.update((v) => !v);
+	leftSidebarVisible.update(value => !value);
 }
 
 export function toggleRightSidebar() {
-	rightSidebarVisible.update((v) => !v);
+	// Updated implementation to prevent right sidebar from being toggled when content is loaded
+	if (!currentContentUrlValue) {
+		rightSidebarVisible.update(value => !value);
+	}
 }
 
 export async function loadContent(path) {
