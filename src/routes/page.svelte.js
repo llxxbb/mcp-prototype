@@ -56,3 +56,45 @@ export async function loadContent(path) {
 		console.log(`load  help markdown error for ${helpPath}: ${error.message}`);
 	}
 }
+
+// Drag logic
+let isPanelDragging = false;
+let panelPosition = { x: 0, y: 20 };
+let dragStart = { x: 0, y: 0 };
+
+export function handleDragStart(event) {
+	isPanelDragging = true;
+	dragStart.x = event.clientX - panelPosition.x;
+	dragStart.y = event.clientY - panelPosition.y;
+	event.preventDefault(); // Prevent default drag behavior
+}
+
+export function handleDragMove(event) {
+	if (isPanelDragging) {
+		const newX = event.clientX - dragStart.x;
+		const newY = event.clientY - dragStart.y;
+
+		// Calculate boundaries
+		const maxX = window.innerWidth - 100; // panel width
+		const maxY = window.innerHeight - 50; // panel height
+
+		// Update position with boundary checks
+		panelPosition.x = Math.max(-100, Math.min(newX, maxX));
+		panelPosition.y = Math.max(0, Math.min(newY, maxY));
+	}
+}
+
+export function handleDragEnd() {
+	isPanelDragging = false;
+}
+
+// Drag event listeners
+export function setupDragListeners() {
+	const moveListener = (event) => handleDragMove(event);
+	const upListener = () => handleDragEnd();
+
+	document.addEventListener('mousemove', moveListener);
+	document.addEventListener('mouseup', upListener);
+
+	return { moveListener, upListener };
+}
