@@ -6,7 +6,7 @@ import {
 } from './stores';
 
 let currentContentUrlValue;
-currentContentUrl.subscribe(value => {
+currentContentUrl.subscribe((value) => {
 	currentContentUrlValue = value;
 });
 export const prototypeRoot = '/html';
@@ -29,13 +29,13 @@ export function initFiles() {
 }
 
 export function toggleLeftSidebar() {
-	leftSidebarVisible.update(value => !value);
+	leftSidebarVisible.update((value) => !value);
 }
 
 export function toggleRightSidebar() {
 	// Updated implementation to prevent right sidebar from being toggled when content is loaded
 	if (!currentContentUrlValue) {
-		rightSidebarVisible.update(value => !value);
+		rightSidebarVisible.update((value) => !value);
 	}
 }
 
@@ -57,10 +57,18 @@ export async function loadContent(path) {
 	}
 }
 
-// Drag logic
-let isPanelDragging = false;
-let panelPosition = { x: 0, y: 20 };
-let dragStart = { x: 0, y: 0 };
+export function dragInit(doc) {
+	dragDoc = doc;
+	// Set initial position to top-right corner but within visible area
+	panelPosition.x = window.innerWidth - 130; // 100 (width) + 30 buffer
+}
+
+export async function dragEnd() {
+	if (dragDoc) {
+		dragDoc.removeEventListener('mousemove', moveListener);
+		dragDoc.removeEventListener('mouseup', upListener);
+	}
+}
 
 export function handleDragStart(event) {
 	isPanelDragging = true;
@@ -69,32 +77,31 @@ export function handleDragStart(event) {
 	event.preventDefault(); // Prevent default drag behavior
 }
 
-export function handleDragMove(event) {
-	if (isPanelDragging) {
-		const newX = event.clientX - dragStart.x;
-		const newY = event.clientY - dragStart.y;
+let dragDoc;
+const moveListener = (event) => handleDragMove(event);
+const upListener = () => handleDragEnd();
 
-		// Calculate boundaries
-		const maxX = window.innerWidth - 100; // panel width
-		const maxY = window.innerHeight - 50; // panel height
 
-		// Update position with boundary checks
-		panelPosition.x = Math.max(-100, Math.min(newX, maxX));
-		panelPosition.y = Math.max(0, Math.min(newY, maxY));
+let isPanelDragging = false;
+let panelPosition = { x: 0, y: 0 };
+let dragStart = { x: 0, y: 0 };
+
+function handleDragMove(event) {
+	if (!isPanelDragging) {
+		return;
 	}
+	const newX = event.clientX - dragStart.x;
+	const newY = event.clientY - dragStart.y;
+
+	// Calculate boundaries
+	const maxX = window.innerWidth - 100; // panel width
+	const maxY = window.innerHeight - 50; // panel height
+
+	// Allow full horizontal movement
+	panelPosition.x = Math.max(0, Math.min(newX, maxX)); // increased range
+	panelPosition.y = Math.max(0, Math.min(newY, maxY));
 }
 
-export function handleDragEnd() {
+function handleDragEnd() {
 	isPanelDragging = false;
-}
-
-// Drag event listeners
-export function setupDragListeners() {
-	const moveListener = (event) => handleDragMove(event);
-	const upListener = () => handleDragEnd();
-
-	document.addEventListener('mousemove', moveListener);
-	document.addEventListener('mouseup', upListener);
-
-	return { moveListener, upListener };
 }

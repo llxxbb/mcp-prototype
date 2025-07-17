@@ -4,8 +4,9 @@
 		toggleLeftSidebar,
 		toggleRightSidebar,
 		loadContent,
-		handleDragStart,
-		setupDragListeners
+		dragInit,
+		dragEnd,
+		handleDragStart
 	} from './page.svelte.js';
 
 	import { onMount, onDestroy } from 'svelte';
@@ -21,18 +22,9 @@
 	let prototypeItems = data?.prototypeItems || [];
 	let panelPosition = { x: 0, y: 0 };
 
-	onMount(() => {
-		panelPosition.x = window.innerWidth - 120; // 100 (width) + 20 buffer
+	onMount(() =>dragInit(document));
+	onDestroy(() =>dragEnd());
 
-		// Setup drag listeners
-		const { moveListener, upListener } = setupDragListeners();
-
-		// Cleanup function to remove event listeners when component is destroyed
-		onDestroy(() => {
-			document.removeEventListener('mousemove', moveListener);
-			document.removeEventListener('mouseup', upListener);
-		});
-	});
 </script>
 
 <main class="app-container">
