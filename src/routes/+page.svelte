@@ -13,23 +13,32 @@
 	export let data;
 	let prototypeItems = data?.prototypeItems || [];
 	let isPanelDragging = false;
-	let panelPosition = { x: 20, y: 20 };
+	let panelPosition = { x: 0, y: 20 };
 	let dragStart = { x: 0, y: 0 };
+
+	onMount(() => {
+		// Set initial position to top-right corner but within visible area
+		panelPosition.x = window.innerWidth - 130; // 100 (width) + 30 buffer
+	});
 
 	function handleDragStart(event) {
 		isPanelDragging = true;
 		dragStart.x = event.clientX - panelPosition.x;
 		dragStart.y = event.clientY - panelPosition.y;
+		event.preventDefault(); // Prevent default drag behavior
 	}
 
 	function handleDragMove(event) {
 		if (isPanelDragging) {
 			const newX = event.clientX - dragStart.x;
 			const newY = event.clientY - dragStart.y;
-			// Ensure the panel stays within the viewport
+
+			// Calculate boundaries
 			const maxX = window.innerWidth - 100; // panel width
 			const maxY = window.innerHeight - 50; // panel height
-			panelPosition.x = Math.max(0, Math.min(newX, maxX));
+
+			// Allow full horizontal movement
+			panelPosition.x = Math.max(0, Math.min(newX, maxX)); // increased range
 			panelPosition.y = Math.max(0, Math.min(newY, maxY));
 		}
 	}
@@ -38,33 +47,34 @@
 		isPanelDragging = false;
 	}
 
-	$: {
-		// Only add event listeners when the component is active
-		if (typeof window !== 'undefined') {
-			const moveListener = (event) => handleDragMove(event);
-			const upListener = () => handleDragEnd();
+	// Manage drag event listeners
+	if (typeof window !== 'undefined') {
+		const moveListener = (event) => handleDragMove(event);
+		const upListener = () => handleDragEnd();
 
+		// Add listeners on component mount
+		onMount(() => {
 			document.addEventListener('mousemove', moveListener);
 			document.addEventListener('mouseup', upListener);
+		});
 
-			// Cleanup function to remove event listeners when component is destroyed
-			onDestroy(() => {
-				document.removeEventListener('mousemove', moveListener);
-				document.removeEventListener('mouseup', upListener);
-			});
-		}
+		// Remove listeners on component destroy
+		onDestroy(() => {
+			document.removeEventListener('mousemove', moveListener);
+			document.removeEventListener('mouseup', upListener);
+		});
 	}
 </script>
 
 <main class="app-container">
-	<div class="draggable-panel" style="left: {panelPosition.x}px; top: {panelPosition.y}px;" role="button" tabindex="0">
-		<button onclick={toggleLeftSidebar} class="toggle-btn sidebar-toggle-btn">
+	<div id="toolbox" class="draggable-panel" role="button" tabindex="0" style="transform: translate({panelPosition.x}px, {panelPosition.y}px);">
+		<button onclick={toggleLeftSidebar} class="toggle-btn">
 			{$leftSidebarVisible ? '◀' : '▶'}
 		</button>
-		<button onclick={toggleRightSidebar} class="toggle-btn sidebar-toggle-btn">
+		<button onclick={toggleRightSidebar} class="toggle-btn">
 			{$rightSidebarVisible ? '◀' : '▶'}
 		</button>
-		<div class="drag-handle" onmousedown={handleDragStart} role="presentation">☰</div>
+		<div id="drag-handler" class="drag-handle" onmousedown={handleDragStart} role="presentation">☰</div>
 	</div>
 	<aside class="sidebar" class:collapsed={!$leftSidebarVisible}>
 		<div class="nav-content">
@@ -92,7 +102,7 @@
 	<aside class="sidebar right" class:collapsed={!$rightSidebarVisible}>
 		<div class="helper-content">
 			<h2>Helper</h2>
-			<div class="markdown-content">
+			<div class="helper-content">
 				{#if $currentContentHelp}
 					{@html marked($currentContentHelp)}
 				{:else}
@@ -105,4 +115,5 @@
 
 <style global>
 	@import './page.svelte.css';
+	
 </style>
