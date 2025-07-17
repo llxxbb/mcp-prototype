@@ -16,9 +16,9 @@
 			>
 				{$expandedNodes.get(node.path) ? '📂' : '📁'}
 			</button>
-			<span class="folder" on:click={() => toggleExpand(node.path)} tabindex="0" role="button">
+			<button class="folder" on:click={() => toggleExpand(node.path)}>
 				{node.name}
-			</span>
+			</button>
 		</div>
 		{#if $expandedNodes.get(node.path)}
 			<div class="tree-children">
@@ -71,6 +71,9 @@
 		cursor: pointer;
 		user-select: none;
 		outline: none;
+		background: none;
+		border: none;
+		padding: 0;
 	}
 	.folder:focus {
 		text-decoration: underline;

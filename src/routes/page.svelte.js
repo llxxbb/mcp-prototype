@@ -2,7 +2,8 @@ import {
 	leftSidebarVisible,
 	rightSidebarVisible,
 	currentContentUrl,
-	currentContentHelp
+	currentContentHelp,
+	panelPosition
 } from './stores';
 
 let currentContentUrlValue;
@@ -57,51 +58,54 @@ export async function loadContent(path) {
 	}
 }
 
-export function dragInit(doc) {
-	dragDoc = doc;
-	// Set initial position to top-right corner but within visible area
-	panelPosition.x = window.innerWidth - 130; // 100 (width) + 30 buffer
+// 用于 Svelte 响应式的 panelPosition
+let isPanelDragging = false;
+let dragStart = { x: 0, y: 0 };
+let dragDoc;
+
+// Svelte 组件可调用此方法来设置 panelPosition
+export function setPanelPosition(pos) {
+	panelPosition.set(pos);
 }
 
-export async function dragEnd() {
-	if (dragDoc) {
-		dragDoc.removeEventListener('mousemove', moveListener);
-		dragDoc.removeEventListener('mouseup', upListener);
-	}
+const moveListener = (event) => handleDragMove(event);
+const upListener = () => handleDragEnd();
+
+export function dragInit(doc) {
+	dragDoc = doc;
+	// 初始位置
+	panelPosition.set({ x: window.innerWidth - 130, y: 0 });
 }
 
 export function handleDragStart(event) {
 	isPanelDragging = true;
-	dragStart.x = event.clientX - panelPosition.x;
-	dragStart.y = event.clientY - panelPosition.y;
-	event.preventDefault(); // Prevent default drag behavior
+	let current;
+	panelPosition.subscribe(v => current = v)();
+	dragStart.x = event.clientX - current.x;
+	dragStart.y = event.clientY - current.y;
+	dragDoc.addEventListener('mousemove', moveListener);
+	dragDoc.addEventListener('mouseup', upListener);
+	event.preventDefault();
 }
-
-let dragDoc;
-const moveListener = (event) => handleDragMove(event);
-const upListener = () => handleDragEnd();
-
-
-let isPanelDragging = false;
-let panelPosition = { x: 0, y: 0 };
-let dragStart = { x: 0, y: 0 };
 
 function handleDragMove(event) {
-	if (!isPanelDragging) {
-		return;
-	}
+	if (!isPanelDragging) return;
+	let current;
+	panelPosition.subscribe(v => current = v)();
 	const newX = event.clientX - dragStart.x;
 	const newY = event.clientY - dragStart.y;
-
-	// Calculate boundaries
-	const maxX = window.innerWidth - 100; // panel width
-	const maxY = window.innerHeight - 50; // panel height
-
-	// Allow full horizontal movement
-	panelPosition.x = Math.max(0, Math.min(newX, maxX)); // increased range
-	panelPosition.y = Math.max(0, Math.min(newY, maxY));
+	const maxX = window.innerWidth - 100;
+	const maxY = window.innerHeight - 50;
+	panelPosition.set({
+		x: Math.max(0, Math.min(newX, maxX)),
+		y: Math.max(0, Math.min(newY, maxY))
+	});
 }
 
-function handleDragEnd() {
+export function dragEnd() {
 	isPanelDragging = false;
+	if (dragDoc) {
+		dragDoc.removeEventListener('mousemove', moveListener);
+		dragDoc.removeEventListener('mouseup', upListener);
+	}
 }

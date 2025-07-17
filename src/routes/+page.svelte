@@ -14,13 +14,13 @@
 		leftSidebarVisible,
 		rightSidebarVisible,
 		currentContentUrl,
-		currentContentHelp
+		currentContentHelp,
+		panelPosition
 	} from './stores';
 	import { marked } from 'marked';
 
 	export let data;
 	let prototypeItems = data?.prototypeItems || [];
-	let panelPosition = { x: 0, y: 0 };
 
 	onMount(() =>dragInit(document));
 	onDestroy(() =>dragEnd());
@@ -28,7 +28,7 @@
 </script>
 
 <main class="app-container">
-	<div id="toolbox" class="draggable-panel" role="button" tabindex="0" style="transform: translate({panelPosition.x}px, {panelPosition.y}px);">
+	<div id="toolbox" class="draggable-panel" role="button" tabindex="0" style="transform: translate({$panelPosition.x}px, {$panelPosition.y}px);">
 		<button onclick={toggleLeftSidebar} class="toggle-btn">
 			{$leftSidebarVisible ? '◀' : '▶'}
 		</button>
