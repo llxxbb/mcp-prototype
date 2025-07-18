@@ -4,3 +4,4 @@ node_modules/
 .svelte-kit/
 tmp/
 test-prototype/html/js/mcp-prototype-inject.js
+test-prototype/html/business-architecture.html

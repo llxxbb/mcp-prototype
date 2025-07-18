@@ -1,4 +1,9 @@
 <script lang="ts">
+	import svgNav1 from '$img/nav-1.svg';
+	import svgNav2 from '$img/nav-2.svg';
+	import svgPen1 from '$img/pen-1.svg';
+	import svgPen2 from '$img/pen-2.svg';
+	import svgDir from '$img/dir.svg';
 	import Tree from '../components/Tree.svelte';
 	import {
 		toggleLeftSidebar,
@@ -29,15 +34,17 @@
 
 <main class="app-container">
 	<div id="toolbox" class="draggable-panel" role="button" tabindex="0" style="transform: translate({$panelPosition.x}px, {$panelPosition.y}px);">
-		<button onclick={toggleLeftSidebar} class="toggle-btn">
-			{$leftSidebarVisible ? '◀' : '▶'}
-		</button>
-		<button onclick={toggleRightSidebar} class="toggle-btn">
-			{$rightSidebarVisible ? '◀' : '▶'}
-		</button>
-		<div id="drag-handler" class="drag-handle" onmousedown={handleDragStart} role="presentation">☰</div>
+		<img onclick={toggleLeftSidebar} class="toggle-btn" alt="toggle left sidebar" role="button"
+			src={$leftSidebarVisible ? svgNav1 : svgNav2}
+		/>
+		<img onclick={toggleRightSidebar} class="toggle-btn" alt="toggle right sidebar" role="button"
+			src={$rightSidebarVisible ? svgPen1 : svgPen2}
+		/>
+		<div id="drag-handler" class="drag-handle" onmousedown={handleDragStart} role="presentation">
+			<img src={svgDir} alt="drag handle" />
+		</div>
 	</div>
-	<aside class="sidebar" class:collapsed={!$leftSidebarVisible}>
+	<aside class="sidebar" style="display: {$leftSidebarVisible ? 'block' : 'none'}">
 		<div class="nav-content">
 			<h2>Prototype Files: {prototypeItems.length}</h2>
 			<Tree items={prototypeItems} onItemClick={loadContent} />
@@ -60,7 +67,7 @@
 		{/if}
 	</section>
 
-	<aside class="sidebar right" class:collapsed={!$rightSidebarVisible}>
+	<aside class="sidebar right" style="display: {$rightSidebarVisible ? 'block' : 'none'}">
 		<div class="helper-content">
 			<h2>Helper</h2>
 			<div class="helper-content">

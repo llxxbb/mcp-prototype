@@ -16,7 +16,10 @@ const config = {
 		adapter: adapter(),
 		files: {
       		assets: htmlPath || 'static' // 默认使用 'static' 目录
-    	}
+    	},
+		alias: {
+			$img: 'static/img'
+		}
 	}
 };
 
