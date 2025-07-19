@@ -34,10 +34,7 @@ export function toggleLeftSidebar() {
 }
 
 export function toggleRightSidebar() {
-	// Updated implementation to prevent right sidebar from being toggled when content is loaded
-	if (!currentContentUrlValue) {
-		rightSidebarVisible.update((value) => !value);
-	}
+	rightSidebarVisible.update((value) => !value);
 }
 
 export async function loadContent(path) {
@@ -58,54 +55,112 @@ export async function loadContent(path) {
 	}
 }
 
-// 用于 Svelte 响应式的 panelPosition
+// 拖拽相关变量
 let isPanelDragging = false;
 let dragStart = { x: 0, y: 0 };
 let dragDoc;
+let currentPosition = { x: 0, y: 0 };
+let toolboxElement = null;
 
-// Svelte 组件可调用此方法来设置 panelPosition
-export function setPanelPosition(pos) {
-	panelPosition.set(pos);
+// 禁用 iframe 的指针事件
+function disableIframePointerEvents() {
+	if (typeof document === 'undefined') return;
+	const iframes = document.querySelectorAll('iframe');
+	iframes.forEach(iframe => {
+		iframe.style.pointerEvents = 'none';
+	});
 }
 
-const moveListener = (event) => handleDragMove(event);
-const upListener = () => handleDragEnd();
-
-export function dragInit(doc) {
-	dragDoc = doc;
-	// 初始位置
-	panelPosition.set({ x: window.innerWidth - 130, y: 0 });
+// 恢复 iframe 的指针事件
+function enableIframePointerEvents() {
+	if (typeof document === 'undefined') return;
+	const iframes = document.querySelectorAll('iframe');
+	iframes.forEach(iframe => {
+		iframe.style.pointerEvents = '';
+	});
 }
 
-export function handleDragStart(event) {
-	isPanelDragging = true;
-	let current;
-	panelPosition.subscribe(v => current = v)();
-	dragStart.x = event.clientX - current.x;
-	dragStart.y = event.clientY - current.y;
-	dragDoc.addEventListener('mousemove', moveListener);
-	dragDoc.addEventListener('mouseup', upListener);
+// 事件监听器
+const moveListener = (event) => {
+	if (!isPanelDragging || !toolboxElement) return;
+	
 	event.preventDefault();
-}
-
-function handleDragMove(event) {
-	if (!isPanelDragging) return;
-	let current;
-	panelPosition.subscribe(v => current = v)();
+	event.stopPropagation();
+	
 	const newX = event.clientX - dragStart.x;
 	const newY = event.clientY - dragStart.y;
 	const maxX = window.innerWidth - 100;
 	const maxY = window.innerHeight - 50;
-	panelPosition.set({
+	
+	currentPosition = {
 		x: Math.max(0, Math.min(newX, maxX)),
 		y: Math.max(0, Math.min(newY, maxY))
-	});
+	};
+	
+	toolboxElement.style.transform = `translate(${currentPosition.x}px, ${currentPosition.y}px)`;
+};
+
+const upListener = () => dragEnd();
+
+export function dragInit(doc) {
+	if (typeof document === 'undefined') return;
+	
+	dragDoc = doc;
+	const initialPosition = { x: window.innerWidth - 130, y: 0 };
+	panelPosition.set(initialPosition);
+	currentPosition = { ...initialPosition };
+	
+	const toolbox = document.getElementById('toolbox');
+	if (toolbox) {
+		toolbox.style.transform = `translate(${initialPosition.x}px, ${initialPosition.y}px)`;
+	}
+}
+
+export function handleDragStart(event) {
+	if (typeof document === 'undefined') return;
+	
+	isPanelDragging = true;
+	toolboxElement = event.target.closest('#toolbox') || document.getElementById('toolbox');
+	
+	panelPosition.subscribe(value => {
+		currentPosition = { ...value };
+	})();
+	
+	dragStart.x = event.clientX - currentPosition.x;
+	dragStart.y = event.clientY - currentPosition.y;
+	
+	dragDoc.addEventListener('mousemove', moveListener, { capture: true });
+	dragDoc.addEventListener('mouseup', upListener, { capture: true });
+	
+	// 防止文本选择
+	dragDoc.body.style.userSelect = 'none';
+	
+	// 禁用 iframe 指针事件
+	disableIframePointerEvents();
+	
+	event.preventDefault();
+	event.stopPropagation();
 }
 
 export function dragEnd() {
 	isPanelDragging = false;
+	
+	if (currentPosition) {
+		panelPosition.set(currentPosition);
+	}
+	
+	// 恢复用户选择
+	if (dragDoc && dragDoc.body) {
+		dragDoc.body.style.userSelect = '';
+	}
+	
+	// 恢复 iframe 指针事件
+	enableIframePointerEvents();
+	
+	toolboxElement = null;
+	
 	if (dragDoc) {
-		dragDoc.removeEventListener('mousemove', moveListener);
-		dragDoc.removeEventListener('mouseup', upListener);
+		dragDoc.removeEventListener('mousemove', moveListener, { capture: true });
+		dragDoc.removeEventListener('mouseup', upListener, { capture: true });
 	}
 }

@@ -33,13 +33,19 @@
 </script>
 
 <main class="app-container">
-	<div id="toolbox" class="draggable-panel" role="button" tabindex="0" style="transform: translate({$panelPosition.x}px, {$panelPosition.y}px);">
-		<img onclick={toggleLeftSidebar} class="toggle-btn" alt="toggle left sidebar" role="button"
-			src={$leftSidebarVisible ? svgNav1 : svgNav2}
-		/>
-		<img onclick={toggleRightSidebar} class="toggle-btn" alt="toggle right sidebar" role="button"
-			src={$rightSidebarVisible ? svgPen1 : svgPen2}
-		/>
+	<div id="toolbox" class="draggable-panel">
+		<button onclick={toggleLeftSidebar} class="toggle-btn">
+			<img
+				src={$leftSidebarVisible ? svgNav1 : svgNav2}
+				alt="toggle left sidebar"
+			/>
+		</button>
+		<button onclick={toggleRightSidebar} class="toggle-btn">
+			<img
+				src={$rightSidebarVisible ? svgPen1 : svgPen2}
+				alt="toggle right sidebar"
+			/>
+		</button>
 		<div id="drag-handler" class="drag-handle" onmousedown={handleDragStart} role="presentation">
 			<img src={svgDir} alt="drag handle" />
 		</div>
