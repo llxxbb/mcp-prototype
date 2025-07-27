@@ -1,15 +1,38 @@
-## You are free to:
+MIT 许可证
 
-Share — copy and redistribute the material in any medium or format
+版权所有 (c) 2025 llxxbb
 
-The licensor cannot revoke these freedoms as long as you follow the license terms.
+特此授予免费的许可，允许任何人获得本软件及相关文档文件（以下简称"软件"）的副本，
+并在不受限制的情况下处理本软件，包括但不限于使用、复制、修改、合并、发布、分发、
+再许可和/或销售软件副本的权利，以及允许软件提供给他人，但须符合以下条件：
 
-### Under the following terms:
+所有软件副本或实质性部分都必须包含上述版权声明和本许可声明。
 
-**Attribution** — You must give appropriate credit , provide a link to the license, and indicate if changes were made . You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+本软件按"原样"提供，不提供任何形式的明示或暗示保证，包括但不限于适销性、
+特定用途适用性和不侵权的保证。在任何情况下，作者或版权持有人均不对因软件或
+软件使用或其他处理而引起的任何索赔、损害或其他责任承担责任，无论是在合同诉讼、
+侵权行为或其他方面。
 
-**NonCommercial** — You may not use the material for commercial purposes .
+附加条款：
 
-**NoDerivatives** — If you remix, transform, or build upon the material, you may not distribute the modified material.
+1. 广告位保留要求：
+   任何分发、修改或使用本软件的行为都必须保留软件中所有现有的广告位、
+   推广内容和相关标识的原始形式和位置。未经版权所有者明确书面许可，
+   不得以任何形式移除、遮挡、修改或重新定位这些广告内容。
 
-**No additional restrictions** — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+2. 二次分发开源要求：
+   基于本软件进行修改、衍生或二次开发的作品在分发时，必须：
+   - 公开发布完整的源代码
+   - 采用与本许可证相同或更宽松的许可条款
+   - 保留原始软件的所有版权声明和广告内容
+   - 在显著位置说明基于本项目的修改内容
+
+3. 商业使用特别说明：
+   商业用途的使用、分发或集成到其他项目中时，原始广告位和推广内容必须保持完整可见。
+   任何试图规避、移除或更改广告内容的行为均构成本许可证的实质性违约。
+
+4. 署名保护：
+   所有版权标识、署名信息和与广告相关的任何内容在软件的任何副本或衍生作品中都必须保留。
+
+这些附加条款是对 MIT 许可证的补充，并构成本许可证的一部分。当这些附加条款与基础
+MIT 许可证条款存在任何冲突时，这些附加条款在广告保留和署名要求方面具有优先权。

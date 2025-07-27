@@ -55,6 +55,13 @@
 			<h2>Prototype Files: {prototypeItems.length}</h2>
 			<Tree items={prototypeItems} onItemClick={loadContent} />
 		</div>
+		<!-- Advertisement slot 1 -->
+		<div class="advertisement-slot">
+			<div class="ad-label">广告</div>
+			<div class="ad-content">
+				<!-- Advertisement content goes here -->
+			</div>
+		</div>
 	</aside>
 
 	<section class="content">
@@ -82,6 +89,13 @@
 				{:else}
 					<p>No help available</p>
 				{/if}
+			</div>
+		</div>
+		<!-- Advertisement slot 2 -->
+		<div class="advertisement-slot">
+			<div class="ad-label">广告</div>
+			<div class="ad-content">
+				<!-- Advertisement content goes here -->
 			</div>
 		</div>
 	</aside>
