@@ -39,6 +39,11 @@ export async function getSpecTool(): Promise<CallToolResult> {
 						specId: 'marker',
 						content:
 							'UI 元素增加悬浮标记说明，可选。如相关界面元素的意义已经非常明显，则不建议配置。来源于元素标签的data-marker数据属性值，MCP-Prototype 将自动为元素绘制标记。'
+					},
+					{
+						specId: 'pageNote',
+						content:
+							'原型页面的整体说明，用于表达原型页面无法表达的内容，如设计理念，元素拖拽，注意事项等。规范：独立的 markdown 格式，文件名与原型页面名称一致，扩展名为:".annotation.md"'
 					}
 				])
 			}
