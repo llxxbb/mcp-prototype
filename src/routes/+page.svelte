@@ -59,6 +59,13 @@
 		<div class="advertisement-slot">
 			<div class="ad-label">广告</div>
 			<div class="ad-content">
+				<a href="https://beta.publishers.adsterra.com/referral/MMkdJQZHGc" rel="nofollow"><img alt="banner" src="https://landings-cdn.adsterratech.com/referralBanners/png/200%20x%20200%20px.png" /></a>
+			</div>
+		</div>
+		<!-- Advertisement slot 2 -->
+		<div class="advertisement-slot">
+			<div class="ad-label">广告</div>
+			<div class="ad-content">
 				<!-- Advertisement content goes here -->
 			</div>
 		</div>
@@ -91,7 +98,14 @@
 				{/if}
 			</div>
 		</div>
-		<!-- Advertisement slot 2 -->
+		<!-- Advertisement slot 3 -->
+		<div class="advertisement-slot">
+			<div class="ad-label">广告</div>
+			<div class="ad-content">
+				<!-- Advertisement content goes here -->
+			</div>
+		</div>
+		<!-- Advertisement slot 4 -->
 		<div class="advertisement-slot">
 			<div class="ad-label">广告</div>
 			<div class="ad-content">

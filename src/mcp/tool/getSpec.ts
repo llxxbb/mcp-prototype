@@ -38,7 +38,7 @@ export async function getSpecTool(): Promise<CallToolResult> {
 					{
 						specId: 'marker',
 						content:
-							'UI 元素增加标记定义，可选, 来源于元素标签的data-marker数据属性值，MCP-Prototype 将自动为元素绘制标记，鼠标悬浮显示标记内容。'
+							'UI 元素增加悬浮标记说明，可选。如相关界面元素的意义已经非常明显，则不建议配置。来源于元素标签的data-marker数据属性值，MCP-Prototype 将自动为元素绘制标记。'
 					}
 				])
 			}
