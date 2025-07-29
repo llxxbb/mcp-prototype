@@ -43,7 +43,7 @@ export async function getSpecTool(): Promise<CallToolResult> {
 					{
 						specId: 'pageNote',
 						content:
-							'原型页面的整体说明，用于表达原型页面无法表达的内容，如设计理念，元素拖拽，注意事项等。规范：独立的 markdown 格式，文件名与原型页面名称一致，扩展名为:".annotation.md"'
+							'原型页面的整体说明，用于表达原型页面无法表达的内容，如设计理念，元素拖拽，注意事项等。规范：独立的 markdown 格式，文件名格式为[原型页面文件名].annotation.md'
 					}
 				])
 			}
