@@ -73,7 +73,8 @@
 	padding: 10px;
 }
 
-.draggable-panel, .drag-handle {
+.draggable-panel,
+.drag-handle {
 	user-select: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;

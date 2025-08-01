@@ -82,7 +82,7 @@
 
 <!-- 引入递归组件 -->
 <ul class="tree">
-	{#each getDisplayNodes() as node}
+	{#each getDisplayNodes() as node (node.path)}
 		<TreeNode {node} {onItemClick} {toggleExpand} />
 	{/each}
 </ul>

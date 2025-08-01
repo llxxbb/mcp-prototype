@@ -15,7 +15,8 @@ export async function getSpecTool(): Promise<CallToolResult> {
 					},
 					{
 						specId: 'navigateName',
-						content: '导航栏中的原型名称定义，来源于原型页面<html>标签的 data-nav-name 数据属性值，如省略则使用文件名。'
+						content:
+							'导航栏中的原型名称定义，来源于原型页面<html>标签的 data-nav-name 数据属性值，如省略则使用文件名。'
 					},
 					{
 						specId: 'navigateSeq',
@@ -23,7 +24,8 @@ export async function getSpecTool(): Promise<CallToolResult> {
 					},
 					{
 						specId: 'baseInject',
-						content: '系统会为每个 HTML 页面注入 <base href="/html/"> 标签，注意"引用"路径的正确性。'
+						content:
+							'系统会为每个 HTML 页面注入 <base href="/html/"> 标签，注意"引用"路径的正确性。'
 					},
 					{
 						specId: 'jsInject',
@@ -35,11 +37,13 @@ export async function getSpecTool(): Promise<CallToolResult> {
 					},
 					{
 						specId: 'marker',
-						content: '通过设置 UI 元素的 data-marker 数据属性来增强使用者对UI元素的理解，可选。如相关界面元素的意义已经非常明显，则不建议配置。'
+						content:
+							'通过设置 UI 元素的 data-marker 数据属性来增强使用者对UI元素的理解，可选。如相关界面元素的意义已经非常明显，则不建议配置。'
 					},
 					{
 						specId: 'pageNote',
-						content: '原型页面的整体说明，用于表达原型页面无法表达的内容，如设计理念，元素拖拽，注意事项等。规范：独立的 markdown 格式，文件名格式为[原型页面文件名].annotation.md'
+						content:
+							'原型页面的整体说明，用于表达原型页面无法表达的内容，如设计理念，元素拖拽，注意事项等。规范：独立的 markdown 格式，文件名格式为[原型页面文件名].annotation.md'
 					}
 				])
 			}

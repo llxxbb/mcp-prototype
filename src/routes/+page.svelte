@@ -19,32 +19,24 @@
 		leftSidebarVisible,
 		rightSidebarVisible,
 		currentContentUrl,
-		currentContentHelp,
-		panelPosition
+		currentContentHelp
 	} from './stores';
 	import { marked } from 'marked';
 
 	export let data;
-	let prototypeItems = data?.prototypeItems || [];
+	const prototypeItems = data?.prototypeItems || [];
 
-	onMount(() =>dragInit(document));
-	onDestroy(() =>dragEnd());
-
+	onMount(() => dragInit(document));
+	onDestroy(() => dragEnd());
 </script>
 
 <main class="app-container">
 	<div id="toolbox" class="draggable-panel">
 		<button onclick={toggleLeftSidebar} class="toggle-btn">
-			<img
-				src={$leftSidebarVisible ? svgNav1 : svgNav2}
-				alt="toggle left sidebar"
-			/>
+			<img src={$leftSidebarVisible ? svgNav1 : svgNav2} alt="toggle left sidebar" />
 		</button>
 		<button onclick={toggleRightSidebar} class="toggle-btn">
-			<img
-				src={$rightSidebarVisible ? svgPen1 : svgPen2}
-				alt="toggle right sidebar"
-			/>
+			<img src={$rightSidebarVisible ? svgPen1 : svgPen2} alt="toggle right sidebar" />
 		</button>
 		<div id="drag-handler" class="drag-handle" onmousedown={handleDragStart} role="presentation">
 			<img src={svgDir} alt="drag handle" />
@@ -59,7 +51,12 @@
 		<div class="advertisement-slot">
 			<div class="ad-label">广告</div>
 			<div class="ad-content">
-				<a href="https://beta.publishers.adsterra.com/referral/MMkdJQZHGc" rel="nofollow"><img alt="banner" src="https://landings-cdn.adsterratech.com/referralBanners/png/200%20x%20200%20px.png" /></a>
+				<a href="https://beta.publishers.adsterra.com/referral/MMkdJQZHGc" rel="nofollow"
+					><img
+						alt="banner"
+						src="https://landings-cdn.adsterratech.com/referralBanners/png/200%20x%20200%20px.png"
+					/></a
+				>
 			</div>
 		</div>
 		<!-- Advertisement slot 2 -->
@@ -92,6 +89,7 @@
 			<h2>Helper</h2>
 			<div class="helper-content">
 				{#if $currentContentHelp}
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 					{@html marked($currentContentHelp)}
 				{:else}
 					<p>No help available</p>
@@ -117,5 +115,4 @@
 
 <style global>
 	@import './page.svelte.css';
-	
 </style>

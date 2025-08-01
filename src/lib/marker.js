@@ -101,18 +101,17 @@ export class Marker {
 
 	updateMarkerPosition(marker) {
 		const rect = marker._targetElement.getBoundingClientRect();
-		
+
 		// 计算标记位置（基于元素中心点）
 		const left = rect.left - 5; // 减去标记宽度的一半
-		const top = rect.top - 5;   // 减去标记高度的一半
-		
+		const top = rect.top - 5; // 减去标记高度的一半
+
 		// 获取视口尺寸（考虑iframe情况和滚动条）
-		const viewportWidth = window.innerWidth;
 		const viewportHeight = window.innerHeight;
-		
+
 		// 获取实际可用宽度（考虑滚动条）
 		const availableWidth = document.documentElement.clientWidth;
-		
+
 		// 获取文档可见区域的高度（考虑滚动位置和iframe）
 		const documentHeight = Math.max(
 			document.body.scrollHeight,
@@ -121,7 +120,7 @@ export class Marker {
 			document.documentElement.scrollHeight,
 			document.documentElement.offsetHeight
 		);
-		
+
 		// 如果在iframe中，使用iframe的实际可见高度
 		let visibleHeight;
 		if (window !== window.top) {
@@ -131,7 +130,7 @@ export class Marker {
 			// 不在iframe中，使用原来的逻辑
 			visibleHeight = Math.min(viewportHeight, documentHeight - window.scrollY);
 		}
-		
+
 		// 边界检查 - 确保标记不会显示在视口外
 		const boundedLeft = Math.max(0, Math.min(left, availableWidth - 10));
 		const boundedTop = Math.max(0, Math.min(top, viewportHeight - 10));
@@ -152,11 +151,11 @@ export class Marker {
 			const tooltipRect = marker._tooltip.getBoundingClientRect();
 			const tooltipWidth = tooltipRect.width || 100;
 			const tooltipHeight = tooltipRect.height || 20;
-			
+
 			// 水平位置计算：优先显示在右侧，否则显示在左侧
 			const rightSpace = boundedLeft + 10 + tooltipWidth;
 			const leftSpace = boundedLeft - tooltipWidth;
-			
+
 			if (rightSpace <= availableWidth) {
 				// 右侧空间足够，在右侧显示
 				marker._tooltip.style.left = `15px`;
@@ -180,19 +179,19 @@ export class Marker {
 					marker._tooltip.style.right = `auto`;
 				}
 			}
-			
+
 			// 垂直位置计算：优先显示在右侧居中，然后根据空间情况调整
 			const topSpace = boundedTop;
 			const bottomSpace = visibleHeight - boundedTop - 10;
-			
+
 			// 计算tooltip垂直居中的位置
 			const centerOffset = (tooltipHeight - 10) / 2; // 10是marker的高度
-			
-			// 检查是否有足够空间进行居中显示
-			const canCenter = boundedTop - centerOffset >= 0 && boundedTop + centerOffset + tooltipHeight <= visibleHeight;
-			
 
-			
+			// 检查是否有足够空间进行居中显示
+			const canCenter =
+				boundedTop - centerOffset >= 0 &&
+				boundedTop + centerOffset + tooltipHeight <= visibleHeight;
+
 			if (canCenter) {
 				// 空间足够，显示在右侧居中
 				marker._tooltip.style.top = `-${centerOffset}px`;
@@ -220,7 +219,7 @@ export class Marker {
 					marker._tooltip.style.maxHeight = '';
 					marker._tooltip.style.overflow = '';
 				}
-			} 
+			}
 		}
 	}
 

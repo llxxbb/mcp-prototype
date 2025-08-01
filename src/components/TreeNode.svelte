@@ -23,7 +23,7 @@
 		{#if $expandedNodes.get(node.path)}
 			<div class="tree-children">
 				<ul class="tree">
-					{#each node.children as child}
+					{#each node.children as child (child.path)}
 						<TreeNode node={child} {onItemClick} {toggleExpand} />
 					{/each}
 				</ul>

@@ -25,7 +25,7 @@ export async function GET() {
 				ETag: cachedHash
 			}
 		});
-	} catch (error) {
+	} catch {
 		return new Response('Not found', { status: 404 });
 	}
 }
