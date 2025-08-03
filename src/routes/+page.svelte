@@ -19,14 +19,27 @@
 		leftSidebarVisible,
 		rightSidebarVisible,
 		currentContentUrl,
-		currentContentHelp
+		currentContentHelp,
+		ads
 	} from './stores';
 	import { marked } from 'marked';
+	import { adService } from '../lib/adService';
+	import Advertisement from '../components/Advertisement.svelte';
 
 	export let data;
 	const prototypeItems = data?.prototypeItems || [];
 
-	onMount(() => dragInit(document));
+	onMount(async () => {
+		dragInit(document);
+		
+		// 加载广告数据
+		try {
+			const adsData = await adService.getAds();
+			ads.set(adsData);
+		} catch (error) {
+			console.error('Failed to load ads:', error);
+		}
+	});
 	onDestroy(() => dragEnd());
 </script>
 
@@ -48,24 +61,13 @@
 			<Tree items={prototypeItems} onItemClick={loadContent} />
 		</div>
 		<!-- Advertisement slot 1 -->
-		<div class="advertisement-slot">
-			<div class="ad-label">广告</div>
-			<div class="ad-content">
-				<a href="https://beta.publishers.adsterra.com/referral/MMkdJQZHGc" rel="nofollow"
-					><img
-						alt="banner"
-						src="https://landings-cdn.adsterratech.com/referralBanners/png/200%20x%20200%20px.png"
-					/></a
-				>
-			</div>
-		</div>
+		{#if $ads[0]}
+			<Advertisement ad={$ads[0]} />
+		{/if}
 		<!-- Advertisement slot 2 -->
-		<div class="advertisement-slot">
-			<div class="ad-label">广告</div>
-			<div class="ad-content">
-				<!-- Advertisement content goes here -->
-			</div>
-		</div>
+		{#if $ads[1]}
+			<Advertisement ad={$ads[1]} />
+		{/if}
 	</aside>
 
 	<section class="content">
@@ -97,19 +99,13 @@
 			</div>
 		</div>
 		<!-- Advertisement slot 3 -->
-		<div class="advertisement-slot">
-			<div class="ad-label">广告</div>
-			<div class="ad-content">
-				<!-- Advertisement content goes here -->
-			</div>
-		</div>
+		{#if $ads[2]}
+			<Advertisement ad={$ads[2]} />
+		{/if}
 		<!-- Advertisement slot 4 -->
-		<div class="advertisement-slot">
-			<div class="ad-label">广告</div>
-			<div class="ad-content">
-				<!-- Advertisement content goes here -->
-			</div>
-		</div>
+		{#if $ads[3]}
+			<Advertisement ad={$ads[3]} />
+		{/if}
 	</aside>
 </main>
 
