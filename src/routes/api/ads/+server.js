@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 
 export async function GET() {
   try {
-    const response = await fetch('https://gitee.com/xb_li/mcp-prototype/raw/main/abs/ads.json');
+    const response = await fetch('https://gitee.com/xb_li/mcp-prototype/raw/main/ads/ads.json');
     
     if (!response.ok) {
       throw new Error(`Failed to fetch ads: ${response.status}`);
