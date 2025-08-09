@@ -5,7 +5,7 @@ export const InitArgsSchema = z.object({
 		.string()
 		.optional()
 		.describe(
-			'原型文件所在目录，要求最后一节目录必须是“html”，html 将作为 mcp-prototype web 服务的资源前缀。'
+			'原型文件所在目录，要求最后一节目录必须是“html”，html 将作为 MCP-Prototype web 服务的资源前缀。'
 		),
 	port: z
 		.number()

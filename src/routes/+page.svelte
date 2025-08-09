@@ -81,7 +81,7 @@
 				></iframe>
 			</div>
 		{:else}
-			<h1>mcp-prototype</h1>
+			<h1>MCP-Prototype</h1>
 			<p>Please select a prototype file from the left sidebar</p>
 		{/if}
 	</section>
