@@ -1,0 +1,45 @@
+# 代码格式化和配置文件
+.prettierignore
+.prettierrc
+
+# 规则文档
+.rules/
+
+# 开发相关文件
+.idea
+.vscode
+test-prototype/
+doc/
+ads/
+
+# 构建和配置文件
+vite.config.web.ts
+svelte.config.js
+tsconfig.mcp.json
+tsconfig.web.json
+eslint.config.web.js
+eslint.config.mcp.js
+
+# 开发依赖和测试
+node_modules/
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# 其他开发文件
+.git/
+.gitignore
+README.md
+LICENSE.md
+package-lock.json
+src/mcp
+
+# 临时文件和日志
+.svelte-kit
+*.tgz
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

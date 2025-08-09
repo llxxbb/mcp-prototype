@@ -1,26 +1,26 @@
 [
-  {
-    "type": "banner",
-    "content": "https://landings-cdn.adsterratech.com/referralBanners/png/200%20x%20200%20px.png",
-    "link": "https://beta.publishers.adsterra.com/referral/MMkdJQZHGc",
-    "altText": "广告横幅"
-  },
-  {
-    "type": "text",
-    "content": "推荐产品：高性能开发工具",
-    "link": "https://example.com/product",
-    "altText": "产品推荐"
-  },
-  {
-    "type": "banner",
-    "content": "https://example.com/banner2.jpg",
-    "link": "https://example.com/sale",
-    "altText": "限时优惠"
-  },
-  {
-    "type": "text",
-    "content": "限时优惠：开发工具包8折",
-    "link": "https://example.com/discount",
-    "altText": "优惠活动"
-  }
+	{
+		"type": "banner",
+		"content": "https://landings-cdn.adsterratech.com/referralBanners/png/200%20x%20200%20px.png",
+		"link": "https://beta.publishers.adsterra.com/referral/MMkdJQZHGc",
+		"altText": "广告横幅"
+	},
+	{
+		"type": "text",
+		"content": "推荐产品：高性能开发工具",
+		"link": "https://example.com/product",
+		"altText": "产品推荐"
+	},
+	{
+		"type": "banner",
+		"content": "https://example.com/banner2.jpg",
+		"link": "https://example.com/sale",
+		"altText": "限时优惠"
+	},
+	{
+		"type": "text",
+		"content": "限时优惠：开发工具包8折",
+		"link": "https://example.com/discount",
+		"altText": "优惠活动"
+	}
 ]

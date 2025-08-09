@@ -1,15 +1,24 @@
 import path from 'path';
-import { createServer } from 'vite';
-import { sveltekit } from '@sveltejs/kit/vite';
 import { initHtmlFiles } from './main/html.js';
+
+// 动态导入 Vite 相关模块
+async function loadViteModules() {
+	const vite = await import('vite');
+	const sveltekitModule = await import('@sveltejs/kit/vite');
+	return {
+		createServer: vite.createServer,
+		sveltekit: sveltekitModule.sveltekit
+	};
+}
 
 const start = async () => {
 	const htmlPath = path.join(process.cwd(), 'test-prototype');
 	initHtmlFiles(htmlPath);
 
 	try {
+		const { createServer, sveltekit } = await loadViteModules();
 		const server = await createServer({
-			plugins: [sveltekit()],
+			plugins: [await sveltekit()] as any,
 			server: {
 				port: 3000,
 				open: true

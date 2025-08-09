@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@llxxbb/mcp-prototype": "file:mcp/temp-test/llxxbb-mcp-prototype-0.1.1.tgz"
+  }
+}

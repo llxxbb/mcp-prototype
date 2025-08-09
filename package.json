@@ -15,26 +15,31 @@
 		"lint:web": "prettier --check . && eslint --fix  -c ./eslint.config.web.js ./src/",
 		"test": "vitest",
 		"test:ui": "vitest --ui",
-		"test:debug": "vitest --inspect-brk"
+		"test:debug": "vitest --inspect-brk",
+		"test:local": "node ./src/mcp/test-local.js local",
+		"pack": "npm run build:mcp && npm pack"
 	},
 	"bin": {
 		"prototype-mcp": "dist/mcp/index.js"
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.13.1",
+		"cheerio": "^1.1.0",
 		"marked": "^16.0.0",
 		"neverthrow": "^8.2.0",
 		"node-fetch": "^2.7.0",
-		"vite": "^6.3.5",
-		"@sveltejs/kit": "^2.22.2",
-		"cheerio": "^1.1.0",
 		"zod": "^3.25.67"
+	},
+	"optionalDependencies": {
+		"@sveltejs/adapter-auto": "^6.0.0",
+		"@sveltejs/kit": "^2.22.2",
+		"@sveltejs/vite-plugin-svelte": "^5.1.0",
+		"svelte": "^5.0.0",
+		"vite": "^6.3.5"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
-		"@sveltejs/adapter-auto": "^6.0.0",
-		"@sveltejs/vite-plugin-svelte": "^5.1.0",
 		"@types/node": "^24.0.10",
 		"@types/node-fetch": "^2.6.12",
 		"@vitest/browser": "^3.2.3",
@@ -45,7 +50,6 @@
 		"playwright": "^1.53.0",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
-		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.20.0",

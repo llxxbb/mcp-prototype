@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import * as cheerio from 'cheerio';
+import { fileURLToPath } from 'url';
 
 interface HtmlFileInfo {
 	relativePath: string;
@@ -19,7 +20,50 @@ export async function initHtmlFiles(rootDir: string) {
 	process.env.MCP_PROTOTYPE_FILES = JSON.stringify(rtn);
 	console.log('set env.MCP_PROTOTYPE_FILES', rtn);
 	// 复制 mcp-prototype-inject.js 到 dir 目录下
-	await copyFile(path.join(process.cwd(), 'src', 'lib', jsFile), path.join(dir, 'js', jsFile));
+	const sourceFile = await findLibFile(jsFile);
+	await copyFile(sourceFile, path.join(dir, 'js', jsFile));
+}
+
+/**
+ * 查找库文件
+ * 在多个可能的路径中搜索指定的文件
+ * @param fileName 要查找的文件名
+ * @returns 找到的文件的完整路径
+ * @throws 如果找不到文件则抛出错误
+ */
+async function findLibFile(fileName: string): Promise<string> {
+	const sourcePaths = getLibFilePaths(fileName);
+
+	for (const sourcePath of sourcePaths) {
+		try {
+			await fs.access(sourcePath);
+			console.log(`找到 ${fileName} 文件: ${sourcePath}`);
+			return sourcePath;
+		} catch {
+			// 文件不存在，尝试下一个路径
+			console.log(`尝试路径失败: ${sourcePath}`);
+		}
+	}
+
+	throw new Error(`无法找到 ${fileName} 文件，尝试过的路径: ${sourcePaths.join(', ')}`);
+}
+
+/**
+ * 获取库文件的可能路径列表
+ * @param fileName 文件名
+ * @returns 可能的文件路径数组
+ */
+function getLibFilePaths(fileName: string): string[] {
+	// 获取当前模块的目录路径
+	const currentFilePath = fileURLToPath(import.meta.url);
+	const currentDir = path.dirname(currentFilePath);
+
+	return [
+		// 开发环境路径
+		path.join(process.cwd(), 'src', 'lib', fileName),
+		// npm 包安装后的路径（相对于编译后的文件位置）
+		path.join(currentDir, '..', '..', '..', 'src', 'lib', fileName)
+	];
 }
 
 /**

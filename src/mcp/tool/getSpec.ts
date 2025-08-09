@@ -24,12 +24,12 @@ export async function getSpecTool(): Promise<CallToolResult> {
 					},
 					{
 						specId: 'baseInject',
-						content:
-							'base注入：MCP-Prototype 会在页面 header 中注入 <base href="/html/"> '
+						content: 'base注入：MCP-Prototype 会在页面 header 中注入 <base href="/html/"> '
 					},
 					{
 						specId: 'jsInject',
-						content: 'JS注入：MCP-Prototype 回在页面的 header 中注入 mcp-prototype-inject.js 文件，用于展示标记。'
+						content:
+							'JS注入：MCP-Prototype 回在页面的 header 中注入 mcp-prototype-inject.js 文件，用于展示标记。'
 					},
 					{
 						specId: 'fileEncoding',

@@ -3,11 +3,25 @@ import { logger } from '../utils/logger.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { globalConfig, initialized } from './init.js';
 import { response } from '../utils/response.js';
-import { createServer, type ViteDevServer } from 'vite';
-import { sveltekit } from '@sveltejs/kit/vite';
-import { initHtmlFiles } from '../main/html.js';
+// 动态导入 Vite 相关模块
+let createServer: any;
+let sveltekit: any;
 
-export let serverInstance: Promise<ViteDevServer> | null = null;
+async function loadViteModules() {
+	if (!createServer) {
+		const vite = await import('vite');
+		createServer = vite.createServer;
+	}
+	if (!sveltekit) {
+		const sveltekitModule = await import('@sveltejs/kit/vite');
+		sveltekit = sveltekitModule.sveltekit;
+	}
+}
+import { initHtmlFiles } from '../main/html.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+export let serverInstance: Promise<any> | null = null;
 
 export async function startTool(): Promise<CallToolResult> {
 	// 检查是否已初始化
@@ -24,9 +38,19 @@ export async function startTool(): Promise<CallToolResult> {
 
 	try {
 		initHtmlFiles(globalConfig.prototypeRoot);
+
+		// 获取包根目录
+		const currentFilePath = fileURLToPath(import.meta.url);
+		const packageRoot = path.join(currentFilePath, '..', '..', '..', '..');
+		console.log('packageRoot:', packageRoot);
+
+		// 动态加载 Vite 模块
+		await loadViteModules();
+
 		// 创建Vite服务器
 		serverInstance = createServer({
-			plugins: [sveltekit()],
+			root: packageRoot,
+			plugins: [await sveltekit()] as any,
 			server: {
 				port: globalConfig.port,
 				open: true

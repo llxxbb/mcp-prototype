@@ -31,7 +31,7 @@
 
 	onMount(async () => {
 		dragInit(document);
-		
+
 		// 加载广告数据
 		try {
 			const adsData = await adService.getAds();
