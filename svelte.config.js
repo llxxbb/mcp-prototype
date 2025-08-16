@@ -1,7 +1,6 @@
 import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-
-let htmlPath = process.env.MCP_PROTOTYPE_HTML_PATH;
+import path from 'path';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -15,10 +14,10 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
 		files: {
-      		assets: htmlPath || 'static' // 默认使用 'static' 目录
+      		assets: process.env.MCP_PROTOTYPE_HTML_PATH || 'static' // 默认使用 'static' 目录
     	},
 		alias: {
-			$img: 'static/img'
+			$img: path.join(process.env.MCP_PROTOTYPE_PATH, 'static','img')
 		}
 	}
 };

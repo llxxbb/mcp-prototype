@@ -57,12 +57,14 @@ function getLibFilePaths(fileName: string): string[] {
 	// 获取当前模块的目录路径
 	const currentFilePath = fileURLToPath(import.meta.url);
 	const currentDir = path.dirname(currentFilePath);
+	const mcpPath = path.join(currentDir, '..', '..', '..');
+	process.env.MCP_PROTOTYPE_PATH = mcpPath;
 
 	return [
 		// 开发环境路径
 		path.join(process.cwd(), 'src', 'lib', fileName),
 		// npm 包安装后的路径（相对于编译后的文件位置）
-		path.join(currentDir, '..', '..', '..', 'src', 'lib', fileName)
+		path.join(mcpPath, 'src', 'lib', fileName)
 	];
 }
 
