@@ -32,40 +32,19 @@ export async function initHtmlFiles(rootDir: string) {
  * @throws 如果找不到文件则抛出错误
  */
 async function findLibFile(fileName: string): Promise<string> {
-	const sourcePaths = getLibFilePaths(fileName);
-
-	for (const sourcePath of sourcePaths) {
-		try {
-			await fs.access(sourcePath);
-			console.log(`找到 ${fileName} 文件: ${sourcePath}`);
-			return sourcePath;
-		} catch {
-			// 文件不存在，尝试下一个路径
-			console.log(`尝试路径失败: ${sourcePath}`);
-		}
-	}
-
-	throw new Error(`无法找到 ${fileName} 文件，尝试过的路径: ${sourcePaths.join(', ')}`);
-}
-
-/**
- * 获取库文件的可能路径列表
- * @param fileName 文件名
- * @returns 可能的文件路径数组
- */
-function getLibFilePaths(fileName: string): string[] {
 	// 获取当前模块的目录路径
 	const currentFilePath = fileURLToPath(import.meta.url);
-	const currentDir = path.dirname(currentFilePath);
-	const mcpPath = path.join(currentDir, '..', '..', '..');
+	const mcpPath = path.join(currentFilePath, '..', '..', '..', '..');
 	process.env.MCP_PROTOTYPE_PATH = mcpPath;
+	const sourcePath = path.join(mcpPath, 'src', 'lib', fileName);
 
-	return [
-		// 开发环境路径
-		path.join(process.cwd(), 'src', 'lib', fileName),
-		// npm 包安装后的路径（相对于编译后的文件位置）
-		path.join(mcpPath, 'src', 'lib', fileName)
-	];
+	try {
+		await fs.access(sourcePath);
+		console.log(`找到 ${fileName} 文件: ${sourcePath}`);
+		return sourcePath;
+	} catch {
+	}
+	throw new Error(`无法找到 ${fileName} 文件`);
 }
 
 /**

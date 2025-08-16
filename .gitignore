@@ -6,3 +6,4 @@ tmp/
 test-prototype/html/js/mcp-prototype-inject.js
 test-prototype/html/business-architecture.html
 *.tgz
+.runtime-deps-installed
