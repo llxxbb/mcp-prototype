@@ -1,12 +1,13 @@
-<script lang="ts">
+<script>
 	import TreeNode from './TreeNode.svelte';
 	import { expandedNodes } from './treeStore';
-	export let items: { relativePath: string; navName: string }[];
-	export let onItemClick: (path: string) => void;
+
+	export let items;
+	export let onItemClick;
 
 	// expandedNodes 已在 store 文件中定义
 
-	function buildTree(items?: { relativePath: string; navName: string }[]) {
+	function buildTree(items) {
 		const root = [];
 		const pathMap = new Map();
 
@@ -62,13 +63,13 @@
 	function debugExpandedNodes() {
 		expandedNodes.subscribe((val) => {
 			console.log('Expanded nodes:', Array.from(val.entries()));
-		})();
+		});
 	}
 
 	debugExpandedNodes();
 	debugRootNode();
 
-	function toggleExpand(node: string) {
+	function toggleExpand(node) {
 		expandedNodes.update((map) => {
 			const newMap = new Map(map);
 			const currentState = newMap.get(node) || false;

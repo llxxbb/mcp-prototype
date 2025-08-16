@@ -7,7 +7,7 @@ import { InitArgsSchema } from './schema-init.js';
 import { checkDirectory } from '../utils/directory.js';
 import path from 'node:path';
 import * as fs from 'node:fs/promises';
-import { spawn, exec } from 'child_process';
+import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 
 // Global configuration object
@@ -40,7 +40,7 @@ async function ensureLocalDependencies(packageRoot: string): Promise<void> {
 	// 从 package.json 读取运行时依赖版本
 	const packageJsonPath = path.join(packageRoot, 'package.json');
 	logger.info('读取 package.json 文件:', packageJsonPath);
-	
+
 	let packageJson;
 	try {
 		const packageJsonContent = await fs.readFile(packageJsonPath, 'utf-8');
@@ -49,7 +49,10 @@ async function ensureLocalDependencies(packageRoot: string): Promise<void> {
 		logger.info('包名:', packageJson.name);
 		logger.info('版本:', packageJson.version);
 	} catch (error) {
-		logger.error('❌ 无法读取 package.json:', error instanceof Error ? error.message : String(error));
+		logger.error(
+			'❌ 无法读取 package.json:',
+			error instanceof Error ? error.message : String(error)
+		);
 		throw new Error('无法读取 package.json');
 	}
 
@@ -63,12 +66,12 @@ async function ensureLocalDependencies(packageRoot: string): Promise<void> {
 	// 批量安装依赖
 	logger.info('批量安装运行时依赖...');
 	logger.info('依赖列表: ' + dependencies.join(', '));
-	
+
 	await new Promise<void>((resolve, reject) => {
 		logger.info('开始执行 npm install 命令...');
 		logger.info('工作目录:', packageRoot);
 		logger.info('命令: npm install ' + dependencies.join(' ') + ' --no-save');
-		
+
 		// 使用 spawn 启动 npm install，捕获输出
 		const child = spawn('npm', ['install', ...dependencies, '--no-save'], {
 			stdio: ['pipe', 'pipe', 'pipe'], // 捕获所有输出
@@ -100,7 +103,7 @@ async function ensureLocalDependencies(packageRoot: string): Promise<void> {
 			if (stderr) {
 				logger.warn('完整 stderr:', stderr);
 			}
-			
+
 			if (code === 0) {
 				logger.info('✅ 运行时依赖安装成功');
 				// 创建标记文件
@@ -127,11 +130,13 @@ async function ensureLocalDependencies(packageRoot: string): Promise<void> {
 			// 检查是否已经安装了依赖
 			try {
 				const sveltePath = path.join(localNodeModules, 'svelte');
-				fs.access(sveltePath).then(() => {
-					logger.info('检测到依赖已安装，等待进程完成...');
-				}).catch(() => {
-					// 依赖还未安装
-				});
+				fs.access(sveltePath)
+					.then(() => {
+						logger.info('检测到依赖已安装，等待进程完成...');
+					})
+					.catch(() => {
+						// 依赖还未安装
+					});
 			} catch {
 				// 忽略检查错误
 			}
@@ -193,33 +198,36 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
 			try {
 				// 尝试多种方法找到包根目录
 				let packageRoot: string | null = null;
-				
+
 				// 方法1: 从当前工作目录开始查找
 				let searchDir = process.cwd();
 				const maxDepth = 10; // 增加查找深度
-				
+
 				logger.info('开始方法1查找包根目录...');
 				logger.info('当前工作目录:', searchDir);
-				
+
 				for (let i = 0; i < maxDepth; i++) {
 					logger.info(`方法1第 ${i + 1} 次查找，当前路径:`, searchDir);
-					
+
 					try {
 						const packageJsonPath = path.join(searchDir, 'package.json');
 						await fs.access(packageJsonPath);
 						const content = await fs.readFile(packageJsonPath, 'utf-8');
 						const pkg = JSON.parse(content);
 						logger.info('找到 package.json，包名:', pkg.name);
-						
+
 						if (pkg.name === '@llxxbb/mcp-prototype') {
 							packageRoot = searchDir;
 							logger.info('✅ 方法1找到包根目录:', packageRoot);
 							break;
 						}
 					} catch (error) {
-						logger.info('当前路径没有 package.json 或读取失败:', error instanceof Error ? error.message : String(error));
+						logger.info(
+							'当前路径没有 package.json 或读取失败:',
+							error instanceof Error ? error.message : String(error)
+						);
 					}
-					
+
 					const parentDir = path.dirname(searchDir);
 					if (parentDir === searchDir) {
 						logger.info('方法1已到达根目录，停止查找');
@@ -227,36 +235,39 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
 					}
 					searchDir = parentDir;
 				}
-				
+
 				// 方法2: 如果方法1失败，从当前文件位置查找
 				if (!packageRoot) {
 					logger.info('方法1未找到包根目录，开始方法2...');
 					const currentFilePath = fileURLToPath(import.meta.url);
 					const currentDir = path.dirname(currentFilePath);
 					searchDir = currentDir;
-					
+
 					logger.info('当前文件路径:', currentFilePath);
 					logger.info('当前文件目录:', currentDir);
-					
+
 					for (let i = 0; i < maxDepth; i++) {
 						logger.info(`方法2第 ${i + 1} 次查找，当前路径:`, searchDir);
-						
+
 						try {
 							const packageJsonPath = path.join(searchDir, 'package.json');
 							await fs.access(packageJsonPath);
 							const content = await fs.readFile(packageJsonPath, 'utf-8');
 							const pkg = JSON.parse(content);
 							logger.info('找到 package.json，包名:', pkg.name);
-							
+
 							if (pkg.name === '@llxxbb/mcp-prototype') {
 								packageRoot = searchDir;
 								logger.info('✅ 方法2找到包根目录:', packageRoot);
 								break;
 							}
 						} catch (error) {
-							logger.info('当前路径没有 package.json 或读取失败:', error instanceof Error ? error.message : String(error));
+							logger.info(
+								'当前路径没有 package.json 或读取失败:',
+								error instanceof Error ? error.message : String(error)
+							);
 						}
-						
+
 						const parentDir = path.dirname(searchDir);
 						if (parentDir === searchDir) {
 							logger.info('方法2已到达根目录，停止查找');
@@ -265,7 +276,7 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
 						searchDir = parentDir;
 					}
 				}
-				
+
 				// 如果还是找不到，抛出错误
 				if (!packageRoot) {
 					throw new Error('无法找到包根目录，请确保在正确的项目目录中运行');
@@ -289,7 +300,9 @@ export async function initTool(args?: InitArgs): Promise<CallToolResult> {
 				logger.info('运行时依赖安装完成');
 			} catch (error) {
 				logger.error('运行时依赖安装失败:', error);
-				return response.error(`运行时依赖安装失败: ${error instanceof Error ? error.message : String(error)}`);
+				return response.error(
+					`运行时依赖安装失败: ${error instanceof Error ? error.message : String(error)}`
+				);
 			}
 
 			initialized = true;
@@ -311,7 +324,8 @@ export function registerInitTool(server: McpServer) {
 		'init',
 		{
 			title: 'Initialize Tool',
-			description: '提供原型根路径和展示服务的端口号，可以多次调用。注意此过程需检测并安装运行 web 服务所需的包，可能时间较长',
+			description:
+				'提供原型根路径和展示服务的端口号，可以多次调用。注意此过程需检测并安装运行 web 服务所需的包，可能时间较长',
 			inputSchema: InitArgsSchema.shape
 		},
 		async (args: InitArgs) => {

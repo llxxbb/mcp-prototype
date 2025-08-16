@@ -17,7 +17,7 @@ const config = {
       		assets: process.env.MCP_PROTOTYPE_HTML_PATH || 'static' // 默认使用 'static' 目录
     	},
 		alias: {
-			$img: path.join(process.env.MCP_PROTOTYPE_PATH, 'static','img')
+			$img: path.join(process.env.MCP_PROTOTYPE_PATH || '.', 'static','img')
 		}
 	}
 };

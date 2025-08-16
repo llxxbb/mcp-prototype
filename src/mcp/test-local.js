@@ -15,11 +15,18 @@ class LocalTester {
 		this.mcpProcess = null;
 		this.requestId = 1;
 		this.pendingRequests = new Map();
-		this.sveltePath = path.join(".", ".svelte-kit");
-		this.mcpPath = path.join(".", "node_modules", "@llxxbb", "mcp-prototype");
-		this.mcpSvc = path.join(".", "node_modules", "@llxxbb", "mcp-prototype", "dist", "mcp", "index.js");
+		this.sveltePath = path.join('.', '.svelte-kit');
+		this.mcpPath = path.join('.', 'node_modules', '@llxxbb', 'mcp-prototype');
+		this.mcpSvc = path.join(
+			'.',
+			'node_modules',
+			'@llxxbb',
+			'mcp-prototype',
+			'dist',
+			'mcp',
+			'index.js'
+		);
 	}
-
 
 	// 方法2: 使用本地 tgz 包测试
 	async testWithLocalPackage() {
@@ -34,10 +41,8 @@ class LocalTester {
 
 		console.log('📦 找到包文件:', packageFile);
 
-
-
 		// 安装本地包
-		await this.runCommand('npm', ['install', packageFile], ".");
+		await this.runCommand('npm', ['install', packageFile], '.');
 
 		// 测试包
 		await this.testPackage();
@@ -46,12 +51,12 @@ class LocalTester {
 	// 查找本地包文件
 	findLocalPackage() {
 		try {
-			const files = fs.readdirSync(".");
+			const files = fs.readdirSync('.');
 			const packageFile = files.find(
 				(file) => file.startsWith('llxxbb-mcp-prototype-') && file.endsWith('.tgz')
 			);
 			if (packageFile) {
-				return path.join(".", packageFile);
+				return path.join('.', packageFile);
 			}
 		} catch {
 			console.log('❌ 未找到本地包文件，请先运行 npm pack');
@@ -72,7 +77,7 @@ class LocalTester {
 
 	// 创建测试原型文件
 	async createTestPrototype() {
-		const prototypeDir = path.join(".", 'test-prototype', 'html');
+		const prototypeDir = path.join('.', 'test-prototype', 'html');
 		fs.mkdirSync(prototypeDir, { recursive: true });
 
 		// 创建简单的测试 HTML 文件
@@ -103,7 +108,7 @@ class LocalTester {
 		this.mcpProcess = spawn('node', [this.mcpSvc], {
 			stdio: ['pipe', 'pipe', 'pipe'],
 			shell: true,
-			cwd: ".",
+			cwd: '.',
 			env: { ...process.env, DEBUG: '*', NODE_ENV: 'development' }
 		});
 
@@ -113,7 +118,7 @@ class LocalTester {
 			for (const line of lines) {
 				if (line.trim()) {
 					try {
-						const response = JSON.parse(line);
+						JSON.parse(line);
 						this.handleResponse(line);
 					} catch {
 						// 如果不是 JSON，可能是服务日志
@@ -189,7 +194,7 @@ class LocalTester {
 				this.pendingRequests.delete(response.id);
 				resolve(response);
 			}
-		} catch (error) {
+		} catch {
 			// 如果不是 JSON，可能是服务日志
 			console.log('📄 非JSON输出:', line.trim());
 		}
@@ -485,7 +490,8 @@ class LocalTester {
 	// 使用 PowerShell 检查服务
 	async checkWithPowerShell() {
 		return new Promise((resolve) => {
-			const psCommand = 'try { $response = Invoke-WebRequest -Uri "http://localhost:3000" -Method Head -TimeoutSec 5; if ($response.StatusCode -eq 200) { exit 0 } else { exit 1 } } catch { exit 1 }';
+			const psCommand =
+				'try { $response = Invoke-WebRequest -Uri "http://localhost:3000" -Method Head -TimeoutSec 5; if ($response.StatusCode -eq 200) { exit 0 } else { exit 1 } } catch { exit 1 }';
 			const psProcess = spawn('powershell', ['-Command', psCommand], {
 				stdio: 'pipe',
 				shell: true

@@ -9,7 +9,7 @@ import { initHtmlFiles } from '../main/html.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-export let serverInstance: Promise<any> | null = null;
+export let serverInstance: Promise<import('vite').ViteDevServer> | null = null;
 
 export async function startTool(): Promise<CallToolResult> {
 	// 检查是否已初始化
@@ -25,7 +25,7 @@ export async function startTool(): Promise<CallToolResult> {
 	}
 
 	try {
-		initHtmlFiles(globalConfig.prototypeRoot);
+		await initHtmlFiles(globalConfig.prototypeRoot);
 
 		// 获取包根目录
 		const currentFilePath = fileURLToPath(import.meta.url);
@@ -34,7 +34,7 @@ export async function startTool(): Promise<CallToolResult> {
 
 		// 保存当前工作目录
 		const originalCwd = process.cwd();
-		
+
 		try {
 			// 切换到包根目录
 			process.chdir(packageRoot);
@@ -43,7 +43,7 @@ export async function startTool(): Promise<CallToolResult> {
 			// 创建Vite服务器
 			serverInstance = createServer({
 				root: packageRoot,
-				plugins: [sveltekit()] as any, // SvelteKit 会自动查找 svelte.config.js
+				plugins: [sveltekit()], // SvelteKit 会自动查找 svelte.config.js
 				server: {
 					port: globalConfig.port,
 					open: true

@@ -1,6 +1,6 @@
 {
 	"name": "@llxxbb/mcp-prototype",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "基于Model Context Protocol(MCP)协议开发的AI辅助工具，旨在帮助开发者快速构建软件原型。",
 	"license": "see LICENSE in LICENSE.md",
 	"type": "module",

@@ -1,9 +1,10 @@
-<script lang="ts">
+<script>
 	import TreeNode from './TreeNode.svelte';
 	import { expandedNodes } from './treeStore';
+
 	export let node;
-	export let onItemClick: (path: string) => void;
-	export let toggleExpand: (path: string) => void;
+	export let onItemClick;
+	export let toggleExpand;
 </script>
 
 {#if node.children && node.children.length > 0}

@@ -43,6 +43,7 @@ async function findLibFile(fileName: string): Promise<string> {
 		console.log(`找到 ${fileName} 文件: ${sourcePath}`);
 		return sourcePath;
 	} catch {
+		console.log(`文件不存在: ${sourcePath}`);
 	}
 	throw new Error(`无法找到 ${fileName} 文件`);
 }
@@ -182,10 +183,9 @@ export async function injectHeader(files: HtmlFileInfo[], jsPath: string, baseDi
 
 				// 添加base标签
 				$('head').append(`<base href="/${baseDir}/">`);
-				console.log(`文件 ${file.relativePath} 添加了JS引用: ${jsPath}`);
 				// 添加JS引用
 				$('head').append(`<script src="${jsPath}" defer></script>`);
-				console.log(`文件 ${file.relativePath} 添加了JS引用: ${jsPath}`);
+				console.log(`文件 ${file.relativePath} 添加了base标签和JS引用`);
 
 				// 写入修改后的内容
 				await fs.writeFile(fullPath, $.html());

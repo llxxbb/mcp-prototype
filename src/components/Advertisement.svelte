@@ -1,8 +1,6 @@
-<script lang="ts">
-	import type { Advertisement } from '../lib/adService';
-
-	export let ad: Advertisement;
-	export let showLabel: boolean = true;
+<script>
+	export let ad;
+	export let showLabel = true;
 
 	function handleClick() {
 		// 可以在这里添加点击统计
