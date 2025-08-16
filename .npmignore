@@ -14,7 +14,6 @@ ads/
 
 # 构建和配置文件
 vite.config.web.ts
-svelte.config.js
 tsconfig.mcp.json
 tsconfig.web.json
 eslint.config.web.js

@@ -3,20 +3,8 @@ import { logger } from '../utils/logger.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { globalConfig, initialized } from './init.js';
 import { response } from '../utils/response.js';
-// 动态导入 Vite 相关模块
-let createServer: any;
-let sveltekit: any;
-
-async function loadViteModules() {
-	if (!createServer) {
-		const vite = await import('vite');
-		createServer = vite.createServer;
-	}
-	if (!sveltekit) {
-		const sveltekitModule = await import('@sveltejs/kit/vite');
-		sveltekit = sveltekitModule.sveltekit;
-	}
-}
+import { createServer } from 'vite';
+import { sveltekit } from '@sveltejs/kit/vite';
 import { initHtmlFiles } from '../main/html.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -44,18 +32,28 @@ export async function startTool(): Promise<CallToolResult> {
 		const packageRoot = path.join(currentFilePath, '..', '..', '..', '..');
 		console.log('packageRoot:', packageRoot);
 
-		// 动态加载 Vite 模块
-		await loadViteModules();
+		// 保存当前工作目录
+		const originalCwd = process.cwd();
+		
+		try {
+			// 切换到包根目录
+			process.chdir(packageRoot);
+			console.log('切换到工作目录:', process.cwd());
 
-		// 创建Vite服务器
-		serverInstance = createServer({
-			root: packageRoot,
-			plugins: [await sveltekit()] as any,
-			server: {
-				port: globalConfig.port,
-				open: true
-			}
-		});
+			// 创建Vite服务器
+			serverInstance = createServer({
+				root: packageRoot,
+				plugins: [sveltekit()] as any, // SvelteKit 会自动查找 svelte.config.js
+				server: {
+					port: globalConfig.port,
+					open: true
+				}
+			});
+		} finally {
+			// 恢复原始工作目录
+			process.chdir(originalCwd);
+			console.log('恢复工作目录:', process.cwd());
+		}
 
 		const viteServer = await serverInstance;
 		// 启动服务
