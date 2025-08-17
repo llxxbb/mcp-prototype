@@ -1,6 +1,6 @@
 {
 	"name": "@llxxbb/mcp-prototype",
-	"version": "0.1.2",
+	"version": "0.1.6",
 	"description": "基于Model Context Protocol(MCP)协议开发的AI辅助工具，旨在帮助开发者快速构建软件原型。",
 	"license": "see LICENSE in LICENSE.md",
 	"type": "module",
@@ -9,7 +9,6 @@
 		"start:mcp": "node dist/mcp/index.js",
 		"start:mcpW": "node ./dist/mcp/web.js",
 		"build:web": "set TSCONFIG_PATH=tsconfig.web.json && vite build -c ./vite.config.web.ts",
-		"web": "vite dev -c ./vite.config.web.ts",
 		"format": "prettier --write .",
 		"lint:mcp": "prettier --check . && eslint --fix -c ./eslint.config.mcp.js ./src/mcp/",
 		"lint:web": "prettier --check . && eslint --fix  -c ./eslint.config.web.js ./src/",

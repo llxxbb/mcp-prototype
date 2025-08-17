@@ -2,20 +2,31 @@ import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
 
+// // 简单的日志过滤
+// const originalStderr = process.stderr.write;
+
+// process.stderr.write = function(chunk, encoding, callback) {
+// 	const str = chunk.toString();
+// 	if (str.includes('vite:resolve') 
+// 		|| str.includes('connect:dispatcher')
+// 		|| str.includes('vite:load')
+// 		|| str.includes('vite:import-analysis')
+// 		|| str.includes('vite:transform')
+// 	) {
+// 		return;
+// 	}
+// 	return originalStderr.call(this, chunk, encoding, callback);
+// };
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	// Consult https://svelte.dev/docs/kit/integrations
-	// for more information about preprocessors
 	preprocess: vitePreprocess(),
 	
 	kit: {
-		// adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
-		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
-		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
-		files: {
-      		assets: process.env.MCP_PROTOTYPE_HTML_PATH || 'static' // 默认使用 'static' 目录
-    	},
+		files:{
+			assets: process.env.MCP_PROTOTYPE_HTML_PATH
+		},		
 		alias: {
 			$img: path.join(process.env.MCP_PROTOTYPE_PATH || '.', 'static','img')
 		}

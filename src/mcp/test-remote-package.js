@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * 本地包测试脚本
+ * 远程包测试脚本
  * 支持多种测试方式
  */
 
@@ -15,65 +15,6 @@ class LocalTester {
 		this.mcpProcess = null;
 		this.requestId = 1;
 		this.pendingRequests = new Map();
-		this.sveltePath = path.join('.', '.svelte-kit');
-		this.mcpPath = path.join('.', 'node_modules', '@llxxbb', 'mcp-prototype');
-		this.mcpSvc = path.join(
-			'.',
-			'node_modules',
-			'@llxxbb',
-			'mcp-prototype',
-			'dist',
-			'mcp',
-			'index.js'
-		);
-	}
-
-	// 方法2: 使用本地 tgz 包测试
-	async testWithLocalPackage() {
-		// 删除node_modules/@llxxbb/mcp-prototype目录下除 node_modules/@llxxbb/mcp-prototype/node_modules 目录外的所有文件和目录
-		try {
-			const mcpPrototypeDir = path.join('.', 'node_modules', '@llxxbb', 'mcp-prototype');
-			const files = fs.readdirSync(mcpPrototypeDir);
-			files.forEach((file) => {
-				if (file !== 'node_modules') {
-					fs.rmSync(path.join(mcpPrototypeDir, file), { recursive: true, force: true });
-				}
-			});
-			console.log(`✅ 删除${mcpPrototypeDir}目录下除 node_modules 目录外的所有文件和目录完成`);
-		} catch (error) {
-			console.log('⚠️ 清理目录时出现错误:', error.message);
-		}
-		// 查找本地包文件
-		console.log('📦 使用本地 tgz 包测试...');
-		const packageFile = this.findLocalPackage();
-		if (!packageFile) {
-			console.log('❌ 未找到本地包文件，请先运行 npm pack');
-			return;
-		}
-
-		console.log('📦 找到包文件:', packageFile);
-
-		// 安装本地包
-		await this.runCommand('npm', ['install', packageFile], '.');
-
-		// 测试包
-		await this.testPackage();
-	}
-
-	// 查找本地包文件
-	findLocalPackage() {
-		try {
-			const files = fs.readdirSync('.');
-			const packageFile = files.find(
-				(file) => file.startsWith('llxxbb-mcp-prototype-') && file.endsWith('.tgz')
-			);
-			if (packageFile) {
-				return path.join('.', packageFile);
-			}
-		} catch {
-			console.log('❌ 未找到本地包文件，请先运行 npm pack');
-			throw new Error('未找到本地包文件，请先运行 npm pack');
-		}
 	}
 
 	// 测试包功能
@@ -117,9 +58,11 @@ class LocalTester {
 	// 测试 MCP 服务
 	async testMCPService() {
 		console.log('🚀 启动 MCP 服务测试...');
-		this.mcpProcess = spawn('node', [this.mcpSvc], {
+		this.mcpProcess = spawn('npx', ['-y', '@llxxbb/mcp-prototype@latest'], {
 			stdio: ['pipe', 'pipe', 'pipe'],
-			shell: true
+			shell: true,
+			cwd: '.',
+			env: { ...process.env, DEBUG: '*', NODE_ENV: 'development' }
 		});
 
 		// 监听标准输出
@@ -546,13 +489,6 @@ class LocalTester {
 			});
 		});
 	}
-
-	// 清理测试环境
-	cleanup() {
-		fs.rmSync(this.sveltePath, { recursive: true, force: true });
-		fs.rmSync(this.mcpPath, { recursive: true, force: true });
-		console.log('清理测试环境完成');
-	}
 }
 
 // 主函数
@@ -560,28 +496,15 @@ async function main() {
 	const tester = new LocalTester();
 
 	try {
-		console.log('🎯 MCP Prototype 本地测试工具');
+		console.log('🎯 MCP Prototype 远程包测试工具');
 		console.log('================================');
 
-		await tester.testWithLocalPackage();
+		await tester.testPackage();
 
 		console.log('\n🎉 测试完成！');
 	} catch (error) {
 		console.error('❌ 测试失败:', error.message);
-	} finally {
-		// 清理测试环境
-		if (process.argv.includes('--cleanup')) {
-			tester.cleanup();
-		}
 	}
 }
 
-// 如果直接运行此脚本
-if (import.meta.url.includes(process.argv[1]) || import.meta.url.endsWith('test-local.js')) {
-	main().catch((error) => {
-		console.error('💥 测试脚本执行失败:', error.message);
-		process.exit(1);
-	});
-}
-
-export default LocalTester;
+await main();

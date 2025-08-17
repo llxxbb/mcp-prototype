@@ -18,7 +18,7 @@ const start = async () => {
 	try {
 		const { createServer, sveltekit } = await loadViteModules();
 		const server = await createServer({
-			plugins: [await sveltekit()],
+			plugins: [await sveltekit()] as unknown as import('vite').PluginOption[],
 			server: {
 				port: 3000,
 				open: true

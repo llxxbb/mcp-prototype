@@ -1,6 +1,6 @@
 # MCP-Prototype
 
-可以让 AI 基于HTML直接进行原型设计的 MCP 工具，可快速构建软件原型。
+可以让 AI 基于HTML直接进行原型设计的 MCP 工具，即使没有 figma、axure和 可快速构建软件原型。
 
 工具能力：
 

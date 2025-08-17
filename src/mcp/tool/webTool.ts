@@ -4,9 +4,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { globalConfig, initialized } from './init.js';
 import { response } from '../utils/response.js';
 import { createServer } from 'vite';
-import { sveltekit } from '@sveltejs/kit/vite';
 import { initHtmlFiles } from '../main/html.js';
-import { fileURLToPath } from 'url';
 import path from 'path';
 
 export let serverInstance: Promise<import('vite').ViteDevServer> | null = null;
@@ -27,33 +25,26 @@ export async function startTool(): Promise<CallToolResult> {
 	try {
 		await initHtmlFiles(globalConfig.prototypeRoot);
 
-		// 获取包根目录
-		const currentFilePath = fileURLToPath(import.meta.url);
-		const packageRoot = path.join(currentFilePath, '..', '..', '..', '..');
-		console.log('packageRoot:', packageRoot);
-
 		// 保存当前工作目录
-		const originalCwd = process.cwd();
+		// const originalCwd = process.cwd();
+		// console.log('保存当前工作目录:', originalCwd);
 
-		try {
-			// 切换到包根目录
-			process.chdir(packageRoot);
-			console.log('切换到工作目录:', process.cwd());
+		// 切换到包根目录
+		const packageRoot = process.env.MCP_PROTOTYPE_PATH;
+		process.chdir(packageRoot as string);
+		console.log('切换到包根目录:', packageRoot);
 
-			// 创建Vite服务器
-			serverInstance = createServer({
-				root: packageRoot,
-				plugins: [sveltekit()], // SvelteKit 会自动查找 svelte.config.js
-				server: {
-					port: globalConfig.port,
-					open: true
-				}
-			});
-		} finally {
-			// 恢复原始工作目录
-			process.chdir(originalCwd);
-			console.log('恢复工作目录:', process.cwd());
-		}
+		// 创建Vite服务器 - 使用 packageRoot 下的 vite.config.web.ts
+		const configFilePath = path.join(packageRoot || '.', 'vite.config.web.ts');
+		serverInstance = createServer({
+			// 使用外部配置文件
+			configFile: configFilePath,
+			// 覆盖服务器配置
+			server: {
+				port: globalConfig.port,
+				open: true
+			}
+		});
 
 		const viteServer = await serverInstance;
 		// 启动服务

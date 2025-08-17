@@ -13,7 +13,6 @@ doc/
 ads/
 
 # 构建和配置文件
-vite.config.web.ts
 tsconfig.mcp.json
 tsconfig.web.json
 eslint.config.web.js
@@ -26,6 +25,7 @@ __tests__/
 *.test.ts
 *.spec.js
 *.spec.ts
+.runtime-deps-installed
 
 # 其他开发文件
 .git/
