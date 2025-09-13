@@ -1,21 +1,37 @@
 import { json } from '@sveltejs/kit';
+import { readFileSync } from 'fs';
+import { env } from '$env/dynamic/private';
 
 export async function GET() {
 	try {
-		const response = await fetch('https://gitee.com/xb_li/mcp-prototype/raw/main/ads/ads.json');
+		if (env.ADS_URL) {
+			// 从本地路径加载 ads.json
+			const adsData = readFileSync(env.ADS_URL, 'utf8');
+			const ads = JSON.parse(adsData);
 
-		if (!response.ok) {
-			throw new Error(`Failed to fetch ads: ${response.status}`);
+			// 验证数据格式
+			if (!Array.isArray(ads)) {
+				throw new Error('Invalid ads data format');
+			}
+
+			return json(ads);
+		} else {
+			// 从远程 URL 获取 ads.json
+			const response = await fetch('https://gitee.com/xb_li/mcp-prototype/raw/main/ads/ads.json');
+
+			if (!response.ok) {
+				throw new Error(`Failed to fetch ads: ${response.status}`);
+			}
+
+			const ads = await response.json();
+
+			// 验证数据格式
+			if (!Array.isArray(ads)) {
+				throw new Error('Invalid ads data format');
+			}
+
+			return json(ads);
 		}
-
-		const ads = await response.json();
-
-		// 验证数据格式
-		if (!Array.isArray(ads)) {
-			throw new Error('Invalid ads data format');
-		}
-
-		return json(ads);
 	} catch (error) {
 		console.error('Error fetching ads from Gitee:', error);
 

@@ -15,6 +15,8 @@
 AI MCP 配置增加下面的内容
 
 ```json
+{
+  "mcpServers": {
     "mcp-prototype": {
       "command": "npx",
       "args": [
@@ -22,6 +24,8 @@ AI MCP 配置增加下面的内容
         "@llxxbb/mcp-prototype"
       ]
     }
+  }
+}
 ```
 
 本地调试

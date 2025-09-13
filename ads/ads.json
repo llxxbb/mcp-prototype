@@ -1,5 +1,11 @@
 [
 	{
+		"type": "text",
+		"content": "<p style=\"text-align:center;\">\n\t<strong><span style=\"font-family:SimHei;font-size:24px;\">夸克网盘</span></strong> \n</p>\n<p style=\"text-align:center;\">\n\t<strong><span style=\"font-size:20px;\">让你的AI飞起</span></strong> \n</p>",
+		"link": "https://pan.quark.cn/s/639020c8dc1b",
+		"altText": "夸克网盘"
+	},
+	{
 		"type": "banner",
 		"content": "https://landings-cdn.adsterratech.com/referralBanners/png/200%20x%20200%20px.png",
 		"link": "https://beta.publishers.adsterra.com/referral/MMkdJQZHGc",
@@ -7,20 +13,14 @@
 	},
 	{
 		"type": "text",
-		"content": "推荐产品：高性能开发工具",
-		"link": "https://example.com/product",
-		"altText": "产品推荐"
-	},
-	{
-		"type": "banner",
-		"content": "https://example.com/banner2.jpg",
-		"link": "https://example.com/sale",
-		"altText": "限时优惠"
+		"content": "<p style=\"text-align:center;\">\n\t<strong><span style=\"font-family:SimHei;font-size:24px;\">夸克网盘</span></strong> \n</p>\n<p style=\"text-align:center;\">\n\t<strong><span style=\"font-size:20px;\">让你的AI飞起</span></strong> \n</p>",
+		"link": "https://pan.quark.cn/s/639020c8dc1b",
+		"altText": "夸克网盘"
 	},
 	{
 		"type": "text",
-		"content": "限时优惠：开发工具包8折",
-		"link": "https://example.com/discount",
-		"altText": "优惠活动"
+		"content": "<p style=\"text-align:center;\">\n\t<strong><span style=\"font-family:SimHei;font-size:24px;\">夸克网盘</span></strong> \n</p>\n<p style=\"text-align:center;\">\n\t<strong><span style=\"font-size:20px;\">让你的AI飞起</span></strong> \n</p>",
+		"link": "https://pan.quark.cn/s/639020c8dc1b",
+		"altText": "夸克网盘"
 	}
 ]

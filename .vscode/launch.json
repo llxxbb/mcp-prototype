@@ -1,21 +1,14 @@
 {
   "version": "0.2.0",
   "configurations": [
- {
-      "name": "Debug Current Vitest File",
+    {
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
-      "args": [
-        "--run",
-        "--no-file-parallelism",
-        "--inspect-brk",
-        "${file}"
-      ],
-      "autoAttachChildProcesses": true,
-      "smartStep": true,
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
+      "name": "Debug with .env.development",
+      "program": "${workspaceFolder}/dist/mcp/web.js",
+      "env": {
+        "ADS_URL": "./ads/ads.json"  
+      }
     },
     {
       "name": "Debug All Vitest Tests",

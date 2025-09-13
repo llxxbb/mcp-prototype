@@ -17,12 +17,12 @@
 			{#if ad.type === 'banner'}
 				<img src={ad.content} alt={ad.altText} />
 			{:else}
-				<div class="text-ad">{ad.content}</div>
+				<div class="text-ad">{@html ad.content}</div>
 			{/if}
 		</a>
 	</div>
 </div>
-
+	
 <style>
 	.advertisement-slot {
 		margin: 10px 0;
